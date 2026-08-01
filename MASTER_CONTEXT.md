@@ -95,6 +95,8 @@ Three tiers, applied per subsystem:
 
 **Nothing is presented as more real than it is.** Ghost Medic's governing rule carries over verbatim: *simulated = labeled simulated, raw = labeled raw, stub = labeled stub.* Every claim on the site maps to a file in the repo.
 
+**Compute rule — online-first (added 2026-08-01).** Everything designed at first runs on cloud compute. Phase 1 simulation and any training run on rented cloud GPUs; the local machine (MacBook Air M4 — Metal only, no CUDA, 16 GB unified memory) is a terminal, not a compute ceiling. Spec parameters (trial budgets, timesteps, degradation sweep resolution) are sized to cloud GPU capability, not local hardware. Cloud spend is budgeted before Phase 1 starts.
+
 ### 2.2 The one thing physics cannot prove
 
 Tow forces, power budgets, and thermal envelopes are closed-form. Docking reliability is not. It is empirical, and it must come from a simulation that is an honest experiment rather than a demonstration.
