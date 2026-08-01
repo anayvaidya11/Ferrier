@@ -158,7 +158,7 @@ anayvaidya11/Ferrier/
 
 ### 2.6 Known operational workarounds (carried from Ghost Medic)
 
-- Claude Code cannot push to GitHub in the sandboxed environment (persistent 403). Commit and push manually, or use the `deploy.sh` heredoc approach.
+- Claude Code can commit and push to GitHub directly in this environment (verified 2026-08-01, first push of this repo). The Ghost Medic-era 403 workaround (`deploy.sh` heredoc, manual push) is obsolete; see amendment A-005.
 - Claude Code tends to work on its own branch rather than `main`. Fix: `git checkout -b main origin/[branch]` then force push.
 - Prompts should be concise, target autonomous multi-step execution, and include built-in verification gates rather than back-and-forth debugging.
 
@@ -414,3 +414,10 @@ CPU on measured cost per trial — the retry loop multiplies trial count, and ho
 billing punishes exactly that workload. The local machine remains a terminal for
 anything at experimental scale. This resolves the A-002-vs-spec-plan conflict flagged
 during Week 2.
+
+### A-005 (2026-08-01) — §2.6 push workaround obsolete
+
+§2.6's first bullet claimed Claude Code cannot push to GitHub (persistent 403, carried
+from Ghost Medic). Reality: the first push of this repo succeeded directly from a
+Claude Code session on 2026-08-01. The §2.6 bullet is corrected in-body per this
+amendment; the `deploy.sh` heredoc workaround is retired.
