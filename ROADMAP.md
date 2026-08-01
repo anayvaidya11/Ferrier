@@ -61,11 +61,17 @@ One question, one number: given a standardized target interface, what fraction o
 | 30–60% | Holds conditionally | Iterate interface / active illumination / tactile feedback; two weeks, re-run |
 | <30% | Interface does not sufficiently constrain the problem | **Stop.** Revisit wedge: assessment-and-triage instead of physical rigging |
 
+**Deliverables (per MASTER_CONTEXT Phase 1 + A-007):** reproducible harness, committed
+results dataset, honest writeup with failure taxonomy, sensitivity curve (D-014),
+first/multi-attempt distributions (D-005), and **replayable trial artifacts** (≥1
+successful dock + 1 per failure class, labeled simulated, each mapping to a committed
+trial record). First `CLAIMS.md` entries land with these results.
+
 ---
 
 ## Phase 2 — Physics proof (October) ⬜
 
-Tow/extraction forces, power budget, thermal, mechanical envelope, chassis selection (tradeoff study — do **not** design a chassis). Deliverable: `PHYSICS.md`, every number derived and sourced.
+Tow/extraction forces, power budget, thermal, mechanical envelope, chassis selection (tradeoff study — do **not** design a chassis). Deliverable: `PHYSICS.md`, every number derived and sourced, **plus the "cost of the gap"** — order-of-magnitude prototype cost, team, and 12-month build plan: what the capital buys (A-007).
 
 ## Phase 3 — Perception + embedded (November) ⬜
 
@@ -73,11 +79,11 @@ Fiducial detection + 6-DoF pose on real degraded imagery, fault classification, 
 
 ## Phase 4 — Integration, proof, cofounder (December) ⬜
 
-End-to-end demo, CAD (labeled as concept), proof site, mechanical cofounder — conversations start no later than early December.
+End-to-end demo, CAD (labeled as concept), proof site, mechanical cofounder — conversations start no later than early December. **Site gate: `CLAIMS.md` complete — no external claim without a register row (A-007).**
 
 ## Phase 5 — Customer and application (January) ⬜
 
-Get to a human (UGV manufacturer → NAMC member → Army robotics unit → SF network). Application: four full rewrites minimum, opens with *useful before it's perfect*. Two-minute video.
+Get to a human (UGV manufacturer → NAMC member → Army robotics unit → SF network; warmest named door: unmanned-ground-recovery@aal.army from the Week 1 RFI research). Application: four full rewrites minimum, opens with *useful before it's perfect*. Two-minute video.
 
 ## Submit (February) ⬜
 

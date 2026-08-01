@@ -442,3 +442,31 @@ is retired: it errors when a local `main` exists and risks overwriting remote hi
 Sessions never force-push `main`;
 (e) §2.6 retitled to "Operational notes" — its contents are now verified in this repo,
 not Ghost Medic carryover.
+
+### A-007 (2026-08-01) — Pitch-facing deliverables: replay artifacts, cost of the gap, claims register
+
+The end state of this program is a YC demo plus the ask "the gap is capital" — evidence
+that the machine would work, and a priced plan for the money to build it. Three
+deliverable additions design backwards from that pitch:
+
+(a) **Phase 1 produces replayable trial artifacts**, not only statistics: recorded,
+re-runnable visualizations of at least one successful dock and one trial per failure
+class, labeled *simulated* per §4.3. The harness logs full trial state from day one —
+reproducibility requires it anyway; a partner watching a dock attempt fail honestly is
+the demo. A replay of a real trial is evidence made legible; a rendered animation of no
+trial would be the §2.2 decorative failure — the distinction is that every replay maps
+to a committed trial record.
+
+(b) **Phase 2 produces a "cost of the gap" deliverable**: order-of-magnitude prototype
+cost (chassis as purchased component, actuators, sensors, fabrication), team, and a
+12-month build plan — what the capital buys. Extends work already scheduled (chassis
+tradeoff study, mechanical envelope). Without it "the gap is capital" is a slogan; with
+it, an invoice.
+
+(c) **`CLAIMS.md` is the claims register** — every external claim (site, deck, video,
+application) maps to claim → evidence file → §4.3 label. Seeded in Phase 1, mandatory
+gate for Phase 4's site. This makes §2.1's "every claim maps to a file" rule mechanical
+instead of aspirational.
+
+Also noted for Phase 5: the AAL contact channel (unmanned-ground-recovery@aal.army,
+Week 1 research) is the warmest named door for the customer conversation.
