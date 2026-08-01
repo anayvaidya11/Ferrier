@@ -28,10 +28,11 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 
 ### Week 2 — Define the interface ⬜
 
-- ⬜ `INTERFACE_SPEC.md` — fiducial pattern, mechanical envelope, tolerance budget, load path, failure modes, degradation assumptions
-- ⬜ `ARCHITECTURE.md` — contract-first topology, real-vs-simulated table
-- ⬜ `WIRE_FORMAT.md` — target-state stream: pose, fault class, confidence, timestamps; omitted-not-zeroed rule stated explicitly
-- 🟢 Stand up the repo with all docs committed (2026-07-31; spec docs are labeled stubs pending Week 2)
+- 🟢 `INTERFACE_SPEC.md` v1.0 (2026-08-01) — fiducial pattern, mechanical envelope, tolerance budget, load path, failure modes, degradation assumptions
+- 🟢 `ARCHITECTURE.md` v1.0 (2026-08-01) — contract-first topology, real-vs-simulated table, sim architecture, compute plan, Phase 1 output spec
+- 🟢 `WIRE_FORMAT.md` v1.0 (2026-08-01) — target-state stream field-by-field; omitted-not-zeroed rule with worked example; consumer checklist; annotated reference lines
+- 🟢 Stand up the repo with all docs committed (2026-07-31)
+- 🟡 **Gate: OPEN — does not pass yet.** Self-test found 12 holes + 6 unratified placeholders (`HOLES.md`); H-04 (funnel compliance architecture) is critical path. One decisions session before Aug 14 closes it.
 
 **Deliverable:** three specification documents. No implementation code.
 **Gate:** interface spec precise enough that Phase 1 builds directly against it with no further design decisions.
