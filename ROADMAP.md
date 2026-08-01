@@ -18,20 +18,20 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 
 ## Phase 0 — Orient (Aug 1–14) 🟡
 
-### Week 1 — Read the customer 🟡
+### Week 1 — Read the customer 🟢 (completed 2026-07-31)
 
-- 🟡 Locate the ACC-APG Durham RFI (posted 17 Jun 2026) on SAM.gov; capture every Army question → `research/RFI_ACC-APG.md`
-- 🟡 Convert Army questions into numbered requirements, [DIRECT] vs [INFERRED] → `research/REQUIREMENTS.md`
-- 🟡 Search for follow-on signal: solicitations, sources-sought, NAMC announcements → `research/FOLLOW_ON.md`
-- 🟡 Read MIL-STD-3078 and STUB documentation; know what each does and does not standardize → `research/STANDARDS.md`
-- 🟡 Study the five Project Sustainment vendors (AM General, American Rheinmetall, Carnegie Robotics, HDT/BLADE, Stratom) → `research/VENDORS.md`
+- 🟢 Locate the ACC-APG Durham RFI (posted 17 Jun 2026) on SAM.gov; capture every Army question → `research/RFI_ACC-APG.md` (full notice text retrieved verbatim via SAM.gov API)
+- 🟢 Convert Army questions into numbered requirements, [DIRECT] vs [INFERRED] → `research/REQUIREMENTS.md` (16 requirements: 10 direct, 6 inferred)
+- 🟢 Search for follow-on signal: solicitations, sources-sought, NAMC announcements → `research/FOLLOW_ON.md` (17 dated signals; no follow-on solicitation exists yet as of 2026-07-31)
+- 🟢 Read MIL-STD-3078 and STUB documentation; know what each does and does not standardize → `research/STANDARDS.md` (full MIL-STD-3078 PDF retrieved and read; MIL-PRF-32383/7 needs human ASSIST retrieval)
+- 🟢 Study the five Project Sustainment vendors (AM General, American Rheinmetall, Carnegie Robotics, HDT/BLADE, Stratom) → `research/VENDORS.md` (selection confirmed from three independent sources)
 
 ### Week 2 — Define the interface ⬜
 
 - ⬜ `INTERFACE_SPEC.md` — fiducial pattern, mechanical envelope, tolerance budget, load path, failure modes, degradation assumptions
 - ⬜ `ARCHITECTURE.md` — contract-first topology, real-vs-simulated table
 - ⬜ `WIRE_FORMAT.md` — target-state stream: pose, fault class, confidence, timestamps; omitted-not-zeroed rule stated explicitly
-- 🟡 Stand up the repo with all docs committed
+- 🟢 Stand up the repo with all docs committed (2026-07-31; spec docs are labeled stubs pending Week 2)
 
 **Deliverable:** three specification documents. No implementation code.
 **Gate:** interface spec precise enough that Phase 1 builds directly against it with no further design decisions.
