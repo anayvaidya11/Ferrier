@@ -133,7 +133,7 @@ This makes WyZen more valuable as MIL-STD-3078 adoption grows. You become the co
 ### 2.5 Repository structure
 
 ```
-wyzen-industries/recovery-stack/
+anayvaidya11/Ferrier/
 ├── MASTER_CONTEXT.md        # this document, committed
 ├── INTERFACE_SPEC.md        # the docking interface (Phase 0)
 ├── ARCHITECTURE.md          # system topology, real-vs-simulated table
