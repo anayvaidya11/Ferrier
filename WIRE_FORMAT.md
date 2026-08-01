@@ -86,6 +86,33 @@ it]**; insertion commit additionally requires `pose_source` ∈ {`inner_ring`,
    `pose`, `fault`, or `degradation`.
 7. **Unknown fields:** ignore, preserve on relay (forward compatibility).
 
+## Trial record schema (A-007, D-006, ARCHITECTURE §6.4–6.5)
+
+One NDJSON file per trial: a header line, the full interleaved state sequence, a result
+line. This is what makes every trial bit-identically re-runnable and every replay
+artifact traceable to a committed record. Same rules as above (versioned, omitted-not-
+zeroed, unknown fields ignored).
+
+- **Header** — `{"v":1, "type":"trial_header", "trial_id": string (unique, stable),
+  "seed": int (single RNG root; all streams derive from it), "code_git_sha": string
+  (repo commit the harness ran from), "engine": {"name","version"},
+  "sweep_point": object (every §9 axis value for this trial), "params_ref": string
+  (path to the committed parameter file)}` — all required. A trial whose header cannot
+  name its seed, SHA, and sweep point is not a result; it is an anecdote.
+- **State sequence** — interleaved, timestamped on the sim clock:
+  - `target_state` lines exactly as specified above (the injected perception output);
+  - `{"type":"sim_truth", "t": float, "T_world_head": pose, "T_world_stud": pose,
+    "contact_wrench": [fx,fy,fz,mx,my,mz] (N, N·m, head_frame; omitted before
+    contact), "actuator_cmd": object}` — the ground truth the injected model degrades
+    from, logged every physics step after capture-plane handoff and every kinematic
+    step before it (D-006).
+- **Result** — `{"v":1, "type":"trial_result", "outcome": "success" |
+  "IS8-<row>" (failure class keyed to INTERFACE_SPEC §8 row number, e.g. "IS8-5" =
+  ambiguity flip) | "clean_miss", "first_attempt_success": bool, "attempts_used": int,
+  "t_total": float, "handoff_reached": bool}` — required; unclassifiable failures
+  extend §8 by recorded amendment before they get an outcome string (ARCHITECTURE
+  §6.2).
+
 ## Annotated reference lines
 
 ```json
