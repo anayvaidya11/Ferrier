@@ -42,11 +42,15 @@ accumulates on the serviceable side (D-001).
 - Off-axis load sensitivity [derived, shown]: at tow angle θ off the stud axis,
   transverse component 15 kN·sin θ bends the neck about the plate face (moment arm
   90 mm, section modulus πd³/32 = 1.53×10⁻⁶ m³). At θ = 20°: σ ≈ 5.13 kN × 0.09 m /
-  1.53×10⁻⁶ ≈ 300 MPa — safety factor ≈ 2.2 against 4140 QT yield (~655 MPa). At
-  θ = 30°: σ ≈ 440 MPa, SF ≈ 1.5. **Provisional off-axis tow limit: ±20° [ASSUMED].
-  Bending, not shear, sizes the neck — Phase 2 must verify this, and the tow-angle
-  limit becomes an operational constraint the resolver stage must respect** (flagged
-  in §10 and HOLES.md).
+  1.53×10⁻⁶ ≈ 300 MPa — safety factor ≈ 2.2 against class-typical 4140 QT yield
+  (655 MPa; Phase 2 sources the certificate). At θ = 30°: σ ≈ 440 MPa, SF ≈ 1.5.
+  Bending, not shear, sizes the neck.
+- **Normative (D-018): final approach heading and applied tow direction shall lie
+  within a ±20° cone of the stud +X axis.** Two load ratings govern (D-003-R): latch
+  tension 15 kN axial; stud neck bending 462 N·m design moment. Both static, both
+  unverified until Phase 2; dynamic/snatch loads excluded and flagged. The sector
+  constraint propagates to the approach planner (ARCHITECTURE §2) and the resolver
+  stage.
 
 ### 2.2 The mounting boss (D-002)
 
@@ -58,6 +62,14 @@ accumulates on the serviceable side (D-001).
 - Per-unit cost class (qualitative): a machined pin and a plate — no moving parts,
   nothing to maintain, nothing to certify. §1.7's mitigation is adoption; **every gram
   of complexity added to the target side is thesis risk** (D-001 consequence).
+
+### 2.3 Funnel compliance — **UNRATIFIED, decision pending**
+
+D-001's "compliant funnel" has no committed topology or stiffness. The tradeoff study
+is `studies/H04_FUNNEL_COMPLIANCE.md` (four candidates, requirements, derived
+stiffness envelope k ∈ [~1, ~70] N/mm with its two honest unknowns, and a marked
+recommendation). **The Phase 0 gate stays open on this item until the human ratifies a
+topology; nothing in this spec assumes one.**
 
 ## 3. Fiducial specification (D-010, D-011)
 
@@ -120,6 +132,13 @@ Rule for IDs 1–8: center = (h, −55·sin α_k, +55·cos α_k) with α_k = 45�
 clockwise from +Z viewed from the approach direction (+X looking at the plate); h = 0
 (L-A) or h_c (L-B). All tag faces normal +X_stud, upright.
 
+**Single-tag caveat (studies/H08_AMBIGUITY_MODEL.md, D-011 qualification):** a lone
+10 mm tag yields reliable *position* but its *orientation* is flip-prone at every view
+angle at inner-servo ranges (discriminability ≈1.4 px < 1.5 px noise threshold).
+**Insertion commit therefore requires ≥2 fused tags** (`multi_tag_fused`,
+WIRE_FORMAT). The outer tag is likewise flip-prone near head-on out to ~26° at 3 m —
+the acquisition-range flip axis is real, not just an insertion concern.
+
 **ID allocation scheme:** family 36h11 (587 usable IDs) is allocated in blocks of 16
 per interface variant: IDs 0–15 = variant 0, the base recovery plate (0 outer, 1–8
 inner, 9–15 reserved); IDs 16–31 reserved for the battery-swap variant (§1); IDs 32+
@@ -168,8 +187,10 @@ Perception only has to hit a 220 mm mouth; steel does the rest.
 | Margin | 15% | 32% |
 
 The funnel absorbs everything inside the envelope by design; the allocations above are
-Phase 1 sweep centers, not guarantees — Phase 1's sensitivity curve (D-014) reports
-what happens as each contributor grows past its allocation.
+**declared sweep centers (Door 4)** — Phase 1 sweeps each at ×{0.5, 1, 2} via the
+D-019 error model, and the sensitivity curve (D-014) reports what happens as each
+contributor grows past its allocation. They were never constants; treating them as
+such was the error the sweep declaration corrects.
 
 ## 6. Capture plane and handoff state vector (D-006)
 
@@ -183,11 +204,15 @@ what happens as each contributor grows past its allocation.
   if contact physics needs a quantity not listed here, that is a spec bug, not a code
   decision (D-006 consequence).
 - **Annulus rule:** contact physics runs on a disc of radius **160 mm** about the
-  funnel axis at the capture plane — mouth radius 110 mm + funnel lip 25 mm + 25 mm
-  margin [ASSUMED] — not only inside the mouth. Trajectories crossing the capture
-  plane inside r ≤ 160 mm get full contact simulation (lip strikes score as the misses
-  they are); r > 160 mm scores as a kinematic clean miss. Omitting the annulus would
-  silently score near-misses as captures and manufacture the headline number (D-006).
+  funnel axis at the capture plane — **[derived]**: a lip strike is possible whenever
+  the stud-head *center* crosses within head-radius reach of the lip band [110, 125] mm,
+  i.e. out to 125 + 20 = 145 mm; add ≤5 mm lateral drift over the last 50 mm (v_lat ≤
+  0.1·v_close) and 10 mm reserve → **160 mm**. Trajectories crossing inside r ≤ 160 mm
+  get full contact simulation; r > 160 mm scores as a kinematic clean miss. **What a
+  too-small annulus hides:** lip strikes misclassified as clean misses — and lip
+  strikes matter twice, because they can deflect *into* capture (a false-capture path
+  the taxonomy must count) or damage the stud and fiducial. Omitting the band silently
+  scores near-misses as captures and manufactures the headline number (D-006).
 - Funnel geometry closing the arithmetic [D-016; derived]: mouth Ø220 = 2 × (35 mm
   envelope + 20 mm head radius + 55 mm margin-to-wall-angle); throat Ø42 = head Ø40
   + 2 mm; depth 180 mm → wall half-angle atan((110 − 21)/180) ≈ **26°**. At full
@@ -257,6 +282,25 @@ Perception enters Phase 1 as the injected model (D-007) parameterized by these a
 (D-008-R). Which cells are measured vs extrapolated at run time is recorded in
 `ARCHITECTURE.md`'s real-vs-simulated table and updated when MR data lands.
 
+### 9.1 Swept system parameters (Door 4 closures — full set in `PHASE1_PARAMETERS.md`)
+
+| Parameter | Sweep | Default | Default's basis |
+|---|---|---|---|
+| `attempts-per-encounter` (D-005, H-01) | {1, 2, 3, 5} | 3 | **arbitrary** — 1 isolates the first-attempt distribution; 5 caps time-on-target |
+| Approach speed, outer servo (H-02) | 0.5–2.0 m/s | 1.0 | **arbitrary** within S-MET-class plausibility |
+| Approach speed, inner servo (H-02) | 0.1–0.3 m/s | 0.2 | arbitrary, same basis |
+| Insertion / capture-plane closing speed (H-02) | 0.02–0.15 m/s | 0.05 | arbitrary; ceiling ties to D-020's latch speed bound; couples to H-04 stiffness |
+| Contact friction μ, mud-contaminated steel (H-03) | 0.1–0.8 | 0.4 | **arbitrary** — contamination state spans the range; sweeping the range IS the honest treatment |
+| Contact restitution e (H-03) | 0.1–0.4 | 0.2 | arbitrary, steel-impact class |
+| Perception rate (H-06) | {10, 30, 60} Hz | 30 | arbitrary, commodity-pipeline class |
+| Perception latency (H-06) | {10, 30, 100} ms | 30 | arbitrary, same class |
+| Chassis error scale (D-019) | ×{0.5, 1, 2} of §5 allocations | ×1 | §5 allocations are themselves assumed |
+| `conf_min_attempt` (D-017) | {0.50–0.95} | 0.85 | **arbitrary** — the sweep's tradeoff curve is the deliverable, not the default |
+| Encounter time budget T (D-022) | {5, 15, 30} min | 15 | arbitrary — no sourced mission-exposure value exists |
+| Mud model f_c (D-023) | {0.6, 0.8, 1.0} | 0.8 | arbitrary within the conservative form |
+| Flip-model scale κ (studies/H08) | {0.5, 1, 2} | 1 | shape assumption pending MR-003 |
+| Compliance stiffness k (H-04) | log grid over [1, 70] N/mm | — | **UNRATIFIED — band derived in studies/H04; no default until topology is ratified** |
+
 ## 10. Known weaknesses
 
 Stated as a section, not buried:
@@ -275,3 +319,8 @@ Stated as a section, not buried:
 8. **Host mounting assumptions are unvalidated** — no platform data is published (§7).
 9. The capture envelope itself (±35 mm/±10°) is an assumption Phase 2 must confirm
    against real chassis-positioning data (D-015).
+10. **Single-tag orientation is flip-unsafe** (§3.5 caveat, studies/H08) — insertion
+    requires multi-tag fusion, so inner-ring occlusion below two visible tags is a
+    hard abort condition, tightening §8 row 3.
+11. **The funnel compliance is unratified** (§2.3) — the crux mechanism's topology
+    awaits a human decision; every contact-model number downstream of it is pending.

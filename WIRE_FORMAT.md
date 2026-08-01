@@ -52,10 +52,14 @@ model. **It does not represent:** the two-solution ambiguity (that is `ambiguity
 extrinsics are assumed), or model error in the injected curves (D-008-R labels).
 Consumers must not treat small covariance as immunity to those.
 
-**Threshold:** the confidence gate holds any actuation when `conf <`
-**`conf_min_attempt` = 0.85 [ASSUMED, unvalidated — named parameter, Phase 1 sweeps
-it]**; insertion commit additionally requires `pose_source` ∈ {`inner_ring`,
-`multi_tag_fused`} and `stage` = `inner_servo` (D-004, D-013).
+**Threshold:** the confidence gate holds any actuation when `conf < conf_min_attempt`.
+**`conf_min_attempt` is a swept Phase 1 parameter (D-017), sweep {0.50–0.95}, default
+0.85 — the default is arbitrary and labeled so; §1.5's refusal-vs-damage asymmetry,
+not a round number, is what ultimately sets it, and the sweep's refusal-rate vs.
+damage-risk tradeoff curve is a Phase 1 deliverable (ARCHITECTURE §6).** Insertion
+commit additionally requires `pose_source` = `multi_tag_fused` **(≥2 fused tags — a
+single tag's orientation is flip-prone at all inner-servo angles, studies/H08, D-011
+qualification)** and `stage` = `inner_servo` (D-004, D-013).
 
 ## Failure semantics — what the stream looks like
 

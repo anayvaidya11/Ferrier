@@ -29,8 +29,10 @@ perception  ──────────►  TARGET-STATE STREAM  (WIRE_FORMAT
                         └───────┬───────────┘   (D-013; §2.3 abort discipline)
                         pass ▼         ▼ fail
                      guidance        abort/escalate path
-                 (3-stage, D-004)    (refuse, send imagery,
-                        │             recommend human — D-013)
+                 (3-stage, D-004;    (refuse, send imagery,
+                  approach planner    recommend human — D-013)
+                  constrained to the
+                  ±20° D-018 sector)
                         ▼
                 actuator commands    telemetry/escalation stream
                 (approach, insert,   (store-and-forward under DDIL,
@@ -86,9 +88,14 @@ If a reader cannot tell from this table alone what is real, the table has failed
 Contact trials run headless; **CPU-first is the expectation**. Cloud GPU is a software
 purchase and permitted (NO_HARDWARE rev 2), but nothing in Phase 1 requires it under
 D-007/D-008-R. The retry loop (D-005) multiplies trial count, and hourly billing
-punishes exactly that workload — **measure cost per trial on parallel CPU first, and
-provision GPU only if it wins on measured cost** (A-004). The local machine is a
-terminal at experimental scale.
+punishes exactly that workload — so the answer is not assumed in either direction.
+**The deciding test (A-004), run in Phase 1 week one before provisioning anything:**
+implement one representative contact workload (1,000 nominal-parameter trials through
+the full capture-plane + annulus pipeline), run it on a cloud CPU instance and a cloud
+GPU spot instance, and compare **measured dollars per 1,000 trials**. The winner is
+provisioned; the loser is not; both measurements are committed alongside the trial
+records (engine and instance identity land in every `trial_header`). The local machine
+is a terminal at experimental scale.
 
 ## 6. Phase 1 output specification
 
@@ -106,3 +113,8 @@ What the experiment produces, in full (D-005, D-006, D-014, A-007):
 5. **Replayable trial artifacts** — ≥1 successful dock + ≥1 per failure class,
    each generated from and mapping to a committed trial record, labeled *simulated*
    (A-007). First `CLAIMS.md` entries land with these.
+6. **The refusal-rate vs. damage-risk tradeoff curve** (D-017) — docking outcomes as
+   `conf_min_attempt` sweeps {0.50–0.95}: how often the machine refuses versus how
+   often it commits to an insertion it should not have attempted. A second deliverable
+   of D-014's class, and §1.5's asymmetry made quantitative — arguably the more
+   interesting curve to a defense reviewer, because it prices the abort discipline.

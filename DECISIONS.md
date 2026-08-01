@@ -23,12 +23,95 @@ mating geometry.
 inherited qualification is claimed for the mating geometry. Using "pintle" for the
 target-side feature inverts standard usage and will be caught.
 
-### D-003 — Preliminary latch load rating: 15 kN design
-≈10 kN breakout for a mired 500 kg UGV × 1.5 safety factor. Stated as an **assumption,
-unverified until Phase 2**.
-**Consequence:** under tow the funnel carries zero load — tension pulls the stud straight
-out of the mouth. The latch is the entire primary structure and a single point of
-failure. Said plainly wherever the rating appears.
+### ~~D-003 — Preliminary latch load rating: 15 kN design~~ — superseded by D-003-R, 2026-08-01
+~~≈10 kN breakout for a mired 500 kg UGV × 1.5 safety factor. Stated as an assumption,
+unverified until Phase 2.~~
+**Why superseded:** the INTERFACE_SPEC §2.1 derivation showed the stud has a different
+governing load case than the latch — bending at the neck, not tension — so a single
+tension rating conflated two structures.
+
+### D-003-R — Two load ratings: latch tension and stud neck bending
+**(a) Latch tension rating: 15 kN axial** — ≈10 kN mired-breakout for a 500 kg-class
+UGV (§1.7) × 1.5. **(b) Stud neck bending rating: 462 N·m design moment** — the
+transverse component of a 15 kN tow at the D-018 sector edge (15·sin 20° ≈ 5.13 kN) on
+the 90 mm exposed length (D-016); SF ≈ 2.2 against class-typical 4140 QT yield
+(655 MPa — a material-class value; Phase 2 sources the actual certificate).
+**Both are static ratings, unverified until Phase 2; dynamic/snatch tow loads are
+excluded and flagged as a Phase 2 item.**
+**Consequence:** under tow the funnel carries zero load; the latch is the entire
+primary structure and a single point of failure (unchanged). The stud's governing case
+constrains approach/tow geometry — see D-018.
+
+### D-017 — Confidence threshold is a swept parameter, and its sweep is a deliverable
+`conf_min_attempt` is **not a constant**: it is the single parameter trading refusal
+rate against the risk of committing to an insertion that should have been refused, and
+§1.5's asymmetry (a refusal costs a wasted trip; a wrong insertion risks the asset) —
+not a round number — is what sets it. Sweep {0.50, 0.60, 0.70, 0.80, 0.85, 0.90,
+0.95}; default 0.85 is **arbitrary and labeled so**.
+**Consequence:** Phase 1 outputs a **refusal-rate vs. damage-risk tradeoff curve** — a
+second deliverable of D-014's class (ARCHITECTURE §6).
+
+### D-018 — Approach and tow sector: ±20° about the stud axis (normative)
+Final approach heading and applied tow direction shall lie within a ±20° cone of the
+stud +X axis. Basis: the D-003-R(b) bending arithmetic — SF erodes from ≈2.2 at 20° to
+≈1.5 at 30° (INTERFACE_SPEC §2.1, derivation shown there).
+**What would make it wrong:** material below class-typical yield, dynamic amplification
+beyond the static margin, or a Phase 2 neck redesign.
+**Consequence:** propagates into the approach planner (ARCHITECTURE §2/§4) and the
+resolver stage; Phase 2 verification item in ROADMAP.
+
+### D-019 — Chassis positioning error model (form decided; magnitudes swept)
+Error = slowly-varying Gauss-Markov bias (correlation length 2 m, swept) + white
+jitter + Poisson-arrival slip events (exponentially distributed magnitude). Magnitudes
+sweep at ×{0.5, 1, 2} of the §5 allocations. Rationale: captures mud-slip
+phenomenology with few parameters.
+**What would make it wrong:** a real platform dominated by oscillatory control
+coupling rather than slip — Phase 3+ data would show it.
+
+### D-020 — Latch success predicate (sim)
+`latched` ⟺ stud-head center within 3 mm radial of throat axis at engagement depth,
+closing speed ≤ 0.1 m/s, condition held 100 ms. Basis: §5 latch tolerance class;
+speed bound tied to the insertion-speed sweep ceiling.
+**What would make it wrong:** the Phase 4 latch CAD defining a mechanism with a
+different engagement condition — restate then.
+
+### D-021 — Phase 1 sweep design (DOE)
+Three tiers: **Tier 1** one-factor marginal grids at nominal elsewhere (produces the
+per-axis curves and the D-014/D-017 deliverables); **Tier 2** Latin Hypercube, N ≥
+4,000 over the joint degradation space (interaction discovery); **Tier 3**
+failure-replay set (A-007 artifacts). Total ≥ 10,000 trials (MASTER_CONTEXT Phase 1).
+Full factorial (~10⁷ cells) is infeasible and unnecessary for the deliverables.
+**What would make it wrong:** Tier 2 revealing interactions strong enough that Tier 1
+marginals mislead — redesign the DOE then, as a recorded revision.
+
+### D-022 — Success definition
+Trial success ⟺ D-020 latch within the attempt budget (D-005/H-01) and total encounter
+time ≤ T. **T swept {5, 15, 30} min, default 15 — arbitrary, labeled so** (mission
+exposure time is a casualty-logic input, §1.3, with no sourced value yet).
+First-attempt and multi-attempt distributions stay separate (D-005).
+
+### D-023 — Interim mud-degradation model (until MR-001)
+P(detect | mud fraction f) = P_mask(f) · C(f), where P_mask is the clean-mask
+literature curve and C(f) = max(0, 1 − f/f_c) with f_c swept {0.6, 0.8, 1.0}
+(f_c = 1.0 degenerates to the literature mask model). Direction is conservative — mud
+strictly worse than clean masking. **The functional form is an assumption, labeled;
+MR-001 replaces it.**
+**What would make it wrong:** wet-mud specularity locally *raising* contrast, breaking
+monotonicity — MR-001 would show it.
+
+### D-024 — Host integration envelope (requirements WyZen levies, not facts)
+Free cylinder Ø270 × 400 mm forward of the plate (funnel outer Ø250 + 20 mm clearance;
+depth 180 mm + drawbar + approach margin); stud axis height 400–800 mm; host resting
+attitude within ±20°. These are interface *requirements* on integrators, derived from
+the funnel envelope and §9's terrain sweep — renegotiated when real platform data
+lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
+
+### D-025 — Cam B obliquity: 30°, justified band [15°, 45°]
+Lower bound: constellation discriminability must survive partial occlusion down to an
+adjacent two-tag baseline (studies/H08_AMBIGUITY_MODEL.md arithmetic). Upper bound:
+far-side tag foreshortening and full-ring frame coverage through insertion. The
+extrinsic translation stays [ASSUMED] within the band (D-012); **MR-003's oblique arm
+uses 30°.**
 
 ### D-004 — Three-stage terminal guidance
 3 m → 200 mm: outer fiducial visual servo. 200 mm → contact: inner-ring servo on an
@@ -110,6 +193,12 @@ integration.
 Outer: 150 mm tag on a 200 mm plate, sized for 3 m acquisition. Inner: ring of ~10 mm
 tags readable to contact. Every tag ID maps to a known rigid offset from the stud frame,
 so **any single visible tag yields full 6-DoF pose**.
+**Qualification (added 2026-08-01, from studies/H08_AMBIGUITY_MODEL.md):** the
+single-tag pose is position-reliable but **orientation is flip-prone for single small
+tags** — a lone 10 mm tag cannot self-disambiguate the two-solution ambiguity at any
+view angle at inner-servo ranges (discriminability ≈1.4 px, below the noise floor).
+The 6-DoF claim stands as a positioning statement; **insertion commit requires ≥2
+fused tags** (`pose_source: multi_tag_fused`, WIRE_FORMAT).
 **Consequence:** two candidate layouts specified to fabrication precision — coplanar
 cluster vs. inner ring raised on a collar — with the selection rule stated explicitly.
 **Selection rule (rev 2026-08-01, propagated from D-008-R):** the layout is selected by
