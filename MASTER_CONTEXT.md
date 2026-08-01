@@ -273,7 +273,7 @@ Four weeks.
 
 **On the cofounder.** You are the CTO — embedded C, CV, models, boards. The gap is mechanical: manipulator design, tow interface, structures, actuator selection, ruggedization. By December you hold a sim result, a physics document, a working perception stack, and a specific well-defined mechanical problem with a failure taxonomy attached. That is a genuinely attractive thing to hand someone.
 
-Targets: robotics/ME people at universities with field robotics programs, FIRST and Formula SAE alumni, anyone in the SF network who builds actuators. **Conversations start no later than early December.** A cofounder who appears three weeks before the deadline reads to YC exactly like what it is.
+Targets: robotics/ME people at universities with field robotics programs, FIRST and Formula SAE alumni, anyone in the SF network who builds actuators. **Conversations start 1 November 2026 (A-009; the earlier "no later than early December" was the deadline dressed as a plan).** A cofounder who appears three weeks before the deadline reads to YC exactly like what it is.
 
 ---
 
@@ -493,3 +493,12 @@ pull-forward is cancelled"; that instruction predates NO_HARDWARE rev 2 and is
 superseded by A-003/D-008-R (the measurement path now runs through
 MEASUREMENT_REQUESTS.md) — recorded here as a prompt-vs-document conflict resolved in
 the documents' favor.
+
+### A-009 (2026-08-01) — Cofounder outreach moved to 1 November
+
+The Phase 4 body text said conversations start "no later than early December" — a
+deadline dressed as a plan. First outreach now begins **1 November 2026**, as a dated
+Phase 3 milestone in ROADMAP.md. Rationale: every artifact this program produces
+doubles as recruiting material only if someone actually sees it, and by 1 November the
+Phase 1 kill-gate result and the tradeoff curves exist to show. Body edited in-place
+per the precedence rule (applying a recorded amendment).

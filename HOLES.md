@@ -1,56 +1,43 @@
-# HOLES — Phase 0 Gate Self-Test Results
+# HOLES — Phase 0 Gate Ledger
 
-**Method (2026-08-01):** attempted to draft the complete Phase 1 simulation parameter
-set — every constant, sweep range, distribution, threshold, and frame transform —
-using only `INTERFACE_SPEC.md`, `ARCHITECTURE.md`, `WIRE_FORMAT.md` (plus the
-committed `DECISIONS.md` and `MEASUREMENT_REQUESTS.md` they cite) and nothing else.
-The probe draft is not committed; it was a probe. Every value that could not be filled
-from the specs alone is a hole, listed here with the section that should have
-contained it and the decision still required. **None are resolved by invented values**
-(NO_HARDWARE rev 2 escalation rule; Week 2 prompt gate rule).
+Updated 2026-08-01 (hole-closure session). Four sanctioned doors: **DERIVED** (Door 1),
+**SOURCED** (Door 2), **DECIDED** (Door 3, promoted to a D-xxx), **SWEPT** (Door 4,
+declared Phase 1 parameter with range + arbitrary-labeled default). No fifth door;
+nothing below was closed by invention.
 
-**Gate verdict is at the bottom, and it is plain.**
+## Closed
 
-## Holes
-
-| # | Missing value | Should live in | Decision required |
+| # | Hole | Door | Resolution lives at |
 |---|---|---|---|
-| H-01 | `attempts-per-encounter` default and sweep set (D-005 names the parameter, no value exists) | INTERFACE_SPEC §9 / ARCHITECTURE §6 | Pick default + sweep (e.g., {1, 2, 3, 5}) and record as a decision |
-| H-02 | Approach speed profile: outer-servo speed, inner-servo creep speed, insertion speed, and the design closing velocity at the capture plane | INTERFACE_SPEC §6 | Set the three stage speeds + v_insert with rationale (chassis class, contact energy) |
-| H-03 | Contact material parameters: friction (clean and mud-contaminated steel), restitution, contact stiffness/damping for the funnel-wall model | ARCHITECTURE §4 | Nominal + sweep ranges, sourced (Phase 2 literature) or declared sensitivity axes |
-| H-04 | **Funnel compliance architecture** — D-001 says "compliant funnel"; nothing defines whether compliance is a mounted-spring stage or structural, in which DOFs, at what stiffness. The sim cannot model the crux mechanism without it. **Largest hole in the set.** | INTERFACE_SPEC §2 / §6 | Design decision: compliance topology + stiffness/damping ranges to sweep |
-| H-05 | Chassis positioning error *model* (§5 allocates ±25 mm but not the form: bias vs. random walk vs. slip events, correlation time) | ARCHITECTURE §4 | Pick the error model and its parameters |
-| H-06 | Perception frame rate and latency distribution for the injected model (WIRE_FORMAT carries the timestamps; no values set) | ARCHITECTURE §4 | Set rate (e.g., 30 Hz) + latency distribution, labeled assumed |
-| H-07 | Numeric literature-derived detection curves — D-008-R's fallback tier names the sources; nobody has digitized the actual curves with figure-level citations | new: `research/data/perception_prior.md` | Extraction task (no hardware needed) — Phase 1 week-one work item |
-| H-08 | Flip-probability-vs-angle injection values pre-MR-003 — the derived IPPE fallback analysis (D-011) has not actually been performed | `research/data/` + INTERFACE_SPEC §9 | Run the derived analysis, or hold the axis until MR-003 lands |
-| H-09 | Latch success criterion in sim: what geometric/kinematic state counts as "latched" (head-center offset bound at throat depth, max closing v at confirm) | INTERFACE_SPEC §6 | Define the latch-confirm predicate |
-| H-10 | Sweep design over §9's axes — full factorial is ~10⁷ cells; 10,000+ trials (MASTER_CONTEXT Phase 1) needs a sampling strategy (LHS, stratified, staged) | ARCHITECTURE §6 | Choose the DOE and its per-axis stratification |
-| H-11 | Formal success definition + per-encounter time budget ("docking success" = latched within attempts budget within T seconds; T unset) | ARCHITECTURE §6 | Set T and ratify the success predicate |
-| H-12 | Mud-extrapolation functional form pre-MR-001 (how the clean-mask literature curve is degraded to stand in for mud: scale, contrast-model, threshold shift) | INTERFACE_SPEC §9 | Pick the extrapolation form and label it — it is the number most likely to be wrong, per D-008-R |
+| H-01 | attempts-per-encounter | 4 SWEPT | INTERFACE_SPEC §9.1 ({1,2,3,5}, default 3 arbitrary) |
+| H-02 | Approach/insertion speed profile | 4 SWEPT | §9.1 (three stage speeds; insertion ceiling tied to D-020; coupling to H-04 noted) |
+| H-03 | Contact μ, e | 4 SWEPT | §9.1 (μ 0.1–0.8, e 0.1–0.4 — contamination state spans the range; sweeping IS the honest treatment). Solver stiffness/damping: 3 DECIDED — numerical artifacts set by the recorded convergence procedure in PHASE1_PARAMETERS §Contact, logged per-run in `trial_header` |
+| H-05 | Chassis error model | 3 DECIDED (form, D-019) + magnitudes swept ×{0.5,1,2} | DECISIONS D-019; §9.1 |
+| H-06 | Perception rate/latency | 4 SWEPT | §9.1 ({10,30,60} Hz; {10,30,100} ms; class-value defaults labeled) |
+| H-08 | Flip injection pre-MR-003 | 1 DERIVED | studies/H08_AMBIGUITY_MODEL.md — discriminability scaling, collar observability bound (h_c ≥ ~8 mm), interim model with its one shape parameter κ declared swept in §9.1. Residual: MR-003 validates. **Consequence propagated: single-tag orientation caveat (D-011 qualification); insertion requires ≥2 fused tags (WIRE_FORMAT)** |
+| H-09 | Latch predicate | 3 DECIDED | D-020 |
+| H-10 | Sweep design | 3 DECIDED | D-021 (3-tier DOE, ≥10k trials) |
+| H-11 | Success definition + T | 3 DECIDED (predicate, D-022) + T swept | D-022; §9.1 |
+| H-12 | Mud extrapolation form | 3 DECIDED (form, D-023) + f_c swept | D-023; §9.1 |
 
-## Placeholder values requiring ratification
+**Former ratification placeholders:**
 
-These appear in the specs as **[ASSUMED]**-labeled values that trace to a decision's
-*mechanism* but whose *magnitudes* were set editorially. They are disclosed here so
-none ride into Phase 1 unratified (Week 2 prompt, verification item 6):
+| Item | Door | Resolution |
+|---|---|---|
+| conf_min_attempt = 0.85 | 4 SWEPT | D-017 — reclassified per Part B: the sweep's refusal-vs-damage tradeoff curve is a Phase 1 deliverable (ARCHITECTURE §6.6) |
+| Tow-angle limit ±20° | 3 DECIDED (on a shown derivation) | D-018 normative sector; D-003-R split; Phase 2 verifies incl. dynamic loads |
+| Annulus margin | 1 DERIVED | INTERFACE_SPEC §6 — 160 mm from lip band + head radius + drift + reserve; too-small hides lip strikes (incl. the false-capture path) |
+| Tolerance-budget allocations | 4 SWEPT | §5 — declared sweep centers, ×{0.5,1,2} via D-019 |
+| Obstruction cone / stud height / host attitude | 3 DECIDED | D-024 — requirements WyZen levies on integrators; renegotiated when platform data exists |
+| Camera extrinsics (Cam B obliquity) | 3 DECIDED (bounds derived) | D-025 — β = 30°, band [15°, 45°] from studies/H08 §5; translations stay [ASSUMED] within band |
 
-- `conf_min_attempt` = 0.85 (WIRE_FORMAT) — placeholder; Phase 1 sweeps it, but the
-  default should be ratified or replaced.
-- Annulus margin 25 mm beyond lip (INTERFACE_SPEC §6).
-- Tolerance-budget allocations 15/25/3 mm and 3/6/1° (§5) — sweep centers.
-- Obstruction cone Ø270 × 400 mm; mounting height 400–800 mm; host attitude ±20° (§7).
-- Off-axis tow limit ±20° (§2.1) — Phase 2 owns the real number; flagged in §10.
-- Camera extrinsics in §4 (D-012 covers the sensors; the mounting offsets are
-  editorial).
+## Open
 
-## Gate verdict
+| # | Hole | Status | What closes it |
+|---|---|---|---|
+| H-04 | Funnel compliance architecture | **OPEN — study complete, UNRATIFIED** (`studies/H04_FUNNEL_COMPLIANCE.md`) | **Human ratifies a topology** (PENDING_HUMAN.md). Stiffness then enters §9.1's declared sweep over the derived [1, 70] N/mm band |
+| H-07 | Literature perception curves, digitized | **OPEN — task specified, not performed** | A reading/extraction session: digitize detection-vs-range/angle/lighting curves and pose covariance from the named sources (Olson 2011; Wang & Olson 2016; Kallwies 2020) into `research/data/perception_prior.md` with figure-level citations. No hardware needed; Door 2 on completion. Estimated half a day. **Not closable by citation-from-memory — that is the Door 2 correctness failure** |
 
-**No — Phase 0 does not pass yet.** The gate requires that Phase 1 build against the
-specs with **no further design decisions**; twelve holes and six unratified
-placeholders remain. Honest status of each class: H-01, H-02, H-05, H-06, H-09, H-10,
-H-11, H-12 are one-session decisions; H-07 and H-08 are small derivation/extraction
-tasks doable without hardware; H-03 is a sourcing task; **H-04 (funnel compliance) is
-a genuine design decision and the critical path** — it defines the crux mechanism the
-whole experiment measures. The gate window runs to Aug 14; a single decisions session
-closing H-01–H-12, plus committing the two derivation artifacts, closes the gate.
-A hole honestly reported closes the gate *correctly*; these are reported, not filled.
+**Open count: 2.** Both have named closure paths; H-04's is a human decision, H-07's is
+a bounded work session. The Phase 0 gate remains open on exactly these two plus the
+resulting unfilled entries in `PHASE1_PARAMETERS.md`.

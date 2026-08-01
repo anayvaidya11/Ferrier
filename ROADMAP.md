@@ -78,6 +78,8 @@ Tow/extraction forces, power budget, thermal, mechanical envelope, chassis selec
 
 Fiducial detection + 6-DoF pose on real degraded imagery, fault classification, confidence-gated abort, sensor-path firmware on the Phase 0 wire contract. Cross-check sim vs real performance.
 
+**Milestone — 1 Nov 2026: first cofounder outreach conversations begin (A-009).** Materials in hand by then: the Phase 1 kill-gate number, the D-014 sensitivity curve, the D-017 refusal/damage tradeoff curve, the failure taxonomy, and the H-04 study — a specific, well-defined mechanical problem with evidence attached.
+
 ## Phase 4 — Integration, proof, cofounder (December) ⬜
 
 End-to-end demo, CAD (labeled as concept), proof site, mechanical cofounder — conversations start no later than early December. **Site gate: `CLAIMS.md` complete — no external claim without a register row (A-007).**
