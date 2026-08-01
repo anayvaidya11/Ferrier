@@ -400,3 +400,17 @@ to file a measurement request and stop — never to invent, estimate, or plausib
 interpolate. Consequence for the plan: perception curves become measured-where-
 measurable (DECISIONS.md D-008-R); the measurement window is late August, bounded at
 three working days of human time, per ROADMAP.md.
+
+### A-004 (2026-08-01) — §2.1 compute rule superseded: cost per trial, not cloud GPU
+
+The online-first compute rule (A-002) was written when Isaac Sim and rendering were in
+the plan and a GPU was a hard requirement. D-007 (perception injected, not rendered)
+removed the renderer, and with it the constraint that motivated the rule — so the rule
+is superseded by its own reasoning, not by preference. The compute target is now chosen
+on **measured cost per trial, verified before provisioning**: contact trials run
+headless and are expected to run on parallel CPU; cloud GPU remains permitted (a
+software purchase under NO_HARDWARE.md rev 2) and is rented only if it beats parallel
+CPU on measured cost per trial — the retry loop multiplies trial count, and hourly
+billing punishes exactly that workload. The local machine remains a terminal for
+anything at experimental scale. This resolves the A-002-vs-spec-plan conflict flagged
+during Week 2.
