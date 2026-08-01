@@ -125,12 +125,19 @@ band.
 ## MR-003 — Detection and pose-flip rate vs. view angle, both candidate layouts — **OPEN** — highest-value entry
 
 **The number needed:** for each candidate layout from D-011 — (a) coplanar cluster,
-(b) inner ring raised on a collar (standoff as specified in `INTERFACE_SPEC.md` §3) —
-P(detection) and **flip incidence** (fraction of frames in which the two-solution planar
-pose ambiguity resolves to the wrong solution, judged against the known rig geometry) as
-a function of view angle: {0°–10° in 2° steps} (the near-head-on region where the flip
-is worst), then {15°–75° in 15° steps}. Both from an on-axis camera position and an
-oblique one (~30° off-axis, standing in for Cam B). N ≥ 100 frames per point.
+(b) inner ring raised on a collar (standoff swept, see procedure) — P(detection) and
+**flip incidence** (fraction of frames in which the detector-plus-pose-estimator selects
+the wrong branch of the two-solution planar ambiguity, judged against the known rig
+geometry) as a function of view angle: {0°–10° in 2° steps} (the near-head-on region
+where the flip is worst), then {15°–75° in 15° steps}. Both from an on-axis camera
+position and an oblique one (~30° off-axis, standing in for Cam B). N ≥ 100 frames per
+point.
+
+**What this measures, precisely:** the wrong-solution *selection rate under real corner
+noise and real optics*. It does not re-measure the two-solution geometric structure or
+the ambiguity separation angle — those are derivable (Collins & Bartoli, IPPE) and any
+version of this request that only reproduces the derivable geometry dies at the field
+below. The purchase buys the noise behavior, nothing else.
 
 **What depends on it:** D-011's layout selection rule — this request is what converts
 the redundancy scheme from an assertion into a measurement; D-012's load-bearing claim
@@ -148,15 +155,20 @@ vs. collar layouts — the comparison is the whole question. Simulating it is ci
 under D-007: the injected model's flip parameter would be assumed, and measuring it in
 sim measures the assumption.
 
-**Procedure:** fabricate both layouts as printed tags on rigid board; the collar variant
-uses a spacer of stated height from the tripod-and-clamp class (a wood block or stacked
-board — not product geometry). Protractor-set view angles on the rig; for each layout ×
-camera position × angle: N ≥ 100 frames, offline detection + pose estimation with the
-reference implementation, flip judged against rig geometry (sign of the recovered
-normal). Consumer angular precision (±2°) is acceptable — the deliverable is a rate
-difference between layouts, not absolute pose truth.
+**Procedure:** print both layouts on rigid board; the collar variant is raised on a
+**shop-bought spacer of arbitrary height — never machined or cut to a spec dimension**.
+The spacer is the seam where this instrument could quietly become product geometry: a
+spacer made to the spec standoff is an artifact and fails the three-question test.
+Instead, **sweep at least two arbitrary shop-bought heights and record them**; the
+selection analysis interpolates across the swept heights, and the shipped standoff is
+set by that analysis, not by the rig. Protractor-set view angles; for each layout ×
+spacer height × camera position × angle: N ≥ 100 frames, offline detection + pose
+estimation with the reference implementation, flip judged against rig geometry (sign of
+the recovered normal). Consumer angular precision (±2°) is acceptable — the deliverable
+is a rate difference between layouts, not absolute pose truth.
 
-**Instruments:** shared with MR-001; spacer block — yes/yes/yes, order $10⁰.
+**Instruments:** shared with MR-001; shop-bought spacers of arbitrary height (≥2) —
+yes/yes/yes, order $10⁰.
 
 **Output format:** `research/data/mr003_flip_rate.csv`: `layout {coplanar|collar},
 collar_standoff_mm, cam_position {axial|oblique}, view_angle_deg, n_frames, n_detected,

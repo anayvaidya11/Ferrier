@@ -121,6 +121,14 @@ MR-003 breaks the circle with a physical measurement. **Fallback if MR-003 is ne
 collected:** a derived observability analysis — IPPE two-solution ambiguity separation
 as a function of collar standoff and camera obliquity — selects the layout, labeled
 derived.
+**Scope consequence for Week 2 (rev 2026-08-01):** because selection now happens in
+late August — before Phase 1 — `INTERFACE_SPEC.md` §3 carries **both candidate layouts
+plus the MR-003 selection rule**, and **Phase 1 builds against whichever layout won,
+only**. The candidates do not travel into Phase 1 as live alternatives; specifying both
+to full fabrication depth as if Phase 1 must sweep them is over-specification. The
+collar standoff is a **swept measurement parameter in MR-003, not a specified
+dimension** — the shipped standoff is set by the selection analysis, and no spacer is
+ever fabricated to a spec value (NO_HARDWARE.md rev 2).
 
 ### D-012 — Simulated sensor parameters, assumed
 Cam A: 1920×1200 global shutter monochrome, ~70° HFOV, on funnel axis. Cam B: same
