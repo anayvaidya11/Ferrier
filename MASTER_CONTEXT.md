@@ -95,7 +95,7 @@ Three tiers, applied per subsystem:
 
 **Nothing is presented as more real than it is.** Ghost Medic's governing rule carries over verbatim: *simulated = labeled simulated, raw = labeled raw, stub = labeled stub.* Every claim on the site maps to a file in the repo.
 
-**Compute rule — online-first (added 2026-08-01).** Everything designed at first runs on cloud compute. Phase 1 simulation and any training run on rented cloud GPUs; the local machine (MacBook Air M4 — Metal only, no CUDA, 16 GB unified memory) is a terminal, not a compute ceiling. Spec parameters (trial budgets, timesteps, degradation sweep resolution) are sized to cloud GPU capability, not local hardware. Cloud spend is budgeted before Phase 1 starts.
+**Compute rule — online-first (added 2026-08-01; SUPERSEDED by A-004 — compute is chosen on measured cost per trial; see AMENDMENTS).** Everything designed at first runs on cloud compute. Phase 1 simulation and any training run on rented cloud GPUs; the local machine (MacBook Air M4 — Metal only, no CUDA, 16 GB unified memory) is a terminal, not a compute ceiling. Spec parameters (trial budgets, timesteps, degradation sweep resolution) are sized to cloud GPU capability, not local hardware. Cloud spend is budgeted before Phase 1 starts.
 
 ### 2.2 The one thing physics cannot prove
 
@@ -156,10 +156,10 @@ anayvaidya11/Ferrier/
 
 **Docs committed and canonical.** Any Claude Code session orients by reading the repo. When prompt instructions conflict with the repo, the repo wins.
 
-### 2.6 Known operational workarounds (carried from Ghost Medic)
+### 2.6 Operational notes (updated 2026-08-01; originally carried from Ghost Medic)
 
-- Claude Code can commit and push to GitHub directly in this environment (verified 2026-08-01, first push of this repo). The Ghost Medic-era 403 workaround (`deploy.sh` heredoc, manual push) is obsolete; see amendment A-005.
-- Claude Code tends to work on its own branch rather than `main`. Fix: `git checkout -b main origin/[branch]` then force push.
+- **Pushes:** Claude Code commits and pushes to GitHub directly in the local macOS environment (verified 2026-08-01, first push of this repo). The Ghost Medic 403 was observed in a *sandboxed* environment and may still apply there. If a push fails: do not retry blindly — commit locally and fall back to the archived recipe: a human runs `git push origin main` manually, or a `deploy.sh` heredoc script is run outside the sandbox. See A-005/A-006.
+- **Branches:** sessions in this repo work directly on `main` (verified 2026-08-01). If a session finds itself on a side branch, merge or fast-forward `main` deliberately. **Never force-push `main`.** (The Ghost Medic-era recipe — `git checkout -b main origin/[branch]` then force push — is retired: it errors when a local `main` exists and can overwrite remote history.)
 - Prompts should be concise, target autonomous multi-step execution, and include built-in verification gates rather than back-and-forth debugging.
 
 ---
@@ -374,11 +374,14 @@ Carried verbatim from Ghost Medic, because it is the most differentiated asset t
 
 ## AMENDMENTS
 
-*Append-only from A-003 onward; the body above is no longer edited directly. Two earlier
-amendments were applied in-body before this mechanism existed and are recorded here for
-completeness: **A-001** (2026-08-01, commit `00b3c6a`) — §2.5 repository is
-`anayvaidya11/Ferrier`, not `wyzen-industries/recovery-stack`; **A-002** (2026-08-01,
-commit `2227701`) — §2.1 compute rule, online-first.*
+*Precedence rule (restated by A-006): amendments are authoritative — where an amendment
+and the body conflict, the amendment wins. From A-003 onward, substantive changes are
+recorded here; the body is touched only to apply a recorded amendment or to add a
+one-line supersession marker pointing at the governing amendment. Two earlier amendments
+were applied in-body before this mechanism existed: **A-001** (2026-08-01, commit
+`00b3c6a`) — §2.5 repository is `anayvaidya11/Ferrier`, not
+`wyzen-industries/recovery-stack`; **A-002** (2026-08-01, commit `2227701`) — §2.1
+compute rule, online-first.*
 
 ### A-003 (2026-08-01) — Procurement policy narrowed: instruments, not artifacts
 
@@ -421,3 +424,21 @@ during Week 2.
 from Ghost Medic). Reality: the first push of this repo succeeded directly from a
 Claude Code session on 2026-08-01. The §2.6 bullet is corrected in-body per this
 amendment; the `deploy.sh` heredoc workaround is retired.
+
+### A-006 (2026-08-01) — Documentation-integrity repairs from high-effort review
+
+A review of A-005 found the amendment mechanism internally inconsistent. Repairs, all
+applied in-body per the precedence rule now stated in this section's preamble:
+(a) the preamble states the rule — amendments win over conflicting body text, and body
+edits are limited to applying a recorded amendment or adding a supersession marker;
+(b) §2.1's superseded compute-rule paragraph carries an in-body marker pointing at
+A-004, so no un-annotated body text silently states retired policy;
+(c) §2.6's push note is scoped to the environment where it was verified (local macOS) —
+the Ghost Medic 403 was observed in a sandboxed environment and may recur there — and
+the fallback recipe (manual push / `deploy.sh` heredoc outside the sandbox) is archived
+in-body instead of deleted;
+(d) §2.6's branch-recovery recipe (`git checkout -b main origin/[branch]` + force push)
+is retired: it errors when a local `main` exists and risks overwriting remote history.
+Sessions never force-push `main`;
+(e) §2.6 retitled to "Operational notes" — its contents are now verified in this repo,
+not Ghost Medic carryover.
