@@ -257,6 +257,7 @@ recommend a human decision — never a metric pose from a non-visual source (D-0
 | 13 | Host frame member deformed | Plate pose skewed beyond §7 mounting assumptions; contact/vision mismatch | Abort; escalate |
 | 14 | Wrong-ID decode | Decoded ID outside expected variant block (§3.4) | Reject frame; persistent → escalate |
 | 15 | Comms loss mid-attempt | Link monitor | **Nominal, not a failure of the attempt**: continue autonomously (REQ-005, Q4); telemetry and any escalation queue store-and-forward |
+| 16 | Lip strike (added 2026-08-01 with the annulus derivation) | Contact wrench in the lip band [110, 125] mm before capture-plane crossing | Scored as its **own outcome class, never as capture or clean miss** — a deflected lip strike can fall into the mouth (false-capture path the taxonomy must count separately) or damage stud/fiducial; retry per D-005 with offset |
 
 ## 9. Degradation assumptions Phase 1 will parameterize
 

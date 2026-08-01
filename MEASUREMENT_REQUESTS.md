@@ -181,6 +181,36 @@ labeled derived; the flip *rate* under degradation stays uncharacterized and
 
 ---
 
+## Execution grids and time budget (added 2026-08-01 — makes each request executable with zero design decisions)
+
+**MR-001 grid (trimmed to fit the time bound; trim recorded):** outer tag at
+{3.0, 1.0} m × {0°, 20°, 40°, 60°}; inner tag at {0.30, 0.15} m × {0°, 20°, 40°} —
+14 geometry setups × 8 mud levels (0–70%, 10% steps, applied cumulatively so the tag
+is mudded once per level, geometry cycled within each level) = 112 conditions ×
+N = 100 frames (~4 s at 30 fps each; repositioning dominates at ~4 min/setup).
+Randomize geometry order within each mud level; photograph tag state before every
+condition. **Estimated human time: 1.5 days.** (The full 768-condition grid from the
+original filing would blow the 3-day bound; the trim drops redundant mid-range points,
+not axes.)
+
+**MR-002 grid:** {50, 10, 5, 2, 1} lux × both scales × {0°, 40°} at one range per
+scale (1.0 m outer / 0.20 m inner), fixed exposure ceiling, N = 100 —
+20 conditions, dark-room setup dominates. **Estimated human time: 0.5 day.**
+
+**MR-003 grid:** 2 layouts (coplanar; collar) × 2 shop-bought spacer heights
+(arbitrary, recorded — **never machined to a spec dimension**) × 2 camera positions
+(axial; 30° oblique per D-025) × view angles {0°, 2°, 4°, 6°, 8°, 10°} ∪ {15°, 30°,
+45°, 60°, 75°} × N = 100. Collar cells: 2 heights; coplanar cells: height n/a →
+(1 + 2) × 2 × 11 = 66 conditions. Flip judged against rig geometry (recovered-normal
+sign). **Estimated human time: 1.0 day.** Standing cautions restated: the spacer is
+tripod-class furniture at arbitrary heights, and the request measures **wrong-branch
+selection under real noise** — the two-solution geometry itself is derivable
+(studies/H08) and is not what this purchase buys.
+
+**Total: 3.0 days — exactly at the ROADMAP hard bound. Any overrun defers the
+remaining cells, never extends the budget.** Data lands in the schemas already
+specified per request; all three CSVs commit under `research/data/`.
+
 ## MR-004 — Pose error covariance — **DEFERRED**
 
 **The number needed:** 6-DoF pose error covariance for 36h11 vs. range and view angle.
