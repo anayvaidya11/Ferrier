@@ -369,3 +369,34 @@ Carried verbatim from Ghost Medic, because it is the most differentiated asset t
 ---
 
 *This document is the single source of truth for WyZen. Update it when reality changes. Commit every update.*
+
+---
+
+## AMENDMENTS
+
+*Append-only from A-003 onward; the body above is no longer edited directly. Two earlier
+amendments were applied in-body before this mechanism existed and are recorded here for
+completeness: **A-001** (2026-08-01, commit `00b3c6a`) — §2.5 repository is
+`anayvaidya11/Ferrier`, not `wyzen-industries/recovery-stack`; **A-002** (2026-08-01,
+commit `2227701`) — §2.1 compute rule, online-first.*
+
+### A-003 (2026-08-01) — Procurement policy narrowed: instruments, not artifacts
+
+`NO_HARDWARE.md` revision 2 supersedes its 1 August 2026 original. The original
+prohibited all physical purchase to prevent drifting into building a robot with no team,
+no time, and no capital — and accidentally forbade a second, much cheaper activity:
+pointing a camera at a muddy tag to collect data. Those are different activities with
+different risk profiles, and collapsing them cost the program its measured perception
+model.
+
+The governing distinction from here forward is **instrument vs. artifact**. Product
+artifacts (any part of the machine, any powered rig, any integration) remain absolutely
+prohibited; measurement instruments (camera, lenses, printed targets, lighting,
+tripod-class furniture, consumables) are permitted only where a committed decision
+depends on a number that cannot be honestly derived or sourced, gated by the
+three-question test in `NO_HARDWARE.md`, and channeled exclusively through
+`MEASUREMENT_REQUESTS.md`. When an honest number is unavailable, the correct action is
+to file a measurement request and stop — never to invent, estimate, or plausibly
+interpolate. Consequence for the plan: perception curves become measured-where-
+measurable (DECISIONS.md D-008-R); the measurement window is late August, bounded at
+three working days of human time, per ROADMAP.md.
