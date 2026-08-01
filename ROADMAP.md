@@ -38,6 +38,17 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 
 ---
 
+### Measurement window (late August, alongside Phase 1 stand-up)
+
+Physical measurements run per `MEASUREMENT_REQUESTS.md` (MR-001 mud, MR-002 low-lux,
+MR-003 layout flip rate; MR-004 deferred), under `NO_HARDWARE.md` rev 2
+(instruments-not-artifacts). **Hard bound: measurement is three working days of the
+human's time. A request that cannot be executed in that budget is deferred, not
+extended.** Phase 1 may begin with literature-derived perception curves and swap in
+measured curves when they land, provided the swap is recorded and the before/after
+results are both reported — silently improving an input mid-experiment is the same
+failure as refitting a model after seeing the answer.
+
 ## Phase 1 — The docking experiment (Aug 15 – Sep 30) ⬜ ⚠️ KILL GATE
 
 One question, one number: given a standardized target interface, what fraction of autonomous approach-and-latch attempts succeed under realistic field degradation?
