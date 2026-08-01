@@ -1,0 +1,369 @@
+# WyZen Industries — Master Context
+### Autonomous recovery and servicing for unmanned ground fleets
+**Version 1.0 · 31 July 2026 · Target: YC Spring 2027, projected mid-February 2027**
+
+> **Read this first, every session.** This is the canonical description of what WyZen is, what is being built, in what order, and under what rules. If any other document, prompt, or memory conflicts with this file, this file wins. If reality conflicts with this file, update this file.
+
+---
+
+## PART I — THE COMPANY
+
+### 1.1 One sentence
+
+WyZen builds the autonomous hand that keeps unmanned fleets in the fight: a robot that goes forward when another robot goes down, and does the physical work a human would otherwise walk into the kill zone to do.
+
+### 1.2 The claim everything rests on
+
+> **A standardized attachment interface turns autonomous battlefield recovery from a research problem into an engineering problem.**
+
+Every task in this agenda serves that sentence. If a task does not serve it, cut the task.
+
+### 1.3 Why this exists
+
+Militaries are buying unmanned ground vehicles at scale. Ukraine contracted 25,000 UGVs in the first half of 2026 and ran 16,676 missions in June alone. The U.S. Army's S-MET acquisition objective runs to 2,195 systems, and Project Sustainment selected five vendors in July 2026 for a medium logistics robot.
+
+When one of those robots gets mired, runs out of charge, or throws a track a kilometre forward of friendly lines, the only remedy today is to send three or four soldiers into a drone-saturated zone to retrieve a machine. Ukrainian commanders describe this as unacceptable and do it anyway. Ukraine's UGV sector nearly collapsed in 2025 for exactly this reason: manufacturers never built the support layer, so a robot that broke down stayed broken.
+
+The U.S. Army asked industry about this directly. Army Contracting Command at Aberdeen Proving Ground issued an RFI on 17 June 2026 seeking unmanned systems able to autonomously locate, rig, and recover disabled or destroyed vehicles in contested environments, explicitly under denied, degraded, intermittent, and limited (DDIL) network conditions. Responses were due 31 July 2026.
+
+**Fleets are growing faster than the ability to keep them running. That gap is the company.**
+
+### 1.4 What the machine does
+
+Four functions, ordered by increasing difficulty:
+
+| # | Function | Description | Hard part | Ours? |
+|---|---|---|---|---|
+| 1 | **Find** | Navigate to a disabled asset's last known position, off-road, GPS-denied | Off-road autonomy under DDIL | No — commodity (Overland, Forterra, Scout) |
+| 2 | **Assess** | Classify why it stopped: mired / out of charge / mechanically damaged / destroyed | CV on a damaged, mud-covered, arbitrarily-oriented object | **Yes** |
+| 3 | **Rig** | Physically attach: tow line, charge connector, battery bay | **The crux. This is the hand.** | **Yes** |
+| 4 | **Resolve** | Restart in place, recharge, or extract to a rear point | Traction and power | No — mostly solved engineering |
+
+**Functions 2 and 3 are the company.** Everything defensible lives there. 1 and 4 are purchased or integrated.
+
+### 1.5 The strategic properties that make this fundable
+
+**Useful before it's perfect.** A failed docking attempt costs a wasted trip. The fallback is exactly the status quo — send humans. Simulation shows meaningful value at a 40% autonomous success rate. Almost no autonomy product has this property; most require >95% because failure is catastrophic. This is the single strongest engineering argument in the thesis and it leads every pitch.
+
+**Never pitch as cost savings.** The materiel argument inverts if UGVs get cheap enough, and Ukrainian doctrine explicitly treats them as expendable. The casualty argument does not invert and is worth roughly 15× more. Pitch casualty avoidance with a cost benefit attached.
+
+**Interface, not platform.** The chassis is a purchased component. Armored recovery vehicles already exist. The gap is doing recovery without a human in the loop when the link is jammed.
+
+### 1.6 What killed the previous project, and why this is different
+
+Ghost Medic (offline AI first-aid assistant) was screened against five failure modes and failed all five. WyZen passes all five.
+
+| # | Test | Ghost Medic | WyZen |
+|---|---|---|---|
+| 1 | Funded buyer exists | ✗ No medical UGV program of record | ✓ ACC-APG RFI, 17 Jun 2026 |
+| 2 | Not already solved by a trained human | ✗ Medics are trained; edge case only | ✓ Current answer is four soldiers forward |
+| 3 | Not a commodity feature | ✗ Fall detection ships in every smartwatch | ✓ Autonomous rigging under DDIL |
+| 4 | Payload arithmetic closes | ✗ Quadruped: 10–14 kg, 3 hours | ✓ Tow force is gearing, not payload |
+| 5 | No regulatory/legal fork | ✗ FDA + Geneva Convention exclusivity | ✓ Materiel function; ITAR is a cost |
+
+**This does not mean WyZen works.** It means WyZen does not fail for the reasons Ghost Medic failed. Its own distinct failure mode is §1.7.
+
+### 1.7 The real risk, stated plainly
+
+*Science Robotics* (2026) states that the reliability of robotic manipulation in unstructured environments is unknown. Published grasp success on unknown objects in cluttered scenes runs roughly 75–87% — indoors, well-lit, clean point clouds, human-hand-sized objects.
+
+WyZen attaches to a mud-covered 500 kg vehicle, at night, at an arbitrary angle, possibly damaged, possibly under observation.
+
+**The mitigation is the thesis.** You do not have to grasp an unknown object. Require a standardized recovery interface on the target — tow eye, fiducial, defined attachment geometry — and an open-ended grasping problem becomes a constrained docking problem. Docking is dramatically more tractable. Every drone dock on earth relies on this.
+
+That converts a physics risk into a standards-adoption risk, which is a business problem a founder can attack.
+
+**Phase 1 exists to measure whether that conversion actually works.**
+
+---
+
+## PART II — THE APPROACH
+
+### 2.1 Build strategy: simulate the risk, model the rest
+
+WyZen is not building a vehicle in the next six months. It is building **evidence that the vehicle would work**, at near-zero capital cost.
+
+The distinction matters because of what kind of risk this is. Ghost Medic carried *market* risk, which no demo can retire. WyZen carries *technical* risk, which simulation genuinely can. NVIDIA released Newton 1.0 in April 2026 as a physics foundation purpose-built for contact-rich manipulation, and synthetic grasp training now transfers zero-shot to real hardware. A docking success distribution measured across ten thousand simulated approaches is real, falsifiable evidence produced on a laptop.
+
+Three tiers, applied per subsystem:
+
+| Tier | Method | Applies to |
+|---|---|---|
+| **Built** | Real, working, tested code | Perception, embedded, wire contracts, abort logic, sim harness |
+| **Derived** | Closed-form physics with sourced numbers | Tow forces, power budget, thermal, mechanical envelope |
+| **Modeled** | CAD and concept renders, labeled as such | Chassis integration, docking head geometry, vehicle concept |
+
+**Nothing is presented as more real than it is.** Ghost Medic's governing rule carries over verbatim: *simulated = labeled simulated, raw = labeled raw, stub = labeled stub.* Every claim on the site maps to a file in the repo.
+
+### 2.2 The one thing physics cannot prove
+
+Tow forces, power budgets, and thermal envelopes are closed-form. Docking reliability is not. It is empirical, and it must come from a simulation that is an honest experiment rather than a demonstration.
+
+**If the degradation model is not adversarial, the result is decoration.** A beautiful 95% that a technical reviewer breaks in diligence is worse than an ugly 55% that survives it. The sim must try to break the system.
+
+### 2.3 Architecture pattern (inherited from Ghost Medic)
+
+Contract-first. One wire format between every stage, so any producer can be swapped for any other without touching consumers.
+
+```
+GHOST MEDIC                          WyZEN
+sensor stream (NDJSON)          →    target-state stream (pose, fault, confidence)
+one wire contract               →    one wire contract
+parse, gate on ok flag          →    parse, gate on perception confidence
+anomaly detected (fall)         →    fault classified (mired/dead/destroyed)
+local model, no connectivity    →    local model, DDIL by requirement
+guidance to a non-expert        →    rigging plan to an actuator
+debounce: when NOT to fire      →    abort logic: when NOT to attempt
+```
+
+The last row carries the most weight. The reasoning about *when not to invoke the model* is the seed of abort-and-escalate logic, which in a recovery robot separates a useful machine from one that destroys the asset it was sent to save.
+
+**The confidence-gated abort is the product's honesty discipline in steel:** when pose confidence falls below threshold, the system refuses to attempt, sends imagery, and recommends a human decision. That is Ghost Medic's `ok:false → "unavailable"` rule, applied to actuators.
+
+### 2.4 The interface design rule
+
+**Mechanical universality, electrical specificity.**
+
+The Army has published MIL-STD-3078 (battery interoperability), and the C5ISR Center's Small Tactical Universal Battery provides eight sizes sharing a common mechanical and electrical interface. But different chemistries have different charging profiles and contact locations, which the standards literature states makes interoperable charging genuinely difficult.
+
+So: one tow interface and one manipulator handling a bounded set of standardized attachment geometries, plus a software layer that knows each platform's electrical profile. **The hand is universal. The handshake is per-platform, and it is a config file, not a redesign.**
+
+This makes WyZen more valuable as MIL-STD-3078 adoption grows. You become the company that services the standard.
+
+### 2.5 Repository structure
+
+```
+wyzen-industries/recovery-stack/
+├── MASTER_CONTEXT.md        # this document, committed
+├── INTERFACE_SPEC.md        # the docking interface (Phase 0)
+├── ARCHITECTURE.md          # system topology, real-vs-simulated table
+├── WIRE_FORMAT.md           # target-state stream contract
+├── ROADMAP.md               # phase status, 🟢/🟡/⬜/🧊
+├── PHYSICS.md               # derived numbers, sourced (Phase 2)
+├── sim/                     # docking simulation harness (Phase 1)
+│   ├── scenarios/           # parameterized degradation cases
+│   ├── results/             # committed datasets, reproducible
+│   └── REPORT.md            # honest writeup + failure taxonomy
+├── perception/              # fiducial detection, 6-DoF pose, fault classification
+├── firmware/                # embedded C, sensor path
+├── control/                 # approach planner, abort logic
+├── cad/                     # docking head, interface adapter, concept
+├── site/                    # the proof website
+└── tools/                   # chart generation, render verification
+```
+
+**Docs committed and canonical.** Any Claude Code session orients by reading the repo. When prompt instructions conflict with the repo, the repo wins.
+
+### 2.6 Known operational workarounds (carried from Ghost Medic)
+
+- Claude Code cannot push to GitHub in the sandboxed environment (persistent 403). Commit and push manually, or use the `deploy.sh` heredoc approach.
+- Claude Code tends to work on its own branch rather than `main`. Fix: `git checkout -b main origin/[branch]` then force push.
+- Prompts should be concise, target autonomous multi-step execution, and include built-in verification gates rather than back-and-forth debugging.
+
+---
+
+## PART III — THE SIX-MONTH PLAN
+
+| Phase | Window | Objective | Gate |
+|---|---|---|---|
+| 0 | Aug 1–14 | Orient. Read the customer's words. Define the interface. | Interface spec written |
+| 1 | Aug 15 – Sep 30 | **The docking experiment.** | **KILL GATE** |
+| 2 | October | Physics proof | Closed-form numbers, sourced |
+| 3 | November | Perception + embedded on real data | Working stack, measured accuracy |
+| 4 | December | Integration, CAD, proof site, cofounder | End-to-end demo runs |
+| 5 | January | Customer contact, application | Named human who wants this |
+| — | February | Submit | — |
+
+---
+
+### PHASE 0 — Orient (Aug 1–14)
+
+Two weeks. Cheap, and it aims everything that follows.
+
+**Week 1 — Read the customer**
+- Locate the RFI on SAM.gov: ACC-APG Durham, posted 17 June 2026. Read every question the Army asked. Their questions are a requirements document written by the customer, for free.
+- Search for follow-on signal: resulting solicitations, sources-sought notices, NAMC announcements referencing recovery.
+- Read MIL-STD-3078 and the STUB documentation. Know what standard exists before proposing one.
+- Study the five Project Sustainment vendors (AM General, American Rheinmetall, Carnegie Robotics, HDT/BLADE, Stratom). These are prospective partners, not just competitors.
+
+**Week 2 — Define the interface**
+- `INTERFACE_SPEC.md`: fiducial pattern, mechanical envelope, tolerance budget, load path, failure modes, degradation assumptions.
+- `ARCHITECTURE.md`: contract-first topology, real-vs-simulated table.
+- `WIRE_FORMAT.md`: the target-state stream — pose, fault class, confidence, timestamps. Field-by-field, with the omitted-not-zeroed rule stated explicitly.
+- Stand up the repo with all docs committed.
+
+**Deliverable:** three specification documents. **No implementation code.**
+
+**Gate:** the interface spec is precise enough that Phase 1 can be built directly against it without further design decisions.
+
+---
+
+### PHASE 1 — The docking experiment (Aug 15 – Sep 30) ⚠️ KILL GATE
+
+Six weeks. **The most important work in the agenda.**
+
+One question, answered with a number: *given a standardized target interface, what fraction of autonomous approach-and-latch attempts succeed under realistic field degradation?*
+
+**Build**
+- Simulation environment. Isaac Sim or Newton for contact fidelity; Gazebo or MuJoCo if lighter weight is needed. Choose on contact fidelity, not familiarity. **Verify GPU capability in week one, not week five.**
+- Parameterized target: interface geometry on a host vehicle at randomized attitude, partial burial, arbitrary heading.
+- Parameterized approach: docking head with simulated depth camera and IMU.
+- **The degradation model is the actual product.** Mud occlusion percentage, low light, rain, partial sensor dropout, lens contamination, vehicle pitch/roll, partially destroyed fiducial.
+
+**Run**
+- 10,000+ randomized trials across the degradation space.
+- Report as a **distribution, not a headline.** "94% clean, 61% at 40% fiducial occlusion, 23% below 10 lux without active illumination" is far more credible than "our system achieves 90%."
+- Classify every failure mode. The taxonomy of *how* it fails is what tells a mechanical cofounder what to design.
+
+**Gate criteria**
+
+| Result | Meaning | Action |
+|---|---|---|
+| **>60%** in moderate degradation | Thesis holds | Proceed to Phase 2 |
+| **30–60%** | Holds conditionally | Iterate interface / add active illumination or tactile feedback. Two weeks, re-run. |
+| **<30%** | Interface does not sufficiently constrain the problem | **Stop.** Revisit whether the wedge is assessment-and-triage rather than physical rigging. |
+
+A bad number here is the experiment working, not the company failing. Finding out in September with five months of runway is the entire point of front-loading it.
+
+**Deliverable:** reproducible harness, committed results dataset, honest writeup with failure taxonomy. This artifact alone outperforms most hardware demos.
+
+---
+
+### PHASE 2 — Physics proof (October)
+
+Four weeks. Mostly closed-form. This is what makes "we can build this" a claim rather than a hope.
+
+- **Tow and extraction forces.** Rolling resistance and mired-vehicle breakout force for a 300–500 kg UGV in mud. Winch line tension, gearing ratios, anchor reaction loads. Show the derivation.
+- **Power budget.** Locomotion + compute + winch + illumination against a realistic pack. Endurance under a defined mission profile.
+- **Thermal.** Edge compute under continuous inference in an enclosed housing at 45 °C ambient.
+- **Mechanical envelope.** Reach, degrees of freedom, payload at extension for the docking head.
+- **Chassis selection.** Do **not** design a chassis. Select a commercially available platform, document why, treat it as a purchased component. Write it as a tradeoff study.
+
+**Deliverable:** `PHYSICS.md`, every number derived and sourced.
+
+**Anti-goal:** designing the vehicle. This is the most tempting and least valuable work available.
+
+---
+
+### PHASE 3 — Perception + embedded (November)
+
+Four weeks. Existing skills carry directly.
+
+- **Fiducial detection and 6-DoF pose estimation on real camera data.** Print the target, mount it, cover it in actual mud, shoot it in the dark. Real data, not sim.
+- **Fault classification.** From imagery, distinguish mired / out of charge / mechanically damaged / destroyed. Small model, runs local, quantized.
+- **Confidence-gated abort.** Below-threshold pose confidence → refuse, send imagery, escalate. Ported directly from Ghost Medic's `ok:false` discipline.
+- **Embedded layer.** Sensor stream over the Phase 0 wire contract, same NDJSON-style pattern that already worked.
+
+**Deliverable:** perception stack on real degraded imagery with measured accuracy, plus sensor-path firmware.
+
+**Cross-check:** sim-measured performance vs. real-data performance. Where they diverge, that divergence is itself a finding worth publishing.
+
+---
+
+### PHASE 4 — Integration, proof, cofounder (December)
+
+Four weeks.
+
+- **End-to-end demo.** Simulated approach → real perception on real imagery → docking decision → abort-or-commit. Runs on command, reproducibly.
+- **CAD.** Docking head, interface adapter, integrated vehicle concept. Labeled as concept where it is concept.
+- **The proof site.** Same four-page structure that worked: overview, how it works, the physics, the evidence. Every claim traceable to a repo file. Real-vs-simulated table front and centre.
+- **Recruit the mechanical cofounder.**
+
+**On the cofounder.** You are the CTO — embedded C, CV, models, boards. The gap is mechanical: manipulator design, tow interface, structures, actuator selection, ruggedization. By December you hold a sim result, a physics document, a working perception stack, and a specific well-defined mechanical problem with a failure taxonomy attached. That is a genuinely attractive thing to hand someone.
+
+Targets: robotics/ME people at universities with field robotics programs, FIRST and Formula SAE alumni, anyone in the SF network who builds actuators. **Conversations start no later than early December.** A cofounder who appears three weeks before the deadline reads to YC exactly like what it is.
+
+---
+
+### PHASE 5 — Customer and application (January)
+
+Four weeks. The YC screener's live objection is here: *procurement is not customers.*
+
+**Get to a human.** Priority order:
+1. A UGV manufacturer wanting recovery as a differentiator — HDT/BLADE, Stratom, Carnegie Robotics are all Project Sustainment participants and all smaller than the primes.
+2. A NAMC member.
+3. An Army unit doing robotics experimentation.
+4. Anyone in the SF network with a line into either.
+
+One conversation with a real operator improves the application more than another month of code.
+
+**Also:**
+- Cofounder locked, or a documented credible plan.
+- Application draft, four full rewrites minimum. Open with *useful before it's perfect.*
+- Two-minute video: you, the sim result, the honest number, the failure modes.
+
+**Deliverable:** submitted application citing at least one customer conversation.
+
+---
+
+## PART IV — OPERATING RULES
+
+### 4.1 Weekly cadence
+
+| Day | Activity |
+|---|---|
+| Monday | Define the week's single deliverable. One. Not three. |
+| Wed/Thu | Claude Code executes autonomously against a concise prompt with verification gates |
+| Friday | Commit, update ROADMAP status, log real vs. simulated |
+| Sunday | 30 minutes: did this week move the load-bearing claim, or just feel productive? |
+
+### 4.2 Anti-rathole rules
+
+1. Never work on a later-phase item while an earlier-phase gate is open.
+2. Every claim on the site must map to a completed, evidenced item in the repo.
+3. When unsure whether something is real or simulated, the answer goes in the label, not the code.
+4. Do not design the chassis.
+5. Do not build a medical variant. That was the last company.
+
+### 4.3 Honesty discipline
+
+Carried verbatim from Ghost Medic, because it is the most differentiated asset the founder has:
+
+- Simulated is labeled simulated. Raw is labeled raw. Stub is labeled stub.
+- Publish the failure taxonomy alongside the success rate.
+- If the repository and the site ever disagree, the repository is right.
+- Defense sales pressure runs against this. Hold the line anyway — it is the reason a technical reviewer will trust the number.
+
+### 4.4 Vocabulary constraints
+
+- **Never use the word "lattice."** Anduril's Lattice was selected as the Army's NGC2 common data layer baseline in June 2026.
+- Never describe WyZen as a cost-savings product.
+- Never claim autonomy the system does not have; say "under DDIL" only where it is demonstrated.
+
+---
+
+## PART V — HONEST RISKS IN THIS PLAN
+
+**The sim could be decorative.** An insufficiently adversarial degradation model yields a meaningless high number that diligence will break. Make the sim try to break the system.
+
+**Phase 1 is genuinely uncertain.** Nobody knows whether the number comes back good. That is why it is a gate and not a milestone.
+
+**Solo through December is a real cost.** YC accepts solo founders but the bar is higher. Every week past November without a cofounder conversation makes December harder.
+
+**Scope creep toward the chassis.** Persistent temptation. The vehicle is a purchased component; the company is the stack that rides on it.
+
+**Manipulation reliability may simply be hard.** If the standardized interface does not sufficiently constrain the problem, the honest answer is to change the wedge, not to fudge the number.
+
+**Procurement timelines are long.** Fewer than 1% of SBIR Phase I awardees reach a program of record. The realistic first revenue path is riding in as a subcontractor to a prime — which is exactly what Forterra and Primordial Labs did under American Rheinmetall.
+
+---
+
+## PART VI — GLOSSARY
+
+| Term | Meaning |
+|---|---|
+| **DDIL** | Denied, Degraded, Intermittent, Limited network conditions |
+| **UGV** | Unmanned Ground Vehicle |
+| **RFI** | Request for Information — market research, precedes a solicitation by 6–18 months |
+| **NAMC** | National Advanced Mobility Consortium — OTA vehicle used by Project Sustainment |
+| **OTA** | Other Transaction Agreement — faster contracting mechanism than traditional FAR |
+| **S-MET** | Small Multipurpose Equipment Transport — the Army's squad robotic mule |
+| **MIL-STD-3078** | Army battery interoperability standard |
+| **STUB** | Small Tactical Universal Battery — eight sizes, common interface |
+| **Rigging** | Physically attaching a recovery line or connector to a disabled asset |
+| **Docking** | Constrained attachment to a *known* interface geometry (tractable) |
+| **Grasping** | Unconstrained attachment to an *unknown* object (unsolved) |
+
+---
+
+*This document is the single source of truth for WyZen. Update it when reality changes. Commit every update.*
