@@ -55,7 +55,7 @@ Ghost Medic (offline AI first-aid assistant) was screened against five failure m
 
 | # | Test | Ghost Medic | WyZen |
 |---|---|---|---|
-| 1 | Funded buyer exists | ✗ No medical UGV program of record | ✓ ACC-APG RFI, 17 Jun 2026 |
+| 1 | Funded buyer exists | ✗ No medical UGV program of record | ✓ *weaker (A-008)* — AAL market-research RFI, 17 Jun 2026; no funded program yet |
 | 2 | Not already solved by a trained human | ✗ Medics are trained; edge case only | ✓ Current answer is four soldiers forward |
 | 3 | Not a commodity feature | ✗ Fall detection ships in every smartwatch | ✓ Autonomous rigging under DDIL |
 | 4 | Payload arithmetic closes | ✗ Quadruped: 10–14 kg, 3 hours | ✓ Tow force is gearing, not payload |
@@ -348,6 +348,16 @@ Carried verbatim from Ghost Medic, because it is the most differentiated asset t
 
 **Procurement timelines are long.** Fewer than 1% of SBIR Phase I awardees reach a program of record. The realistic first revenue path is riding in as a subcontractor to a prime — which is exactly what Forterra and Primordial Labs did under American Rheinmetall.
 
+**Procurement-stage risk (added by A-008).** Week 1 research established the honest
+reading of the demand signal: the recovery RFI is Army Applications Laboratory *market
+research* run through ACC-APG Durham; no follow-on solicitation exists as of 2026-07-31,
+and recovery is not among CPE Mission Autonomy's three named prototype mission sets
+(breaching, sustainment, fires). §1.6 Test 1 remains a pass and a weaker one: **a
+customer is asking questions in writing; no funded program yet exists.** If the RFI
+matures, the demonstrated pipeline (NAMC RPP → selection in ~one quarter → 18-month OTA)
+says the artifact to watch for is a NAMC RPP or AAL solicitation, not a FAR RFP
+(research/FOLLOW_ON.md).
+
 ---
 
 ## PART VI — GLOSSARY
@@ -470,3 +480,16 @@ instead of aspirational.
 
 Also noted for Phase 5: the AAL contact channel (unmanned-ground-recovery@aal.army,
 Week 1 research) is the warmest named door for the customer conversation.
+
+### A-008 (2026-08-01) — §1.6 Test 1 downgraded to honest strength; procurement-stage risk added to Part V
+
+Week 1 research (research/FOLLOW_ON.md, research/RFI_ACC-APG.md) established that the
+recovery RFI is AAL market research, that no follow-on solicitation exists, and that
+recovery is not among the three named NAMC prototype mission sets. §1.6 Test 1's row is
+annotated in-body: still a pass — a customer asking questions in writing — and a weaker
+one than the original text implied. Part V gains a procurement-stage risk entry. Note:
+the Week 2 specification prompt also instructed recording "the bench-measurement
+pull-forward is cancelled"; that instruction predates NO_HARDWARE rev 2 and is
+superseded by A-003/D-008-R (the measurement path now runs through
+MEASUREMENT_REQUESTS.md) — recorded here as a prompt-vs-document conflict resolved in
+the documents' favor.

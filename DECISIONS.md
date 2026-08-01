@@ -148,3 +148,23 @@ Docking success as a function of assumed detection rate — not a single success
 **Consequence:** survives uncertainty in the perception model because it does not depend
 on any single perception value being correct. Produces a requirement handed to a
 mechanical cofounder rather than a claim to defend.
+
+### D-015 — Capture envelope at the capture plane: ±35 mm positional, ±10° angular
+**Assumption, unverified until Phase 2.** The envelope the funnel must swallow,
+referenced to the capture plane, not the latch. Added 2026-08-01 so the tolerance budget
+in `INTERFACE_SPEC.md` §5 traces to a recorded decision rather than exempting itself
+from the traceability rule.
+**Consequence:** funnel mouth size is derived from this envelope plus stud head radius;
+every budget allocation in §5 decomposes against these two numbers.
+
+### D-016 — Provisional interface dimension set (assumed, Phase 2 verifies)
+One named set of dimensions so the simulation and the spec share exact geometry. All
+values **[ASSUMED]** pending Phase 2 structural work; sources of each are shown in
+`INTERFACE_SPEC.md`: stud neck Ø25 mm, head Ø40 mm spherical-capped, exposed length
+90 mm; funnel mouth Ø220 mm (derived from D-015 + head radius, arithmetic in §5–§6),
+throat Ø42 mm, depth 180 mm (half-angle ≈26°, derived); target plate 200 × 200 mm;
+outer tag 150 mm at +185 mm above stud axis; inner ring 8 × 10 mm tags at radius 55 mm;
+collar standoff swept 10–40 mm (MR-003 measures at shop-bought heights; shipped value
+set by the selection analysis, never fabricated to spec — NO_HARDWARE rev 2).
+**Consequence:** Phase 1 builds against exactly these numbers; changing any of them is a
+recorded decision revision, not a code edit.
