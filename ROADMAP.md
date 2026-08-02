@@ -32,7 +32,7 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 - 🟢 `ARCHITECTURE.md` v1.0 (2026-08-01) — contract-first topology, real-vs-simulated table, sim architecture, compute plan, Phase 1 output spec
 - 🟢 `WIRE_FORMAT.md` v1.0 (2026-08-01) — target-state stream field-by-field; omitted-not-zeroed rule with worked example; consumer checklist; annotated reference lines
 - 🟢 Stand up the repo with all docs committed (2026-07-31)
-- 🟡 **Gate: OPEN — one item remains** (`HOLES.md`, 2026-08-02): H-07 literature-curve extraction (half-day session, no human dependency). H-04 CLOSED — T1 ratified as D-027. `PHASE1_PARAMETERS.md`: 61/63 filled.
+- 🟢 **Gate: technical self-assessment PASSES (2026-08-02).** `HOLES.md` open count 0; `PHASE1_PARAMETERS.md` 63/63 — every entry a value, a decided procedure, or a declared sweep with an honestly-labeled default. Perception's unanchorable regions (view-angle shape, covariance magnitudes) are declared sweeps upgraded by MR data under the curve-swap protocol. **Formal sign-off: PENDING_HUMAN P-05; cloud ceiling P-02 owed before Phase 1 ops.**
 
 **Deliverable:** three specification documents. No implementation code.
 **Gate:** interface spec precise enough that Phase 1 builds directly against it with no further design decisions.

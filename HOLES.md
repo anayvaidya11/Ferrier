@@ -36,7 +36,8 @@ nothing below was closed by invention.
 | # | Hole | Status | What closes it |
 |---|---|---|---|
 | H-04 | Funnel compliance architecture | **CLOSED 2026-08-02 — Door 3 (DECIDED): D-027, T1 ratified by the human** (studies/H04, header + Addendum). Stiffness/mass swept per D-026 with the A1 feasibility mask; revised R4 and the IS8-17 jam class landed with the ratification | — |
-| H-07 | Literature perception curves, digitized | **OPEN — task specified, not performed** | A reading/extraction session: digitize detection-vs-range/angle/lighting curves and pose covariance from the named sources (Olson 2011; Wang & Olson 2016; Kallwies 2020) into `research/data/perception_prior.md` with figure-level citations. No hardware needed; Door 2 on completion. Estimated half a day. **Not closable by citation-from-memory — that is the Door 2 correctness failure** |
+| H-07 | Literature perception curves | **CLOSED 2026-08-02 — Door 2** (`research/data/perception_prior.md`: Olson 2011, Wang & Olson 2016, Krogius 2019 fetched and page-verified; 34 extraction rows, text/table-sourced only; a fabricated fetch summary was caught and discarded). Kallwies 2020 UNAVAILABLE (P-07). Regions the corpus honestly cannot anchor (view-angle shape, covariance magnitudes) exited as declared sweeps in #39/#40 — Door 4 residuals, replaced by MR bench data | — |
 
-**Open count: 1 — H-07** (bounded extraction session, no human dependency). The
-Phase 0 gate remains open on exactly it and PHASE1_PARAMETERS #39/#40.
+**Open count: 0.** All twelve holes and every ratification placeholder have exited
+through a sanctioned door. `PHASE1_PARAMETERS.md` reads 63/63. The gate's technical
+condition is met; formal sign-off is PENDING_HUMAN P-05.

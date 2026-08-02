@@ -4,9 +4,10 @@ Every constant, sweep, distribution, threshold, transform, and criterion Phase 1
 needs, each citing the committed source it came from. **An entry that cannot be filled
 from the specs points at its open hole instead of a value. When this document has no
 UNFILLED entries, Phase 0 is done; until then it is the precise map of what remains.**
-Status: 2026-08-02 (post-D-027) — **63 entries, 61 filled, 2 UNFILLED** (#39/#40
-perception curves — H-07 extraction; the last items between this document and a
-closed Phase 0 gate).
+Status: 2026-08-02 (post-H-07) — **63 entries, 63 filled, 0 UNFILLED.** #39/#40 carry
+literature anchors plus declared sweeps for the regions the corpus honestly cannot
+anchor (view-angle shape; covariance magnitudes) — upgraded by MR data under the
+ROADMAP curve-swap protocol.
 
 ## Geometry (all from D-016 / INTERFACE_SPEC)
 
@@ -75,8 +76,8 @@ closed Phase 0 gate).
 |---|---|---|---|
 | 37 | Perception rate | {10, 30, 60} Hz, default 30 | IS §9.1 |
 | 38 | Perception latency | {10, 30, 100} ms, default 30 | IS §9.1 |
-| 39 | **Detection-probability curves P(range, angle, illuminance)** | **UNFILLED — H-07 extraction pending; MR-001/002 replace/refine** | — |
-| 40 | **Pose covariance magnitudes** | **UNFILLED — H-07 extraction (literature); MR-004 DEFERRED** | — |
+| 39 | Detection-probability model | **Literature anchors per `research/data/perception_prior.md`** (plateau ~1.0 in the near-field regime, onset-of-failure falloff — anchors D1–D4, text/table-sourced) + **view-angle axis deliberately unanchored by literature**: falloff shape is a swept parameter (arbitrary-labeled) until MR-001/002/003 data lands; FP/mis-ID rates well-anchored (36h11 ≤2-bit: 1.4×10⁻⁵/image class) | perception_prior.md; D-008-R |
+| 40 | Pose covariance | Generated from **swept corner-noise class value σ_px ∈ {0.3, 0.5, 1.0} px** (default 0.5, arbitrary — consistent with studies/H08's class assumption) propagated through the #19/#20 camera models. The literature pass could NOT anchor this (sole quantifying source Kallwies 2020 UNAVAILABLE; all else qualitative/figure-only) — replaced by measured reprojection residuals from the MR bench (`reproj_rms_px` column) | perception_prior.md; MEASUREMENT_REQUESTS |
 | 41 | Mud model | P_mask(f)·max(0, 1−f/f_c), f_c ∈ {0.6, 0.8, 1.0} | D-023 |
 | 42 | Flip model | studies/H08 §4; κ ∈ {0.5, 1, 2} | studies/H08 |
 | 43 | Dropout | Bernoulli p ∈ {0, .05, .1, .2, .3} + burst (geometric, mean 5) | IS §9 |
@@ -106,6 +107,5 @@ closed Phase 0 gate).
 | 62 | Jam-detection thresholds (IS8-17) | swept, defaults arbitrary: F_ax_jam {50, 100, 200} N; F_lat_jam {10, 25} N; t_jam {0.5, 1, 2} s — recalibrated against simulated force scales in Phase 1 week one, as a recorded revision | IS §8 row 17, D-027 |
 | 63 | k feasibility mask — **a reported finding, not bookkeeping** | ceiling k_max = μ·m_rv·g/35 mm per (μ, m_rv) cell (17–112 N/mm across classes). **Required Phase 1 report line:** intersect the required-stiffness band (deliverable 7) with each class's ceiling — wherever required-k exceeds k_max, report it as *"a recovery vehicle of class (m_rv, μ) cannot dock in that condition regardless of autonomy quality"* — a chassis-selection requirement consumed directly by Phase 2's tradeoff study | studies/H04 A1; ARCHITECTURE §6.7 |
 
-**UNFILLED: #39, #40 (H-07 — one extraction session).** #34 filled by D-027
-ratification (T1); #35/#36 are sweeps per D-026 with #63's feasibility mask; the
-required-stiffness band is a Phase 1 deliverable, not a Phase 0 guess.
+**UNFILLED: none.** The gate condition this document makes literal is met: every entry
+is a value, a decided procedure, or a declared sweep with an honestly-labeled default.

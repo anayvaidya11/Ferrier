@@ -211,6 +211,14 @@ selection under real noise** — the two-solution geometry itself is derivable
 remaining cells, never extends the budget.** Data lands in the schemas already
 specified per request; all three CSVs commit under `research/data/`.
 
+**Schema addition (2026-08-02, from the H-07 finding):** all three CSVs additionally
+carry a **`reproj_rms_px`** column — mean RMS corner reprojection residual per
+condition, computed offline from the same frames. The literature corpus cannot anchor
+corner noise (its only quantifying source is paywalled — `perception_prior.md`), so
+this column is what replaces the swept σ_px class value in PHASE1_PARAMETERS #40. It
+costs nothing at collection time and converts MR-001/002/003 into the covariance
+measurement MR-004 deferred.
+
 ## MR-004 — Pose error covariance — **DEFERRED**
 
 **The number needed:** 6-DoF pose error covariance for 36h11 vs. range and view angle.
