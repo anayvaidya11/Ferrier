@@ -121,3 +121,8 @@ What the experiment produces, in full (D-005, D-006, D-014, A-007):
 7. **The required-stiffness band** (D-026) — capture success over the (k, M_eff)
    sweep: the mechanical specification ("gate threshold met only for k ∈ [X, Y] at
    M_eff = Z") handed to the cofounder. D-014's logic applied to mechanics.
+   **Includes the feasibility intersection (#63):** the band crossed with each vehicle
+   class's traction ceiling k_max(μ, m_rv) — where required stiffness exceeds a
+   class's ceiling, Phase 1 reports that class **cannot dock in that condition
+   regardless of autonomy quality**. A chassis-selection requirement derived from
+   simulation, consumed by Phase 2's tradeoff study.

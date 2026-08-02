@@ -104,7 +104,7 @@ closed Phase 0 gate).
 | 60 | Seed policy | single RNG root per trial in `trial_header`; all streams derive | WIRE_FORMAT |
 | 61 | Compute decision test | 1,000-trial representative workload, cloud CPU vs GPU spot, $/1k trials, winner provisioned, both measurements committed | ARCHITECTURE §5, A-004 |
 | 62 | Jam-detection thresholds (IS8-17) | swept, defaults arbitrary: F_ax_jam {50, 100, 200} N; F_lat_jam {10, 25} N; t_jam {0.5, 1, 2} s — recalibrated against simulated force scales in Phase 1 week one, as a recorded revision | IS §8 row 17, D-027 |
-| 63 | k feasibility mask | ceiling k_max = μ·m_rv·g/35 mm per (μ, m_rv) cell — k = 30, 70 N/mm cells infeasible at the low-traction/light class (~17 N/mm ceiling) | studies/H04 Addendum A1 |
+| 63 | k feasibility mask — **a reported finding, not bookkeeping** | ceiling k_max = μ·m_rv·g/35 mm per (μ, m_rv) cell (17–112 N/mm across classes). **Required Phase 1 report line:** intersect the required-stiffness band (deliverable 7) with each class's ceiling — wherever required-k exceeds k_max, report it as *"a recovery vehicle of class (m_rv, μ) cannot dock in that condition regardless of autonomy quality"* — a chassis-selection requirement consumed directly by Phase 2's tradeoff study | studies/H04 A1; ARCHITECTURE §6.7 |
 
 **UNFILLED: #39, #40 (H-07 — one extraction session).** #34 filled by D-027
 ratification (T1); #35/#36 are sweeps per D-026 with #63's feasibility mask; the

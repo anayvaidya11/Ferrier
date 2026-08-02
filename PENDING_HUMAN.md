@@ -10,6 +10,7 @@ added; struck through when done.
 | P-03 | **Approve MR-001 / MR-002 / MR-003 procedures and purchase instruments** — procedures are now execution-ready; total human time budgeted at the 3-working-day bound | late August measurement window | `MEASUREMENT_REQUESTS.md`; NO_HARDWARE rev 2 three-question test answered per item |
 | P-04 | **ASSIST registration** (https://assist.dla.mil) and retrieval of MIL-PRF-32383/7 (STUB slash sheet) | Phase 2 latest | Top UNVERIFIED item from `research/STANDARDS.md` |
 | P-05 | **Phase 0 gate sign-off** once P-01 lands and H-07 (literature-curve extraction, my task, no human input) is committed | Aug 14 | `HOLES.md` open count must read zero (H-04, H-07) and `PHASE1_PARAMETERS.md` must have no unfilled entries |
+| P-06 | **Obtain Whitney 1982 full text** (ASME JDSMC 104(1):65–77, DOI 10.1115/1.3149634) — any university library proxy with ASME access, or one email to anyone with .edu credentials | before any T5-promotion argument (Phase 1/2) | Currently cited by verified metadata/abstract only. If IS8-17 jamming promotes T5, this paper becomes the foundation of the anti-jamming argument and metadata won't carry it |
 
 *Note: the hole-closure prompt's Part E-5 asked for a "rename repo to recovery-stack"
 action here. That premise conflicts with committed A-001 (§2.5 says the repository IS
