@@ -106,6 +106,34 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-027 — Funnel compliance topology RATIFIED: T1 — rigid steel funnel on a compliant instrumented base mount (closes H-04)
+Ratified by the human 2026-08-02 (PENDING_HUMAN P-01), from
+`studies/H04_FUNNEL_COMPLIANCE.md`. **Rationale:** T1 maximizes R6 simulatability —
+rigid bodies + one 6-DOF spring-damper + hard stops is the only uncontroversial
+Phase 1 contact model among the candidates, which protects the falsifiability of the
+kill-gate number; best debris behavior under R5; benign, designable overload via hard
+stops; high retry endurance under R3; and a clean single-interface net wrench for the
+stage-3 direction signal under R2.
+**Fallbacks (distinct, not interchangeable — they answer different failures):**
+- **T4a deflection sensing** if stage-3 lateral-error *direction recovery* proves
+  marginal in early Phase 1 trials. T4a does **not** address jamming: a symmetric jam
+  produces near-zero net deflection just as it produces near-zero net wrench —
+  deflection sensing is blind to it too.
+- **T5 RCC geometry** if *throat jamming* dominates the failure taxonomy. Without the
+  IS8-17 jam-detection outcome class (added with this ratification), that trigger
+  would be **unobservable in Phase 1** — the study's own escalation path was
+  unreachable as written; only the axial/lateral force criterion or T5's geometry
+  addresses the jam failure.
+The two reversal conditions of the study's §5 carry into this decision unchanged —
+cited, not restated.
+**R4 as ratified (revised — the original was wrong for angled tow):** *"Carries no
+axial tow load; reacts lateral and moment components within the D-018 tow-angle
+envelope."* Under tow at the D-018 sector edge the stud bears laterally against the
+throat rim, which reacts directly into the compliant base — the mount sees tow-class
+loads, not only capture impacts. Consequences: hard stops (or a lockout) sized against
+D-003-R's structural load cases, bottoming before the elastomer carries tow-class
+lateral load; Phase 2 verification item (ROADMAP).
+
 ### D-026 — Stiffness and head mass are swept; Phase 1 outputs a required-stiffness band
 Parameters #35/#36 do not wait on Phase 2 chassis selection: compliance stiffness k
 sweeps the derived envelope as a log grid {1, 3, 10, 30, 70} N/mm (studies/H04 §4) and

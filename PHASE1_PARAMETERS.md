@@ -4,8 +4,9 @@ Every constant, sweep, distribution, threshold, transform, and criterion Phase 1
 needs, each citing the committed source it came from. **An entry that cannot be filled
 from the specs points at its open hole instead of a value. When this document has no
 UNFILLED entries, Phase 0 is done; until then it is the precise map of what remains.**
-Status: 2026-08-02 — **61 entries, 58 filled, 3 UNFILLED** (#34 topology — H-04
-ratification; #39/#40 perception curves — H-07 extraction).
+Status: 2026-08-02 (post-D-027) — **63 entries, 61 filled, 2 UNFILLED** (#39/#40
+perception curves — H-07 extraction; the last items between this document and a
+closed Phase 0 gate).
 
 ## Geometry (all from D-016 / INTERFACE_SPEC)
 
@@ -64,7 +65,7 @@ ratification; #39/#40 perception curves — H-07 extraction).
 | 31 | Friction μ | swept 0.1–0.8, default 0.4 (arbitrary) | IS §9.1 |
 | 32 | Restitution e | swept 0.1–0.4, default 0.2 (arbitrary) | IS §9.1 |
 | 33 | Solver timestep/stiffness (numerical) | set by recorded convergence procedure: halve timestep until success-rate delta < 1% over a 500-trial probe; values logged per run in `trial_header` | HOLES H-03 |
-| 34 | **Compliance topology** | **UNFILLED — H-04 UNRATIFIED** (studies/H04) | — |
+| 34 | Compliance topology | **T1 — rigid steel funnel on compliant instrumented base; rigid bodies + one 6-DOF spring-damper + hard stops** (RATIFIED 2026-08-02) | D-027 |
 | 35 | Compliance stiffness k | swept log grid {1, 3, 10, 30, 70} N/mm over the derived envelope; **Phase 1 outputs the required-stiffness band** | D-026; studies/H04 §4 |
 | 36 | Head effective mass M_eff | swept {8, 15, 30} kg class range | D-026 |
 
@@ -102,7 +103,9 @@ ratification; #39/#40 perception curves — H-07 extraction).
 | 59 | sim_truth logging rate | every physics step post-handoff; every kinematic step pre-handoff | WIRE_FORMAT |
 | 60 | Seed policy | single RNG root per trial in `trial_header`; all streams derive | WIRE_FORMAT |
 | 61 | Compute decision test | 1,000-trial representative workload, cloud CPU vs GPU spot, $/1k trials, winner provisioned, both measurements committed | ARCHITECTURE §5, A-004 |
+| 62 | Jam-detection thresholds (IS8-17) | swept, defaults arbitrary: F_ax_jam {50, 100, 200} N; F_lat_jam {10, 25} N; t_jam {0.5, 1, 2} s — recalibrated against simulated force scales in Phase 1 week one, as a recorded revision | IS §8 row 17, D-027 |
+| 63 | k feasibility mask | ceiling k_max = μ·m_rv·g/35 mm per (μ, m_rv) cell — k = 30, 70 N/mm cells infeasible at the low-traction/light class (~17 N/mm ceiling) | studies/H04 Addendum A1 |
 
-**UNFILLED: #34 (H-04 topology — one human ratification) and #39, #40 (H-07 — one
-extraction session).** #35/#36 closed as sweeps per D-026 — the required-stiffness
-band is now a Phase 1 deliverable, not a Phase 0 guess.
+**UNFILLED: #39, #40 (H-07 — one extraction session).** #34 filled by D-027
+ratification (T1); #35/#36 are sweeps per D-026 with #63's feasibility mask; the
+required-stiffness band is a Phase 1 deliverable, not a Phase 0 guess.

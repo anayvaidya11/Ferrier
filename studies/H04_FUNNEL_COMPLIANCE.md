@@ -1,6 +1,6 @@
 # H-04 — Funnel Compliance Architecture: Tradeoff Study
 
-# **UNRATIFIED — awaiting human decision. The Phase 0 gate stays open on this item.**
+# **RATIFIED 2026-08-02 — T1, per D-027 (PENDING_HUMAN P-01).** The body below is the record of how the decision was made; its caveats and unfetched-prior-art disclosure stand as written. Post-ratification refinements are in the Addendum only.
 
 D-001 asserted a compliant funnel; no committed document defines where the compliance
 lives, in which degrees of freedom, or at what stiffness. This omission is load-bearing
@@ -17,7 +17,7 @@ This study informs the decision; it does not make it.
 | R1 | Absorb ±35 mm / ±10° at the capture plane | D-015; INTERFACE_SPEC §5 |
 | R2 | Produce a wall-reaction force whose **direction** is recoverable — it is the stage-3 guidance signal | D-004 |
 | R3 | Survive repeated contact across the retry loop | D-005 |
-| R4 | Carry **zero tow load** — tension pulls the stud out of the mouth; the latch is primary structure | D-003-R |
+| R4 | *(revised at ratification, D-027 — original text was wrong for angled tow)* **Carries no axial tow load; reacts lateral and moment components within the D-018 tow-angle envelope.** Under angled tow the stud bears laterally on the throat rim, which reacts into the compliant base — the mount sees tow-class loads, not only capture impacts | D-003-R, D-018, D-027 |
 | R5 | Tolerate debris/mud ingress on the head side | D-001 rationale |
 | R6 | **Simulatability** — honestly modelable in Newton/MuJoCo at the fidelity stage 3 consumes; a topology that cannot be simulated credibly is disqualified regardless of merit (unfalsifiable number = §2.2 failure) | §2.2, D-007 |
 
@@ -103,7 +103,7 @@ geometry eliminates (→ T5).
 
 | | Phase 1 contact model | Phase 4 CAD | Mechanical cofounder designs |
 |---|---|---|---|
-| T1 | Rigid bodies + 6-DOF spring-damper at base + hard stops | Funnel weldment, elastomer mount cartridge | Mount stiffness/travel, stop geometry, seal |
+| T1 | Rigid bodies + 6-DOF spring-damper at base + hard stops | Funnel weldment, elastomer mount cartridge | Mount stiffness/travel, seal, **and a stop stack (or lockout) sized against D-003-R's structural load cases — not the insertion-impact bound — bottoming hard before the elastomer carries tow-class lateral load** (revised R4, D-027) |
 | T3 | + soft contact layer at lip (fine mesh/substep cost) | + bonded lip | Lip material, bond, replacement scheme |
 | T4a | T1 + deflection sensor model | + sensor integration | Sensing, calibration, sealing |
 | T4b | Impedance-controlled joint (adds control loop to sim) | Actuated mount | Actuator, drive, control — largest scope |
@@ -112,3 +112,40 @@ geometry eliminates (→ T5).
 **Until ratified:** `INTERFACE_SPEC.md` §2.3 carries a placeholder pointing here;
 `PHASE1_PARAMETERS.md` carries the compliance entries UNFILLED; the Phase 0 gate is
 open on exactly this decision.
+
+---
+
+## Addendum (2026-08-02, post-ratification — D-027 required actions; body above unchanged)
+
+**A1. Upper stiffness bound refined.** §4's F_avail used m = 500 kg, numerically
+identical to D-003's *target*-vehicle mass — a carried-over number, not a chosen one.
+Refinement: recovery-vehicle mass is its own class parameter, **swept independently
+m_rv ∈ {300, 500, 800} kg** (any overlap with the target's 500 kg is coincidental),
+and **μ swept 0.2–0.5** (0.5 alone is optimistic for mud). The ceiling becomes a
+function, k_max = μ·m_rv·g / 35 mm:
+
+| | μ = 0.2 | μ = 0.35 | μ = 0.5 |
+|---|---|---|---|
+| m_rv = 300 kg | **17 N/mm** | 29 | 42 |
+| m_rv = 500 kg | 28 | 49 | 70 |
+| m_rv = 800 kg | 45 | 79 | **112 N/mm** |
+
+The band **narrows conditionally**: at the low-traction/light end the ceiling falls to
+~17 N/mm, making the committed sweep's k = 30 and k = 70 cells infeasible for that
+vehicle class — Phase 1 records a per-(μ, m_rv) feasibility mask rather than one
+number.
+
+**A2. Stiffness–stud coupling cross-checked.** Full-envelope deflection at the ceiling
+puts F_lat = k·35 mm into the stud: 2.45 kN at 70 N/mm → 220 N·m at the 90 mm worst
+arm; 3.92 kN at 112 N/mm → 353 N·m. Both sit **below** D-003-R(b)'s 462 N·m design
+moment. **Verdict: the traction limit sets the k ceiling, not the stud's governing
+load case** — the coupling is real but not binding anywhere in the refined band.
+(Tow-class lateral through the mount — 5.13 kN at the D-018 ±20° sector edge — is the
+stop stack's load case, per revised R4, and is Phase 2's verification item.)
+
+**A3. Jam observability (D-027).** §5's T5 trigger ("jamming dominates the taxonomy")
+was unobservable under T1's net-wrench signal — a symmetric wedge reads as high axial,
+near-zero lateral, no latch: indistinguishable from "seated and latching." IS8-17
+(jam detection: axial force above threshold ∧ lateral below threshold ∧ no latch
+confirm) makes it observable; thresholds are declared sweeps in PHASE1_PARAMETERS.
+T4a is blind to the same failure (near-zero net deflection) — recorded in D-027.

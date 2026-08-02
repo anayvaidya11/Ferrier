@@ -32,7 +32,7 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 - 🟢 `ARCHITECTURE.md` v1.0 (2026-08-01) — contract-first topology, real-vs-simulated table, sim architecture, compute plan, Phase 1 output spec
 - 🟢 `WIRE_FORMAT.md` v1.0 (2026-08-01) — target-state stream field-by-field; omitted-not-zeroed rule with worked example; consumer checklist; annotated reference lines
 - 🟢 Stand up the repo with all docs committed (2026-07-31)
-- 🟡 **Gate: OPEN — two items remain** (`HOLES.md`, 2026-08-02): H-04 narrowed to the topology ratification (P-01, human) and H-07 literature-curve extraction (half-day work session). `PHASE1_PARAMETERS.md`: 58/61 filled. Both closable well before Aug 14.
+- 🟡 **Gate: OPEN — one item remains** (`HOLES.md`, 2026-08-02): H-07 literature-curve extraction (half-day session, no human dependency). H-04 CLOSED — T1 ratified as D-027. `PHASE1_PARAMETERS.md`: 61/63 filled.
 
 **Deliverable:** three specification documents. No implementation code.
 **Gate:** interface spec precise enough that Phase 1 builds directly against it with no further design decisions.
@@ -73,6 +73,8 @@ trial record). First `CLAIMS.md` entries land with these results.
 ## Phase 2 — Physics proof (October) ⬜
 
 Tow/extraction forces, power budget, thermal, mechanical envelope, chassis selection (tradeoff study — do **not** design a chassis). Deliverable: `PHYSICS.md`, every number derived and sourced, **plus the "cost of the gap"** — order-of-magnitude prototype cost, team, and 12-month build plan: what the capital buys (A-007).
+
+**Phase 2 verification items (running list):** D-003-R both load ratings incl. dynamic/snatch tow; D-018 tow-sector limit; D-015 capture envelope vs real positioning data; **mount stop stack / lockout sized to D-003-R load cases — the compliant base sees tow-class lateral per revised R4 (D-027)**; material certificate for the stud (class-typical 655 MPa assumption); force-sensing noise floor and recovery-vehicle mass/traction class (the two H-04 stiffness-envelope unknowns).
 
 ## Phase 3 — Perception + embedded (November) ⬜
 

@@ -31,13 +31,12 @@ nothing below was closed by invention.
 | Obstruction cone / stud height / host attitude | 3 DECIDED | D-024 — requirements WyZen levies on integrators; renegotiated when platform data exists |
 | Camera extrinsics (Cam B obliquity) | 3 DECIDED (bounds derived) | D-025 — β = 30°, band [15°, 45°] from studies/H08 §5; translations stay [ASSUMED] within band |
 
-## Open
+## Open (and recently closed from this list)
 
 | # | Hole | Status | What closes it |
 |---|---|---|---|
-| H-04 | Funnel compliance architecture | **OPEN — narrowed to topology only** (study complete, UNRATIFIED). Stiffness and head mass exited via Door 4 (D-026, 2026-08-02): swept, with the **required-stiffness band** now a Phase 1 deliverable | **Human ratifies a topology** (PENDING_HUMAN.md P-01) — the single remaining H-04 decision |
+| H-04 | Funnel compliance architecture | **CLOSED 2026-08-02 — Door 3 (DECIDED): D-027, T1 ratified by the human** (studies/H04, header + Addendum). Stiffness/mass swept per D-026 with the A1 feasibility mask; revised R4 and the IS8-17 jam class landed with the ratification | — |
 | H-07 | Literature perception curves, digitized | **OPEN — task specified, not performed** | A reading/extraction session: digitize detection-vs-range/angle/lighting curves and pose covariance from the named sources (Olson 2011; Wang & Olson 2016; Kallwies 2020) into `research/data/perception_prior.md` with figure-level citations. No hardware needed; Door 2 on completion. Estimated half a day. **Not closable by citation-from-memory — that is the Door 2 correctness failure** |
 
-**Open count: 2.** Both have named closure paths; H-04's is a human decision, H-07's is
-a bounded work session. The Phase 0 gate remains open on exactly these two plus the
-resulting unfilled entries in `PHASE1_PARAMETERS.md`.
+**Open count: 1 — H-07** (bounded extraction session, no human dependency). The
+Phase 0 gate remains open on exactly it and PHASE1_PARAMETERS #39/#40.
