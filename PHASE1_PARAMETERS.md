@@ -101,13 +101,13 @@ output is success as a function of detection rate (D-014).**
 | 54 | Latch predicate | 3 mm radial @ engagement depth, ≤0.1 m/s, 100 ms | D-020 |
 | 55 | Encounter time budget T | {5, 15, 30} min, default 15 (arbitrary) | D-022 |
 | 56 | Success definition | D-020 within attempts ∧ t ≤ T; first/multi-attempt reported separately | D-022, D-005 |
-| 57 | Outcome classes | success \| IS8-1…IS8-16 \| clean_miss | IS §8; FAILURE_TAXONOMY.md |
+| 57 | Outcome classes | success \| IS8-1…IS8-17 \| clean_miss (predicate D-030) — revised 2026-08-02 (H-15): row 17 was omitted when D-027 added it | IS §8 (17 rows); FAILURE_TAXONOMY.md; D-030 |
 | 58 | Trial record schema | header/state/result per WIRE_FORMAT | WIRE_FORMAT |
 | 59 | sim_truth logging rate | every physics step post-handoff; every kinematic step pre-handoff | WIRE_FORMAT |
 | 60 | Seed policy | single RNG root per trial in `trial_header`; all streams derive | WIRE_FORMAT |
 | 61 | Compute decision test | 1,000-trial representative workload, cloud CPU vs GPU spot, $/1k trials, winner provisioned, both measurements committed | ARCHITECTURE §5, A-004 |
 | 62 | Jam-detection thresholds (IS8-17) | swept, defaults arbitrary: F_ax_jam {50, 100, 200} N; F_lat_jam {10, 25} N; t_jam {0.5, 1, 2} s — recalibrated against simulated force scales in Phase 1 week one, as a recorded revision | IS §8 row 17, D-027 |
-| 63 | k feasibility window and mask — **emits data, not verdicts** (D-028) | Per-class window [k_min, k_max], tuple order (μ_trac, m_rv) everywhere: k_max = μ_trac·m_rv·g/35 mm over #64 × #65 (17–112 N/mm across classes); k_min = n_F/δ_work (n_F a named Phase 2 unknown; class placeholder ≈1 N/mm, studies/H04 §4). Phase 1 emits: window, required band (ARCHITECTURE §6.6–6.7), their **intersection**, and the mask. **Interpretation is normative in ARCHITECTURE §6.7 only** (empty-intersection rule, C-13 caveat). Pinned cross-check (studies/H04 Addendum A1): at (μ_trac, m_rv) = (0.2, 300 kg), k_max ≈ 17 N/mm → sweep cells k = 30, 70 infeasible for that class | D-028; studies/H04 Addendum A1 |
+| 63 | k feasibility window and mask — **emits data, not verdicts** (D-028) | Per-class window [k_min, k_max], tuple order (μ_trac, m_rv) everywhere: k_max = μ_trac·m_rv·g/35 mm over #64 × #65 (17–112 N/mm across classes); k_min = n_F/δ_work (n_F a named Phase 2 unknown; class placeholder ≈1 N/mm, studies/H04 §4). Phase 1 emits: window, required band (D-026; ARCHITECTURE §6.7), their **intersection**, and the mask. **Interpretation is normative in ARCHITECTURE §6.7 only** (empty-intersection rule, C-13 caveat). Pinned cross-check (studies/H04 Addendum A1): at (μ_trac, m_rv) = (0.2, 300 kg), k_max ≈ 17 N/mm → sweep cells k = 30, 70 infeasible for that class | D-028; studies/H04 Addendum A1 |
 | 64 | Recovery-vehicle traction coefficient **μ_trac** (mud; distinct from #31 μ_contact) | swept {0.2, 0.35, 0.5} | studies/H04 Addendum A1; D-028 |
 | 65 | Recovery-vehicle mass **m_rv** (distinct from #36 head effective mass M_eff) | swept {300, 500, 800} kg — class range, independent of the target's 500 kg | studies/H04 Addendum A1; D-028 |
 

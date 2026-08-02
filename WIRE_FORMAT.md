@@ -112,10 +112,14 @@ zeroed, unknown fields ignored).
     step before it (D-006).
 - **Result** — `{"v":1, "type":"trial_result", "outcome": "success" |
   "IS8-<row>" (failure class keyed to INTERFACE_SPEC §8 row number, e.g. "IS8-5" =
-  ambiguity flip) | "clean_miss", "first_attempt_success": bool, "attempts_used": int,
-  "t_total": float, "handoff_reached": bool}` — required; unclassifiable failures
-  extend §8 by recorded amendment before they get an outcome string (ARCHITECTURE
-  §6.2).
+  ambiguity flip) | "clean_miss" (predicate: DECISIONS D-030), "first_attempt_success":
+  bool, "attempts_used": int, "t_total": float, "handoff_reached": bool,
+  "false_capture": bool (optional; emitted only with outcome "IS8-16" — true when the
+  deflected lip strike subsequently entered the mouth, the sub-path §8 row 16 requires
+  counted separately)}` — required except as marked; unclassifiable failures extend §8
+  by recorded amendment before they get an outcome string (ARCHITECTURE §6.2).
+  *(Revised 2026-08-02, H-16: `false_capture` added — additive and optional, schema
+  stays v1.)*
 
 ## Annotated reference lines
 

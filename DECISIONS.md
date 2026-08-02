@@ -106,6 +106,58 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-030 — `clean_miss` outcome predicate (closes H-14)
+`clean_miss` ⟺ all four hold: **(a)** the trial fails D-022; **(b)** no contact ever
+occurred — no `sim_truth.contact_wrench` line exists in the record (no annulus
+contact, no lip-band event); **(c)** every attempt either crossed the capture plane at
+r > 160 mm (the D-006 kinematic-miss path) or ended on the attempt/time budget without
+reaching it; **(d)** no INTERFACE_SPEC §8 row's wire signature matches under the
+classifier's documented precedence order — the perception stream stayed nominal and
+the miss is attributable to accumulated guidance/chassis error alone.
+**The refusal path is not a clean miss:** a trial whose attempts were refused by the
+gate (`abort_reason: low_confidence`, `ambiguity_persistent`, `inner_ring_absent`, …)
+classifies to the §8 row named by that signature. IS8-15 (comms) remains nominal per
+§8.
+**Consequence:** `clean_miss` is the residual class — target never touched, nothing
+classifiable explains why — so its fraction indicts the D-019 error budget against the
+§5/§6 envelope arithmetic, not perception. The Phase 1 classifier implements a
+documented precedence order (exactly one row per trial, FAILURE_TAXONOMY rule); a
+trace matching no rule raises for a recorded amendment, never guesses (WIRE_FORMAT).
+
+### D-029 — "Moderate degradation" defined numerically — the kill-gate cell (closes H-13)
+The gate criterion (MASTER_CONTEXT Phase 1; ROADMAP) reads ">60% in moderate
+degradation" but no committed definition of *moderate* existed anywhere in the repo —
+found 2026-08-02 during Phase 1 planning, after the gate self-assessment. Left
+undefined, the cell could be chosen after seeing results, which is refitting. Defined
+now, before any trial runs:
+
+**The moderate band** (degradation axes only, §9 grids; sampled uniformly over the
+listed cells/ranges):
+
+| Axis | Moderate band | Basis |
+|---|---|---|
+| Outer-tag occlusion | {30, 40}% | mid-grid; MASTER_CONTEXT's reporting example treats 40% occlusion as the mid-severity exemplar |
+| Inner-ring occlusion | {30, 40, 50}% | mid-grid of the 0–90% axis (arbitrary, labeled) |
+| Illuminance | {50, 100} lux | dim-but-lit band; the same example treats sub-10 lux as the severe regime |
+| Rain | 10–20% | mid-grid (arbitrary) |
+| Sensor dropout | p = 0.05, bursts on | second grid point (arbitrary) |
+| Lens contamination | 10–25% aperture | mid-range (arbitrary) |
+| Fiducial destruction | none | per-tag knockout is target damage, not environmental severity |
+
+Host pitch/roll, view angle, and range are encounter geometry, not degradation dials —
+they marginalize over their full committed distributions. All swept *system*
+parameters sit at their labeled defaults (§9.1). The gate number is the success rate
+over this band (D-022 success definition; first-attempt and multi-attempt reported
+separately per D-005), with its confidence interval.
+**Band edges are arbitrary-labeled mid-grid choices except where anchored above.**
+Transcribed verbatim into `sim/scenarios/gate_moderate.json` before the first DOE run;
+harness code never hardcodes it. Changing the band after any results exist is a
+recorded revision reporting both numbers — the same discipline as the ROADMAP curve
+swap.
+**What would make it wrong:** MR-001/002 data placing a detection cliff at a band
+edge, making the gate number knife-edge sensitive to the choice — then the gate is
+reported as a curve across the band with the committed cell number alongside.
+
 ### D-028 — Feasibility-window semantics: intersection, not verdict (repairs the #63 mandate)
 The original #63 mandate was doubly wrong: its trigger fired on *partial* band
 exceedance ("required-k exceeds k_max"), and it hard-coded a verbatim conclusion into a

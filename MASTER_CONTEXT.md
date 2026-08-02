@@ -221,7 +221,7 @@ One question, answered with a number: *given a standardized target interface, wh
 
 | Result | Meaning | Action |
 |---|---|---|
-| **>60%** in moderate degradation | Thesis holds | Proceed to Phase 2 |
+| **>60%** in moderate degradation *(defined numerically in DECISIONS D-029, per A-011)* | Thesis holds | Proceed to Phase 2 |
 | **30–60%** | Holds conditionally | Iterate interface / add active illumination or tactile feedback. Two weeks, re-run. |
 | **<30%** | Interface does not sufficiently constrain the problem | **Stop.** Revisit whether the wedge is assessment-and-triage rather than physical rigging. |
 
@@ -513,3 +513,26 @@ docking success exceeds the robot-to-human sortie risk ratio, P\* = (ρ + h)/(1 
 of order 10–35% across the swept region. The new sentence is derived arithmetic with
 swept class parameters and no empirical inputs; the old sentence may not be used
 externally in any form.
+
+### A-011 (2026-08-02) — Phase 1 early start; post-assessment gate repairs; P-02 ratified
+
+Three records from the Phase 1 planning session, all human-decided or human-reviewed:
+
+(a) **Phase 1 build begins on P-05 sign-off, not on 15 August** (human decision,
+2026-08-02). Phase 0 finished ~12 days early; the window end (30 September) is
+unchanged, so the early start becomes schedule margin on the kill gate. The Part III
+"Aug 15" remains as the no-later-than bound. `PHASE1_PLAN.md` is the committed
+execution map (build order, verification gates, week-by-week schedule).
+
+(b) **Four gaps survived the gate self-assessment and were found during planning**,
+recorded as HOLES H-13..H-16 and closed through sanctioned doors — most seriously,
+the kill-gate criterion "moderate degradation" was never defined numerically anywhere
+in the repo; left undefined, the gate cell could be chosen after seeing results.
+Now D-029, defined before any trial runs, applied in-body as a marker on both gate
+tables. Also: `clean_miss` defined (D-030); PHASE1_PARAMETERS #57 and INTERFACE_SPEC
+§8 row 3 consistency repairs; `trial_result.false_capture` additive schema revision
+(WIRE_FORMAT).
+
+(c) **P-02 ratified: $100 hard cloud ceiling** for Phase 1 compute, expected spend
+$20–60; exceeding it requires a recorded amendment. The A-004 measured-cost test
+stands; the DOE runner meters cumulative spend against the ceiling.

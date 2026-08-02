@@ -7,7 +7,7 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 | Phase | Window | Objective | Gate | Status |
 |---|---|---|---|---|
 | 0 | Aug 1–14 | Orient. Read the customer's words. Define the interface. | Interface spec written | 🟡 |
-| 1 | Aug 15 – Sep 30 | The docking experiment | ⚠️ **KILL GATE** — see criteria below | ⬜ |
+| 1 | on P-05 sign-off (A-011) – Sep 30 | The docking experiment | ⚠️ **KILL GATE** — see criteria below | ⬜ |
 | 2 | October | Physics proof | Closed-form numbers, sourced | ⬜ |
 | 3 | November | Perception + embedded on real data | Working stack, measured accuracy | ⬜ |
 | 4 | December | Integration, CAD, proof site, cofounder | End-to-end demo runs | ⬜ |
@@ -50,15 +50,19 @@ measured curves when they land, provided the swap is recorded and the before/aft
 results are both reported — silently improving an input mid-experiment is the same
 failure as refitting a model after seeing the answer.
 
-## Phase 1 — The docking experiment (Aug 15 – Sep 30) ⬜ ⚠️ KILL GATE
+## Phase 1 — The docking experiment (opens on P-05 sign-off, A-011; ends Sep 30) ⬜ ⚠️ KILL GATE
 
 One question, one number: given a standardized target interface, what fraction of autonomous approach-and-latch attempts succeed under realistic field degradation?
+
+**Execution map: `PHASE1_PLAN.md`** — build order with per-task verification gates,
+week-by-week schedule (weeks 7–8 reserved for the 30–60% iterate branch), engine
+fallback test and A-004 cost test in week one, measurement-window alignment in week 4.
 
 **Gate criteria:**
 
 | Result | Meaning | Action |
 |---|---|---|
-| >60% in moderate degradation | Thesis holds | Proceed to Phase 2 |
+| >60% in moderate degradation (defined: D-029) | Thesis holds | Proceed to Phase 2 |
 | 30–60% | Holds conditionally | Iterate interface / active illumination / tactile feedback; two weeks, re-run |
 | <30% | Interface does not sufficiently constrain the problem | **Stop.** Revisit wedge: assessment-and-triage instead of physical rigging |
 

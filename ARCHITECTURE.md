@@ -118,8 +118,13 @@ What the experiment produces, in full (D-005, D-006, D-014, A-007):
    often it commits to an insertion it should not have attempted. A second deliverable
    of D-014's class, and §1.5's asymmetry made quantitative — arguably the more
    interesting curve to a defense reviewer, because it prices the abort discipline.
-7. **The feasibility intersection** (D-028; data emitted per PHASE1_PARAMETERS #63 —
-   this section owns the interpretation, normatively and only here). For each vehicle
+7. **The required-stiffness band and the feasibility intersection** (D-026 emits the
+   band; D-028 the intersection semantics; data per PHASE1_PARAMETERS #63 — this
+   section owns the interpretation, normatively and only here). The band [k_lo_req,
+   k_hi_req] is the D-026 deliverable — "capture succeeds above the gate threshold
+   only for k within the band at M_eff = Z" — emitted under this item alongside the
+   windows *(citation tidied 2026-08-02, H-16: #63's former "§6.6–6.7" pointed the
+   band at the tradeoff-curve item; the band lives here in §6.7)*. For each vehicle
    class (μ_trac, m_rv): **the class can dock iff the required band [k_lo_req,
    k_hi_req] intersects the feasible window [k_min, k_max]** (k_max the derived static
    traction ceiling; k_min the noise-floor bound). **Empty intersection → that class

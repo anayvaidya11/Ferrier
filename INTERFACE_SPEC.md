@@ -281,7 +281,7 @@ recommend a human decision — never a metric pose from a non-visual source (D-0
 |---|---|---|---|
 | 1 | Outer tag partially occluded | Detection dropout / reprojection error rise; `degradation.occlusion_est` | Continue if pose confidence ≥ threshold; else hold, reacquire; escalate on timeout |
 | 2 | Outer tag destroyed | No ID-0 detection at expected range while mission context confirms target | Close to inner-ring range only if commanded policy allows; else escalate with imagery (D-013) |
-| 3 | Inner ring occluded | < 1 inner tag decoded inside 300 mm | Abort insertion, back out 300 mm (D-005), reacquire; escalate after attempt budget |
+| 3 | Inner ring occluded | < 2 inner tags decoded inside 300 mm — the insertion commit rule requires ≥ 2 fused (D-011, WIRE_FORMAT); threshold corrected from "< 1" 2026-08-02 (H-15) | Abort insertion, back out 300 mm (D-005), reacquire; escalate after attempt budget |
 | 4 | Inner ring destroyed | Outer pose OK; zero inner detections at handoff range | **No insertion attempt** (D-013); escalate |
 | 5 | Pose ambiguity flip | `tags[].ambiguity_flag`; inter-tag or Cam A/B pose disagreement | Reject frame; require multi-tag or oblique confirmation; persistent → abort stage |
 | 6 | Stud bent | Vision pose nominal but contact wrench profile inconsistent with funnel model (D-004 stage 3) | Back out after N anomalous contacts; escalate with imagery |
