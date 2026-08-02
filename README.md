@@ -8,15 +8,17 @@ into an engineering problem.** The program's deliverable is a demonstrated and
 simulated design plus the evidence it would work — the gap presented to investors is
 capital, not physics.
 
-**Status: Phase 0 (Orient, Aug 1–14 2026), Week 2. The Phase 0 gate is OPEN on two
-items** (`HOLES.md`); Phase 1 — the docking experiment, a kill gate — opens 15 August.
+**Status: Phase 0 (Orient, Aug 1–14 2026), Week 2. The gate's technical condition is
+met (2026-08-02):** `HOLES.md` open count 0; `PHASE1_PARAMETERS.md` 65/65. **Formal
+sign-off is pending the human (P-05), and the cloud dollar ceiling (P-02) is owed
+before Phase 1 ops.** Phase 1 — the docking experiment, a kill gate — opens 15 August.
 
 ## Reading order for a new session
 
 1. `MASTER_CONTEXT.md` — canonical: company, plan, rules. **Read the AMENDMENTS
    section; amendments win over body text.**
 2. `NO_HARDWARE.md` — procurement law: instruments, not artifacts.
-3. `DECISIONS.md` — every design decision, D-001…D-025; specs cite these.
+3. `DECISIONS.md` — every design decision, D-001…D-028; specs cite these.
 4. `ROADMAP.md` — phase status. Then whatever the task touches below.
 
 ## Document map
@@ -30,7 +32,7 @@ items** (`HOLES.md`); Phase 1 — the docking experiment, a kill gate — opens 
 | `HOLES.md` | Gate ledger: what closed through which door, what remains open |
 | `FAILURE_TAXONOMY.md` | IS8 failure rows as classifiable events |
 | `MEASUREMENT_REQUESTS.md` | The only channel to physical measurement (MR-001…004) |
-| `studies/` | Tradeoff studies and derivations (H-04 funnel compliance — UNRATIFIED; H-08 ambiguity model) |
+| `studies/` | Tradeoff studies and derivations (H-04 funnel compliance — T1 ratified, D-027; H-08 ambiguity model; C-09 value threshold) |
 | `CLAIMS.md` | Claims register: no external claim without a row |
 | `COST_OF_GAP.md` | Phase 2 scaffold: what the capital buys |
 | `PENDING_HUMAN.md` | Everything owed by the human, in one place |

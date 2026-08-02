@@ -1,6 +1,6 @@
 # HOLES — Phase 0 Gate Ledger
 
-Updated 2026-08-01 (hole-closure session). Four sanctioned doors: **DERIVED** (Door 1),
+Updated 2026-08-02 (H-04, H-07 closures; D-028 count reconciliation). Four sanctioned doors: **DERIVED** (Door 1),
 **SOURCED** (Door 2), **DECIDED** (Door 3, promoted to a D-xxx), **SWEPT** (Door 4,
 declared Phase 1 parameter with range + arbitrary-labeled default). No fifth door;
 nothing below was closed by invention.
@@ -39,5 +39,5 @@ nothing below was closed by invention.
 | H-07 | Literature perception curves | **CLOSED 2026-08-02 — Door 2** (`research/data/perception_prior.md`: Olson 2011, Wang & Olson 2016, Krogius 2019 fetched and page-verified; 34 extraction rows, text/table-sourced only; a fabricated fetch summary was caught and discarded). Kallwies 2020 UNAVAILABLE (P-07). Regions the corpus honestly cannot anchor (view-angle shape, covariance magnitudes) exited as declared sweeps in #39/#40 — Door 4 residuals, replaced by MR bench data | — |
 
 **Open count: 0.** All twelve holes and every ratification placeholder have exited
-through a sanctioned door. `PHASE1_PARAMETERS.md` reads 63/63. The gate's technical
+through a sanctioned door. `PHASE1_PARAMETERS.md` reads 65/65 (post-D-028). The gate's technical
 condition is met; formal sign-off is PENDING_HUMAN P-05.
