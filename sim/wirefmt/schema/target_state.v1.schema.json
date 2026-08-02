@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wyzen/wirefmt/target_state.v1",
+  "title": "target_state v1 — WIRE_FORMAT.md target-state stream line",
+  "description": "Omitted-not-zeroed: an undetermined field is omitted, never zero/null/default. Unknown fields are ignored and preserved on relay. Semantic rules beyond JSON Schema: pose.q unit norm within 1e-6; |pose.t| <= 10 m; pose_cov PSD; t_emit >= t_capture.",
+  "type": "object",
+  "required": ["v", "type", "t_capture", "t_emit", "pose_source", "conf", "stage"],
+  "properties": {
+    "v": {"const": 1},
+    "type": {"const": "target_state"},
+    "t_capture": {"type": "number", "description": "producer steady-clock capture time, s, monotonic"},
+    "t_emit": {"type": "number", "description": ">= t_capture, same clock"},
+    "pose": {
+      "type": "object",
+      "required": ["t", "q"],
+      "properties": {
+        "t": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+        "q": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4, "description": "[w,x,y,z], unit norm within 1e-6"}
+      },
+      "description": "T_head_stud. Absent = no pose this frame; guidance must not act on position (D-013)."
+    },
+    "pose_cov": {
+      "type": "array", "items": {"type": "number"}, "minItems": 21, "maxItems": 21,
+      "description": "Upper triangle of 6x6, order [x y z rx ry rz], PSD. Required whenever pose is present; pose without stated uncertainty is pose-absent."
+    },
+    "pose_source": {"enum": ["outer_tag", "inner_ring", "multi_tag_fused", "contact_force", "none"], "description": "No value means 'guessed' — this is what makes D-013 enforceable."},
+    "conf": {"type": "number", "minimum": 0, "maximum": 1},
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "reproj_err", "ambiguity_flag", "ambiguity_ratio"],
+        "properties": {
+          "id": {"type": "integer"},
+          "reproj_err": {"type": "number", "description": "px"},
+          "ambiguity_flag": {"type": "boolean"},
+          "ambiguity_ratio": {"type": "number"}
+        }
+      }
+    },
+    "fault": {
+      "type": "object",
+      "properties": {
+        "class": {"enum": ["mired", "depleted", "damaged", "destroyed", "unknown"]},
+        "conf": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "degradation": {
+      "type": "object",
+      "properties": {
+        "occlusion_est": {"type": "number", "minimum": 0, "maximum": 1},
+        "illuminance_lux": {"type": "number", "exclusiveMinimum": 0, "description": "0 lux is a measurement, not a default; unavailable is omitted"},
+        "dropout": {"type": "boolean"}
+      }
+    },
+    "stage": {"enum": ["acquire", "outer_servo", "inner_servo", "contact_insert", "latched", "abort", "escalate"]},
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "n": {"type": "integer", "minimum": 1},
+        "last_contact_offset": {
+          "type": "object",
+          "properties": {
+            "frame": {"const": "head_frame"},
+            "t": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3}
+          }
+        }
+      }
+    },
+    "abort_reason": {"enum": ["low_confidence", "ambiguity_persistent", "inner_ring_absent", "contact_anomaly", "jam_detected", "attempt_budget_exhausted", "constellation_inconsistent", "latch_fail", "command"]},
+    "escalation": {
+      "type": "object",
+      "required": ["imagery_ref", "recommend"],
+      "properties": {
+        "imagery_ref": {"type": "string"},
+        "recommend": {"const": "human_decision"}
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"required": ["pose"]}, "then": {"required": ["pose_cov"]}},
+    {"if": {"properties": {"stage": {"enum": ["abort", "escalate"]}}, "required": ["stage"]}, "then": {"required": ["abort_reason"]}},
+    {"if": {"properties": {"stage": {"const": "escalate"}}, "required": ["stage"]}, "then": {"required": ["escalation"]}}
+  ]
+}

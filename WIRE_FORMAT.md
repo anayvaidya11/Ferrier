@@ -124,10 +124,12 @@ zeroed, unknown fields ignored).
 ## Annotated reference lines
 
 ```json
-{"v":1,"type":"target_state","t_capture":142.031,"t_emit":142.043,"pose":{"t":[2.412,0.113,-0.071],"q":[0.008,0.002,0.9999,0.011]},"pose_cov":[0.0009,0,0,0,0,0,0.0016,0,0,0,0,0.0016,0,0,0,0.0007,0,0,0.0011,0,0.0011],"pose_source":"outer_tag","conf":0.96,"tags":[{"id":0,"reproj_err":0.41,"ambiguity_flag":false,"ambiguity_ratio":6.2}],"degradation":{"occlusion_est":0.05,"illuminance_lux":41000},"stage":"outer_servo"}
+{"v":1,"type":"target_state","t_capture":142.031,"t_emit":142.043,"pose":{"t":[2.412,0.113,-0.071],"q":[0.008,0.002,0.999905,0.011]},"pose_cov":[0.0009,0,0,0,0,0,0.0016,0,0,0,0,0.0016,0,0,0,0.0007,0,0,0.0011,0,0.0011],"pose_source":"outer_tag","conf":0.96,"tags":[{"id":0,"reproj_err":0.41,"ambiguity_flag":false,"ambiguity_ratio":6.2}],"degradation":{"occlusion_est":0.05,"illuminance_lux":41000},"stage":"outer_servo"}
 ```
 Nominal outer servo at 2.4 m: single outer tag, tight covariance, high ambiguity ratio
 (solutions well separated), daylight. Gate passes; guidance closes range.
+*(2026-08-02: the example's original q was out of the field table's own 1e-6 unit-norm
+tolerance by ~5.5e-6 — caught by the T1 validator; corrected to a compliant value.)*
 
 ```json
 {"v":1,"type":"target_state","t_capture":198.550,"t_emit":198.561,"pose":{"t":[0.291,0.019,0.024],"q":[0.013,0.007,0.9998,0.004]},"pose_cov":[0.0002,0,0,0,0,0,0.0004,0,0,0,0,0.0004,0,0,0,0.0004,0,0,0.0006,0,0.0006],"pose_source":"inner_ring","conf":0.90,"tags":[{"id":3,"reproj_err":0.62,"ambiguity_flag":false,"ambiguity_ratio":4.1},{"id":4,"reproj_err":0.55,"ambiguity_flag":false,"ambiguity_ratio":4.8}],"degradation":{"occlusion_est":0.32,"illuminance_lux":9.4},"stage":"inner_servo"}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wyzen/wirefmt/sim_truth.v1",
+  "title": "sim_truth v1 — WIRE_FORMAT.md ground-truth state line",
+  "description": "The ground truth the injected perception model degrades from. Logged every physics step after capture-plane handoff and every kinematic step before it (D-006, PHASE1_PARAMETERS #59). contact_wrench is omitted before contact — its absence is meaningful (omitted-not-zeroed). World-frame poses are unbounded (the 10 m bound applies to T_head_stud on the target-state stream).",
+  "type": "object",
+  "required": ["v", "type", "t", "T_world_head", "T_world_stud", "actuator_cmd"],
+  "properties": {
+    "v": {"const": 1},
+    "type": {"const": "sim_truth"},
+    "t": {"type": "number", "description": "sim clock, s"},
+    "T_world_head": {"$ref": "#/$defs/pose"},
+    "T_world_stud": {"$ref": "#/$defs/pose"},
+    "contact_wrench": {
+      "type": "array", "items": {"type": "number"}, "minItems": 6, "maxItems": 6,
+      "description": "[fx,fy,fz,mx,my,mz], N and N·m, head_frame; omitted before contact"
+    },
+    "actuator_cmd": {"type": "object"}
+  },
+  "$defs": {
+    "pose": {
+      "type": "object",
+      "required": ["t", "q"],
+      "properties": {
+        "t": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+        "q": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4, "description": "[w,x,y,z], unit norm within 1e-6"}
+      }
+    }
+  }
+}

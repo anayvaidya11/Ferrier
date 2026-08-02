@@ -1,0 +1,87 @@
+[
+  {
+    "file": "zeroed_pose.ndjson",
+    "mode": "line",
+    "expect": "unit"
+  },
+  {
+    "file": "pose_without_cov.ndjson",
+    "mode": "line",
+    "expect": "pose_cov"
+  },
+  {
+    "file": "missing_version.ndjson",
+    "mode": "line",
+    "expect": "v must be"
+  },
+  {
+    "file": "unknown_type.ndjson",
+    "mode": "line",
+    "expect": "type"
+  },
+  {
+    "file": "conf_out_of_range.ndjson",
+    "mode": "line",
+    "expect": "conf"
+  },
+  {
+    "file": "bad_pose_source.ndjson",
+    "mode": "line",
+    "expect": "pose_source"
+  },
+  {
+    "file": "abort_without_reason.ndjson",
+    "mode": "line",
+    "expect": "abort_reason"
+  },
+  {
+    "file": "escalate_without_escalation.ndjson",
+    "mode": "line",
+    "expect": "escalation"
+  },
+  {
+    "file": "emit_before_capture.ndjson",
+    "mode": "line",
+    "expect": "t_emit"
+  },
+  {
+    "file": "non_psd_cov.ndjson",
+    "mode": "line",
+    "expect": "PSD"
+  },
+  {
+    "file": "zero_lux.ndjson",
+    "mode": "line",
+    "expect": "illuminance"
+  },
+  {
+    "file": "null_field.ndjson",
+    "mode": "line",
+    "expect": "null"
+  },
+  {
+    "file": "header_missing_seed.ndjson",
+    "mode": "line",
+    "expect": "seed"
+  },
+  {
+    "file": "bad_outcome.ndjson",
+    "mode": "line",
+    "expect": "outcome"
+  },
+  {
+    "file": "false_capture_wrong_outcome.ndjson",
+    "mode": "line",
+    "expect": "false_capture"
+  },
+  {
+    "file": "file_no_header.ndjson",
+    "mode": "file",
+    "expect": "header"
+  },
+  {
+    "file": "file_no_result.ndjson",
+    "mode": "file",
+    "expect": "result"
+  }
+]
