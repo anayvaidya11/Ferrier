@@ -63,13 +63,50 @@ accumulates on the serviceable side (D-001).
   nothing to maintain, nothing to certify. §1.7's mitigation is adoption; **every gram
   of complexity added to the target side is thesis risk** (D-001 consequence).
 
-### 2.3 Funnel compliance — **UNRATIFIED, decision pending**
+### 2.3 Funnel compliance — **RATIFIED: T1 (D-027, 2026-08-02)**
 
-D-001's "compliant funnel" has no committed topology or stiffness. The tradeoff study
-is `studies/H04_FUNNEL_COMPLIANCE.md` (four candidates, requirements, derived
-stiffness envelope k ∈ [~1, ~70] N/mm with its two honest unknowns, and a marked
-recommendation). **The Phase 0 gate stays open on this item until the human ratifies a
-topology; nothing in this spec assumes one.**
+**Rigid steel funnel on a compliant instrumented base mount**: all compliance
+concentrated at one 6-DOF spring-damper interface with hard stops; the funnel itself
+is dumb, washable steel. Full record and evaluation: `studies/H04_FUNNEL_COMPLIANCE.md`
+(+ Addendum). Sim model: rigid bodies + one 6-DOF spring-damper + hard stops (the only
+uncontroversial Phase 1 contact model — the falsifiability argument that drove
+ratification).
+
+- **Load path (revised R4, D-027):** the mount *carries no axial tow load* but
+  *reacts lateral and moment components within the D-018 ±20° tow envelope* — under
+  angled tow the stud bears on the throat rim, which reacts into the base. The **stop
+  stack (or lockout) is sized against D-003-R's structural load cases** (5.13 kN
+  lateral at the sector edge), not the insertion impact, and bottoms hard before the
+  elastomer carries tow-class load. Phase 2 verification item.
+- **Stiffness:** swept per D-026 over the derived envelope, with the Addendum-A1
+  feasibility mask (ceiling k_max = μ·m_rv·g/35 mm, 17–112 N/mm across the swept
+  vehicle classes; traction, not stud bending, sets the ceiling — A2).
+- **Jam observability:** IS8-17 (§8) exists because a symmetric throat jam is
+  invisible to T1's net-wrench signal without an explicit axial-high/lateral-low
+  criterion; it is the observable behind D-027's T5 escalation trigger.
+
+**Prior art (fetched 2026-08-02; citations checkable — this pattern was selected, not
+invented):** (1) *Peg-in-hole RCC*: Draper Laboratory's Remote Center Compliance —
+US Patent 4,098,001 (Watson, filed 1976, granted 1978): compliance projected to the
+contact point makes rigid-part insertion self-correcting; Whitney, "Quasi-Static
+Assembly of Compliantly Supported Rigid Parts," ASME J. Dyn. Sys., Meas., and Control
+104(1):65–77, 1982, DOI 10.1115/1.3149634 (cited by verified metadata/abstract; full
+text paywalled); the device class is commercially alive today (ATI 9116-series
+compliance compensators, ati-ia.com). Whitney & Nevins 1979 could not be retrieved and
+is **demoted to an unverified analogy** — cite the patent and the 1982 DOI instead.
+(2) *Spacecraft soft capture*: IDSS Interface Definition Document Rev E (Oct 2016,
+internationaldockingstandard.com) §3.2.2 — rigid 45° guide petals integrated on an
+actuated, instrumented soft-capture ring, hard capture as a separate rigid stage; NASA
+NDS Users Guide SSP 50920 Rev A (2010, NTRS 20110011626) — the actuators provide the
+low-impact capability, i.e., compliance and sensing live in the base under rigid
+guide geometry. (3) *Vehicle scale*: JOST KKS automated coupling (JOST T&T catalogue,
+Systems §KKS; jost-world.com) — unmodified rigid cast funnel throat, three sensors for
+state verification, air suspension supplies the compliance during automated coupling;
+SAF-Holland fifth-wheel documentation (XL-FW20034SL) — rigid cast V-throats at 25 t
+vertical loads with compliance deliberately allocated outside the funnel (Kompensator
+mounts, bushed brackets, oscillating models) and instrumented lock verification
+(ELI-te). **Three independent engineering traditions converge on T1's architecture:
+rigid capture geometry, compliance and instrumentation in the base.**
 
 ## 3. Fiducial specification (D-010, D-011)
 

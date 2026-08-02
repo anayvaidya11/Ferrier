@@ -143,6 +143,15 @@ load case** — the coupling is real but not binding anywhere in the refined ban
 (Tow-class lateral through the mount — 5.13 kN at the D-018 ±20° sector edge — is the
 stop stack's load case, per revised R4, and is Phase 2's verification item.)
 
+**A4-note (2026-08-02): the §2 prior-art disclosure is discharged.** The literature
+pass ran same-day (not deferred to Phase 1): all three families verified against
+fetched sources — Draper RCC patent US 4,098,001 + Whitney 1982 (DOI-verified
+metadata; full text paywalled), IDSS IDD Rev E + NASA SSP 50920 Rev A (both read in
+full), JOST KKS + SAF-Holland XL-FW20034SL (both read). Whitney & Nevins 1979
+unretrievable → demoted to unverified analogy. Citations live in INTERFACE_SPEC §2.3;
+the §2 parenthetical above stands unedited as the record of what was true at
+recommendation time.
+
 **A3. Jam observability (D-027).** §5's T5 trigger ("jamming dominates the taxonomy")
 was unobservable under T1's net-wrench signal — a symmetric wedge reads as high axial,
 near-zero lateral, no latch: indistinguishable from "seated and latching." IS8-17
