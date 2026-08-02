@@ -4,7 +4,8 @@ Committed 2026-08-02 (A-011). **Authority: the specs win.** This file sequences 
 build; every behavioral rule it references lives in `INTERFACE_SPEC.md`,
 `WIRE_FORMAT.md`, `ARCHITECTURE.md`, `PHASE1_PARAMETERS.md`, and `DECISIONS.md`. Where
 this file and a spec disagree, the spec is right and this file has a bug (MASTER_CONTEXT
-§2.5 documents-win rule). Build opens on P-05 sign-off; window ends 30 September.
+§2.5 documents-win rule). Build opened 2026-08-02 on the P-05 signature; window ends
+30 September.
 
 One question, one number: given a standardized target interface, what fraction of
 autonomous approach-and-latch attempts succeed under realistic field degradation?

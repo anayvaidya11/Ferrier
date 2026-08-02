@@ -8,11 +8,10 @@ into an engineering problem.** The program's deliverable is a demonstrated and
 simulated design plus the evidence it would work — the gap presented to investors is
 capital, not physics.
 
-**Status: Phase 0 (Orient, Aug 1–14 2026), Week 2. The gate's technical condition is
-met (2026-08-02):** `HOLES.md` open count 0; `PHASE1_PARAMETERS.md` 65/65. **Formal
-sign-off is pending the human (P-05), and the cloud dollar ceiling (P-02) is owed
-before Phase 1 ops.** Phase 1 — the docking experiment, a kill gate — opens on P-05
-sign-off (A-011; no later than 15 August). Execution map: `PHASE1_PLAN.md`.
+**Status: Phase 0 CLOSED — gate signed 2026-08-02 (P-05), cloud ceiling ratified at
+$100 (P-02, A-011). Phase 1 — the docking experiment, a kill gate — is OPEN as of
+2026-08-02** (early start per A-011; window ends 30 September). Execution map:
+`PHASE1_PLAN.md`.
 
 ## Reading order for a new session
 

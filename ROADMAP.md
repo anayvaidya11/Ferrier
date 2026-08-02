@@ -6,8 +6,8 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 
 | Phase | Window | Objective | Gate | Status |
 |---|---|---|---|---|
-| 0 | Aug 1–14 | Orient. Read the customer's words. Define the interface. | Interface spec written | 🟡 |
-| 1 | on P-05 sign-off (A-011) – Sep 30 | The docking experiment | ⚠️ **KILL GATE** — see criteria below | ⬜ |
+| 0 | Aug 1–14 | Orient. Read the customer's words. Define the interface. | Interface spec written | 🟢 (signed 2026-08-02) |
+| 1 | Aug 2 (early start, A-011) – Sep 30 | The docking experiment | ⚠️ **KILL GATE** — see criteria below | 🟡 |
 | 2 | October | Physics proof | Closed-form numbers, sourced | ⬜ |
 | 3 | November | Perception + embedded on real data | Working stack, measured accuracy | ⬜ |
 | 4 | December | Integration, CAD, proof site, cofounder | End-to-end demo runs | ⬜ |
@@ -16,7 +16,7 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 
 ---
 
-## Phase 0 — Orient (Aug 1–14) 🟡
+## Phase 0 — Orient (Aug 1–14) 🟢 (gate signed 2026-08-02)
 
 ### Week 1 — Read the customer 🟢 (completed 2026-07-31)
 
@@ -32,7 +32,7 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 - 🟢 `ARCHITECTURE.md` v1.0 (2026-08-01) — contract-first topology, real-vs-simulated table, sim architecture, compute plan, Phase 1 output spec
 - 🟢 `WIRE_FORMAT.md` v1.0 (2026-08-01) — target-state stream field-by-field; omitted-not-zeroed rule with worked example; consumer checklist; annotated reference lines
 - 🟢 Stand up the repo with all docs committed (2026-07-31)
-- 🟢 **Gate: technical self-assessment PASSES (2026-08-02).** `HOLES.md` open count 0; `PHASE1_PARAMETERS.md` 65/65 (post-D-028: #64 μ_trac, #65 m_rv added) — every entry a value, a decided procedure, or a declared sweep with an honestly-labeled default. Perception's unanchorable regions (view-angle shape, covariance magnitudes) are declared sweeps upgraded by MR data under the curve-swap protocol. **Formal sign-off: PENDING_HUMAN P-05; cloud ceiling P-02 owed before Phase 1 ops.**
+- 🟢 **Gate: technical self-assessment PASSES (2026-08-02).** `HOLES.md` open count 0; `PHASE1_PARAMETERS.md` 65/65 (post-D-028: #64 μ_trac, #65 m_rv added) — every entry a value, a decided procedure, or a declared sweep with an honestly-labeled default. Perception's unanchorable regions (view-angle shape, covariance magnitudes) are declared sweeps upgraded by MR data under the curve-swap protocol. **Formal sign-off: P-05 signed 2026-08-02; cloud ceiling P-02 ratified at $100 (A-011).**
 
 **Deliverable:** three specification documents. No implementation code.
 **Gate:** interface spec precise enough that Phase 1 builds directly against it with no further design decisions.
@@ -50,7 +50,7 @@ measured curves when they land, provided the swap is recorded and the before/aft
 results are both reported — silently improving an input mid-experiment is the same
 failure as refitting a model after seeing the answer.
 
-## Phase 1 — The docking experiment (opens on P-05 sign-off, A-011; ends Sep 30) ⬜ ⚠️ KILL GATE
+## Phase 1 — The docking experiment (opened 2026-08-02 on P-05 signature, A-011; ends Sep 30) 🟡 ⚠️ KILL GATE
 
 One question, one number: given a standardized target interface, what fraction of autonomous approach-and-latch attempts succeed under realistic field degradation?
 
