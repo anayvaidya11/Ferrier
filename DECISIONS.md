@@ -106,6 +106,27 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-028 — Feasibility-window semantics: intersection, not verdict (repairs the #63 mandate)
+The original #63 mandate was doubly wrong: its trigger fired on *partial* band
+exceedance ("required-k exceeds k_max"), and it hard-coded a verbatim conclusion into a
+parameter row. Corrected semantics, two-sided:
+**A vehicle class can dock iff [k_lo_req, k_hi_req] ∩ [k_min, k_max] ≠ ∅** — where
+k_max = μ_trac·m_rv·g/35 mm is the derived static traction ceiling and k_min = n_F/δ_work
+is the noise-floor bound (also class-dependent through n_F, a named Phase 2 unknown).
+**Infeasible only on empty intersection. Partial overlap means a narrower usable band —
+a tuning finding, not an elimination.** (As originally written, Phase 2 could have
+deleted viable vehicle classes.)
+**Reporting split:** PHASE1_PARAMETERS #63 **emits data only** — the per-class window,
+the required band, their intersection, and the mask, tuple order (μ_trac, m_rv)
+everywhere. **ARCHITECTURE §6.7 owns the interpretation, once, normatively**, with the
+CLAIMS C-13 static-only caveat attached (Phase 2's dynamic analysis may lower k_max;
+the window recomputes, these semantics don't change).
+**Symbols:** μ_trac (recovery-vehicle traction) and μ_contact (stud/funnel interface,
+PHASE1_PARAMETERS #31) are different physical quantities and never share a symbol.
+**Provenance label:** the intersection is *simulated required band ∩ derived static
+bounds* — not a pure simulation result; labeling it "derived from simulation" was the
+§4.3 failure.
+
 ### D-027 — Funnel compliance topology RATIFIED: T1 — rigid steel funnel on a compliant instrumented base mount (closes H-04)
 Ratified by the human 2026-08-02 (PENDING_HUMAN P-01), from
 `studies/H04_FUNNEL_COMPLIANCE.md`. **Rationale:** T1 maximizes R6 simulatability —

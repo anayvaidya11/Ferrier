@@ -4,10 +4,12 @@ Every constant, sweep, distribution, threshold, transform, and criterion Phase 1
 needs, each citing the committed source it came from. **An entry that cannot be filled
 from the specs points at its open hole instead of a value. When this document has no
 UNFILLED entries, Phase 0 is done; until then it is the precise map of what remains.**
-Status: 2026-08-02 (post-H-07) — **63 entries, 63 filled, 0 UNFILLED.** #39/#40 carry
+Status: 2026-08-02 (post-D-028) — **65 entries, 65 filled, 0 UNFILLED.** #39/#40 carry
 literature anchors plus declared sweeps for the regions the corpus honestly cannot
 anchor (view-angle shape; covariance magnitudes) — upgraded by MR data under the
-ROADMAP curve-swap protocol.
+ROADMAP curve-swap protocol. **Phrasing rule (CLAIMS C-14): the perception model is
+"swept across the plausible range," never "literature-derived curves" — the headline
+output is success as a function of detection rate (D-014).**
 
 ## Geometry (all from D-016 / INTERFACE_SPEC)
 
@@ -63,7 +65,7 @@ ROADMAP curve-swap protocol.
 
 | # | Parameter | Value | Source |
 |---|---|---|---|
-| 31 | Friction μ | swept 0.1–0.8, default 0.4 (arbitrary) | IS §9.1 |
+| 31 | Contact friction **μ_contact** (stud/funnel interface — distinct from #64's μ_trac, D-028) | swept 0.1–0.8, default 0.4 (arbitrary) | IS §9.1 |
 | 32 | Restitution e | swept 0.1–0.4, default 0.2 (arbitrary) | IS §9.1 |
 | 33 | Solver timestep/stiffness (numerical) | set by recorded convergence procedure: halve timestep until success-rate delta < 1% over a 500-trial probe; values logged per run in `trial_header` | HOLES H-03 |
 | 34 | Compliance topology | **T1 — rigid steel funnel on compliant instrumented base; rigid bodies + one 6-DOF spring-damper + hard stops** (RATIFIED 2026-08-02) | D-027 |
@@ -105,7 +107,9 @@ ROADMAP curve-swap protocol.
 | 60 | Seed policy | single RNG root per trial in `trial_header`; all streams derive | WIRE_FORMAT |
 | 61 | Compute decision test | 1,000-trial representative workload, cloud CPU vs GPU spot, $/1k trials, winner provisioned, both measurements committed | ARCHITECTURE §5, A-004 |
 | 62 | Jam-detection thresholds (IS8-17) | swept, defaults arbitrary: F_ax_jam {50, 100, 200} N; F_lat_jam {10, 25} N; t_jam {0.5, 1, 2} s — recalibrated against simulated force scales in Phase 1 week one, as a recorded revision | IS §8 row 17, D-027 |
-| 63 | k feasibility mask — **a reported finding, not bookkeeping** | ceiling k_max = μ·m_rv·g/35 mm per (μ, m_rv) cell (17–112 N/mm across classes). **Required Phase 1 report line:** intersect the required-stiffness band (deliverable 7) with each class's ceiling — wherever required-k exceeds k_max, report it as *"a recovery vehicle of class (m_rv, μ) cannot dock in that condition regardless of autonomy quality"* — a chassis-selection requirement consumed directly by Phase 2's tradeoff study | studies/H04 A1; ARCHITECTURE §6.7 |
+| 63 | k feasibility window and mask — **emits data, not verdicts** (D-028) | Per-class window [k_min, k_max], tuple order (μ_trac, m_rv) everywhere: k_max = μ_trac·m_rv·g/35 mm over #64 × #65 (17–112 N/mm across classes); k_min = n_F/δ_work (n_F a named Phase 2 unknown; class placeholder ≈1 N/mm, studies/H04 §4). Phase 1 emits: window, required band (ARCHITECTURE §6.6–6.7), their **intersection**, and the mask. **Interpretation is normative in ARCHITECTURE §6.7 only** (empty-intersection rule, C-13 caveat). Pinned cross-check (studies/H04 Addendum A1): at (μ_trac, m_rv) = (0.2, 300 kg), k_max ≈ 17 N/mm → sweep cells k = 30, 70 infeasible for that class | D-028; studies/H04 Addendum A1 |
+| 64 | Recovery-vehicle traction coefficient **μ_trac** (mud; distinct from #31 μ_contact) | swept {0.2, 0.35, 0.5} | studies/H04 Addendum A1; D-028 |
+| 65 | Recovery-vehicle mass **m_rv** (distinct from #36 head effective mass M_eff) | swept {300, 500, 800} kg — class range, independent of the target's 500 kg | studies/H04 Addendum A1; D-028 |
 
 **UNFILLED: none.** The gate condition this document makes literal is met: every entry
 is a value, a decided procedure, or a declared sweep with an honestly-labeled default.

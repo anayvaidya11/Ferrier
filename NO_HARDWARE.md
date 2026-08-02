@@ -60,6 +60,21 @@ what is needed, collect the data, and return it.
 A blocked analysis that names its blocker is a success. A completed analysis resting on a
 fabricated number is a failure that poisons every downstream phase.
 
+## The source-integrity rule (added 2026-08-02 — standing, inherited by every session)
+
+**A summarizer's output is never a source.** Numbers land in committed documents only
+from a page the author read directly and can cite by number — page, table, figure, or
+section. Automated fetch digests, AI summaries, search snippets, and abstract services
+are *leads*, not sources: treat every digest as untrusted until page-verified.
+
+Why this is a standing rule and not a note: on 2026-08-02 an automated fetch summary of
+Olson 2011 returned plausible fabricated values — "0.3 pixels," a wrong tag-family
+description — that do not appear anywhere in the paper
+(`research/data/perception_prior.md`, UNVERIFIED section). **This failure wears the
+shape of a successful fetch**, which makes it the fabrication mode this program is
+least protected against. The extraction discipline that caught it — discard the
+digest, re-read the pages — is now the required procedure, not a virtue.
+
 ## Labeling
 
 Per MASTER_CONTEXT §4.3:

@@ -56,9 +56,9 @@ If a reader cannot tell from this table alone what is real, the table has failed
 | Sim harness + trial logging/replay (A-007) | Built | Phase 1 | Real code; its *inputs* are simulated and labeled below |
 | Contact physics (funnel/stud, last 50 mm + annulus) | Simulated | Phase 1 | Newton solver stands in for hardware docking trials |
 | Approach/chassis kinematics | Simulated | Phase 1 | Kinematic model + error injection stands in for a real vehicle on terrain |
-| Perception: detection probability | Derived → pending MR-001/002/003 | Phase 1 | Literature-derived curves stand in for bench measurement; **rows move toward Built only when MR data lands — never on the strength of an unfulfilled request** (D-008-R) |
+| Perception: detection probability | Swept → pending MR-001/002/003 | Phase 1 | **A swept plausible range with literature anchors** (`research/data/perception_prior.md` — plateau/onset anchors; view-angle shape unanchored by the corpus) stands in for a measured curve. The headline output is success **as a function of** detection rate (D-014, C-14) — no literature-derived curve is claimed. Rows move toward Built only when MR data lands (D-008-R) |
 | Perception: mud response | Extrapolated → pending MR-001 | Phase 1 | Clean-occlusion literature extrapolated — **no supporting data** until MR-001 |
-| Perception: pose covariance | Derived (literature) | Phase 1 | Published accuracy figures stand in; MR-004 DEFERRED |
+| Perception: pose covariance | Swept class value → pending MR bench | Phase 1 | Swept σ_px {0.3, 0.5, 1.0} px stands in — the sole quantifying source (Kallwies 2020) is paywalled (P-07); replaced by measured `reproj_rms_px` |
 | Cameras (both) | Modeled | Phase 0–1 | Assumed parameters (D-012) stand in for hardware |
 | Fiducial plate / stud / funnel geometry | Modeled | Phase 0 | D-016 parametric CAD-level definition stands in for fabricated parts (NO_HARDWARE) |
 | Tow/extraction physics, power, thermal | Derived | Phase 2 | Closed-form with sourced numbers stands in for testing |
@@ -118,11 +118,15 @@ What the experiment produces, in full (D-005, D-006, D-014, A-007):
    often it commits to an insertion it should not have attempted. A second deliverable
    of D-014's class, and §1.5's asymmetry made quantitative — arguably the more
    interesting curve to a defense reviewer, because it prices the abort discipline.
-7. **The required-stiffness band** (D-026) — capture success over the (k, M_eff)
-   sweep: the mechanical specification ("gate threshold met only for k ∈ [X, Y] at
-   M_eff = Z") handed to the cofounder. D-014's logic applied to mechanics.
-   **Includes the feasibility intersection (#63):** the band crossed with each vehicle
-   class's traction ceiling k_max(μ, m_rv) — where required stiffness exceeds a
-   class's ceiling, Phase 1 reports that class **cannot dock in that condition
-   regardless of autonomy quality**. A chassis-selection requirement derived from
-   simulation, consumed by Phase 2's tradeoff study.
+7. **The feasibility intersection** (D-028; data emitted per PHASE1_PARAMETERS #63 —
+   this section owns the interpretation, normatively and only here). For each vehicle
+   class (μ_trac, m_rv): **the class can dock iff the required band [k_lo_req,
+   k_hi_req] intersects the feasible window [k_min, k_max]** (k_max the derived static
+   traction ceiling; k_min the noise-floor bound). **Empty intersection → that class
+   cannot dock in that condition — subject to CLAIMS C-13's static-only caveat: the
+   ceiling is a derived static bound, dynamic/snatch loads unmodeled, and Phase 2's
+   dynamic analysis may lower k_max, shrinking windows already reported. Partial
+   overlap → a narrower usable band: a tuning finding, never an elimination.**
+   Provenance, labeled exactly: **simulated required band ∩ derived static bounds** —
+   not a pure simulation result. Consumed by Phase 2's chassis tradeoff study with the
+   caveat attached.
