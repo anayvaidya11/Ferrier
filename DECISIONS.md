@@ -106,6 +106,20 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-026 — Stiffness and head mass are swept; Phase 1 outputs a required-stiffness band
+Parameters #35/#36 do not wait on Phase 2 chassis selection: compliance stiffness k
+sweeps the derived envelope as a log grid {1, 3, 10, 30, 70} N/mm (studies/H04 §4) and
+head effective mass M_eff sweeps a class range {8, 15, 30} kg. **The Phase 1
+deliverable is a required-stiffness band** — "capture succeeds above the gate
+threshold only for k within [X, Y] at M_eff = Z" — D-014's logic applied to
+mechanics: a specification handed to the mechanical cofounder instead of a value
+guessed today. The two-order-wide envelope stops being an embarrassment and becomes
+the sweep axis.
+**What would make it wrong:** a ratified H-04 topology whose compliance is not
+representable as a single lumped k (e.g., T5's coupled off-diagonal terms) — then the
+sweep re-parameterizes to that topology's stiffness description, as a recorded
+revision. Only #34 (topology) remains a true H-04 blocker.
+
 ### D-025 — Cam B obliquity: 30°, justified band [15°, 45°]
 Lower bound: constellation discriminability must survive partial occlusion down to an
 adjacent two-tag baseline (studies/H08_AMBIGUITY_MODEL.md arithmetic). Upper bound:

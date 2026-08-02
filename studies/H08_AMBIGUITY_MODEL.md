@@ -71,6 +71,39 @@ layout's measured flip rate makes the collar necessary.
 - **Selected: β = 30°** (D-025) — center of the band; the translation offsets remain
   [ASSUMED] within it.
 
+## 6. Commit-rule geometry check (added 2026-08-02) [derived]
+
+**Question raised:** insertion commit requires ≥2 fused tags; if Cam B's field of view
+at contact were ~100 mm across, two ring tags (ring Ø110 mm) could never be
+simultaneously in frame where the rule is evaluated.
+
+**Check against committed geometry** (Cam B extrinsic (+100, −250, 0) mm, yaw 30°,
+HFOV ~95°, D-025/IS §4; plate standoff from mouth d_p ∈ [200, 70] mm through inner
+servo, IS §6):
+
+- **Range never collapses.** Cam B–to–plate-center range = √((100+d_p)² + 250²):
+  390 mm at commit entry (d_p = 200) → 302 mm at full engagement (d_p = 70). FOV width
+  at 302 mm = 2·302·tan 47.5° ≈ **660 mm** — six ring diameters. The ~100 mm-across
+  premise does not occur with the committed standoff mounting; keeping viewing
+  distance through insertion is exactly what the off-axis position buys (D-012).
+- **The binding constraint is lip occlusion, not FOV.** Tracing the sight line from
+  Cam B to plate center: it passes the mouth plane at radius ≈119 mm against a lip
+  outer radius of 125 mm — a graze — once d_p ≲ 100 mm. Far-side ring tags (the +Y
+  arc) are progressively occluded by the funnel shell in the last ~100 mm; **near-side
+  tags keep clear sight lines to contact.**
+- **Worst surviving constellation = an adjacent near-side pair** (baseline ~42 mm) —
+  precisely the case §2's table already covers (θ_min ≈ 3.5°, and Cam B sits at 30°),
+  and the case D-025's lower bound was set by. With 8 tags at 45° pitch, any 90° arc
+  contains ≥2 tags, so a near-side adjacent pair always exists — this is now a stated
+  requirement on ring population: **azimuthal coverage must guarantee ≥2 tags in the
+  Cam-B-side semicircle** (8 × 45° satisfies it; any descoping below 5 tags would not).
+- **The rule's vision demand ends at contact:** stage 3 is contact-force-guided
+  (D-004; `pose_source: contact_force`), so no vision requirement extends into the
+  final occluded centimeters.
+
+**Verdict: the ≥2-tag commit rule survives its own geometry.** The check is cheap now
+and is committed here so Phase 1 builds against verified geometry, not an assumption.
+
 ## Assumptions (all validated or replaced by MR-003)
 
 1. Weak-perspective two-solution model; real detectors flip via the same mechanism.

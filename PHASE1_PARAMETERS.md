@@ -4,7 +4,8 @@ Every constant, sweep, distribution, threshold, transform, and criterion Phase 1
 needs, each citing the committed source it came from. **An entry that cannot be filled
 from the specs points at its open hole instead of a value. When this document has no
 UNFILLED entries, Phase 0 is done; until then it is the precise map of what remains.**
-Status: 2026-08-01 — **61 entries, 56 filled, 5 UNFILLED.**
+Status: 2026-08-02 — **61 entries, 58 filled, 3 UNFILLED** (#34 topology — H-04
+ratification; #39/#40 perception curves — H-07 extraction).
 
 ## Geometry (all from D-016 / INTERFACE_SPEC)
 
@@ -64,8 +65,8 @@ Status: 2026-08-01 — **61 entries, 56 filled, 5 UNFILLED.**
 | 32 | Restitution e | swept 0.1–0.4, default 0.2 (arbitrary) | IS §9.1 |
 | 33 | Solver timestep/stiffness (numerical) | set by recorded convergence procedure: halve timestep until success-rate delta < 1% over a 500-trial probe; values logged per run in `trial_header` | HOLES H-03 |
 | 34 | **Compliance topology** | **UNFILLED — H-04 UNRATIFIED** (studies/H04) | — |
-| 35 | **Compliance stiffness k** | **UNFILLED — band derived [1, 70] N/mm; enters §9.1 sweep once topology ratified** | studies/H04 §4 |
-| 36 | **Head effective mass M_eff** | **UNFILLED — follows the ratified topology; study used 15 kg class value, labeled** | studies/H04 §4 |
+| 35 | Compliance stiffness k | swept log grid {1, 3, 10, 30, 70} N/mm over the derived envelope; **Phase 1 outputs the required-stiffness band** | D-026; studies/H04 §4 |
+| 36 | Head effective mass M_eff | swept {8, 15, 30} kg class range | D-026 |
 
 ## Perception injection (D-007, D-008-R)
 
@@ -102,5 +103,6 @@ Status: 2026-08-01 — **61 entries, 56 filled, 5 UNFILLED.**
 | 60 | Seed policy | single RNG root per trial in `trial_header`; all streams derive | WIRE_FORMAT |
 | 61 | Compute decision test | 1,000-trial representative workload, cloud CPU vs GPU spot, $/1k trials, winner provisioned, both measurements committed | ARCHITECTURE §5, A-004 |
 
-**UNFILLED: #34, #35, #36 (all H-04 — one human ratification) and #39, #40 (H-07 — one
-extraction session).**
+**UNFILLED: #34 (H-04 topology — one human ratification) and #39, #40 (H-07 — one
+extraction session).** #35/#36 closed as sweeps per D-026 — the required-stiffness
+band is now a Phase 1 deliverable, not a Phase 0 guess.

@@ -300,7 +300,8 @@ Perception enters Phase 1 as the injected model (D-007) parameterized by these a
 | Encounter time budget T (D-022) | {5, 15, 30} min | 15 | arbitrary — no sourced mission-exposure value exists |
 | Mud model f_c (D-023) | {0.6, 0.8, 1.0} | 0.8 | arbitrary within the conservative form |
 | Flip-model scale κ (studies/H08) | {0.5, 1, 2} | 1 | shape assumption pending MR-003 |
-| Compliance stiffness k (H-04) | log grid over [1, 70] N/mm | — | **UNRATIFIED — band derived in studies/H04; no default until topology is ratified** |
+| Compliance stiffness k (D-026) | log grid {1, 3, 10, 30, 70} N/mm | — | derived envelope (studies/H04 §4); **Phase 1 outputs the required-stiffness band**; re-parameterizes if the ratified topology is not lumped-k |
+| Head effective mass M_eff (D-026) | {8, 15, 30} kg | 15 | class range; chassis selection is Phase 2 |
 
 ## 10. Known weaknesses
 

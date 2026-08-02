@@ -35,7 +35,7 @@ nothing below was closed by invention.
 
 | # | Hole | Status | What closes it |
 |---|---|---|---|
-| H-04 | Funnel compliance architecture | **OPEN — study complete, UNRATIFIED** (`studies/H04_FUNNEL_COMPLIANCE.md`) | **Human ratifies a topology** (PENDING_HUMAN.md). Stiffness then enters §9.1's declared sweep over the derived [1, 70] N/mm band |
+| H-04 | Funnel compliance architecture | **OPEN — narrowed to topology only** (study complete, UNRATIFIED). Stiffness and head mass exited via Door 4 (D-026, 2026-08-02): swept, with the **required-stiffness band** now a Phase 1 deliverable | **Human ratifies a topology** (PENDING_HUMAN.md P-01) — the single remaining H-04 decision |
 | H-07 | Literature perception curves, digitized | **OPEN — task specified, not performed** | A reading/extraction session: digitize detection-vs-range/angle/lighting curves and pose covariance from the named sources (Olson 2011; Wang & Olson 2016; Kallwies 2020) into `research/data/perception_prior.md` with figure-level citations. No hardware needed; Door 2 on completion. Estimated half a day. **Not closable by citation-from-memory — that is the Door 2 correctness failure** |
 
 **Open count: 2.** Both have named closure paths; H-04's is a human decision, H-07's is

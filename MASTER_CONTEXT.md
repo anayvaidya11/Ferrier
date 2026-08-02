@@ -43,7 +43,7 @@ Four functions, ordered by increasing difficulty:
 
 ### 1.5 The strategic properties that make this fundable
 
-**Useful before it's perfect.** A failed docking attempt costs a wasted trip. The fallback is exactly the status quo — send humans. Simulation shows meaningful value at a 40% autonomous success rate. Almost no autonomy product has this property; most require >95% because failure is catastrophic. This is the single strongest engineering argument in the thesis and it leads every pitch.
+**Useful before it's perfect.** A failed docking attempt costs a wasted trip. The fallback is exactly the status quo — send humans. A mission-level trade model (studies/C09_VALUE_THRESHOLD.md; A-010) shows robot-first recovery beats sending soldiers whenever docking success exceeds the robot-to-human sortie risk ratio — of order 10–35% across the swept parameter region; a 40% rate clears it with margin in most of that region, and Phase 1 measures whether the system does. Almost no autonomy product has this property; most require >95% because failure is catastrophic. This is the single strongest engineering argument in the thesis and it leads every pitch.
 
 **Never pitch as cost savings.** The materiel argument inverts if UGVs get cheap enough, and Ukrainian doctrine explicitly treats them as expendable. The casualty argument does not invert and is worth roughly 15× more. Pitch casualty avoidance with a cost benefit attached.
 
@@ -502,3 +502,14 @@ Phase 3 milestone in ROADMAP.md. Rationale: every artifact this program produces
 doubles as recruiting material only if someone actually sees it, and by 1 November the
 Phase 1 kill-gate result and the tradeoff curves exist to show. Body edited in-place
 per the precedence rule (applying a recorded amendment).
+
+### A-010 (2026-08-02) — §1.5's "40%" sentence replaced by the derived value threshold
+
+The claim "Simulation shows meaningful value at a 40% autonomous success rate" was
+circular (CLAIMS C-09): Phase 1's simulation is what would show it, and it led every
+pitch while resting on nothing. It is retired. Replacement: the derived mission-level
+trade model (studies/C09_VALUE_THRESHOLD.md) — robot-first beats humans-first when
+docking success exceeds the robot-to-human sortie risk ratio, P\* = (ρ + h)/(1 + h),
+of order 10–35% across the swept region. The new sentence is derived arithmetic with
+swept class parameters and no empirical inputs; the old sentence may not be used
+externally in any form.

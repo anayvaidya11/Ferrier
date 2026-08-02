@@ -32,7 +32,7 @@ Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md)
 - 🟢 `ARCHITECTURE.md` v1.0 (2026-08-01) — contract-first topology, real-vs-simulated table, sim architecture, compute plan, Phase 1 output spec
 - 🟢 `WIRE_FORMAT.md` v1.0 (2026-08-01) — target-state stream field-by-field; omitted-not-zeroed rule with worked example; consumer checklist; annotated reference lines
 - 🟢 Stand up the repo with all docs committed (2026-07-31)
-- 🟡 **Gate: OPEN — does not pass yet.** Self-test found 12 holes + 6 unratified placeholders (`HOLES.md`); H-04 (funnel compliance architecture) is critical path. One decisions session before Aug 14 closes it.
+- 🟡 **Gate: OPEN — two items remain** (`HOLES.md`, 2026-08-02): H-04 narrowed to the topology ratification (P-01, human) and H-07 literature-curve extraction (half-day work session). `PHASE1_PARAMETERS.md`: 58/61 filled. Both closable well before Aug 14.
 
 **Deliverable:** three specification documents. No implementation code.
 **Gate:** interface spec precise enough that Phase 1 builds directly against it with no further design decisions.
