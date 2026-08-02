@@ -26,6 +26,7 @@ tells a cofounder what to fix is worth as much as the success number.
 | 14 | Wrong-ID decode | ID outside variant block (§3.4) | Rare | Yes (frame reject) | Family/ID scheme fine as-is unless measured otherwise |
 | 15 | Comms loss mid-attempt | Link monitor only — wire stream unaffected | Common in DDIL | n/a — **not a failure** (REQ-005) | None; it is the operating condition |
 | 16 | Lip strike | Contact wrench in lip band pre-capture-plane | Occasional | Yes — offset retry (D-005's designed case) | Mouth diameter / wall angle rebalance; **false-capture sub-path counted separately** |
+| 17 | Jam at the throat | `sim_truth.contact_wrench`: axial > F_ax_jam, lateral < F_lat_jam, no latch confirm within t_jam; `abort_reason: jam_detected` | Occasional (a-priori guess — this class exists precisely because it was invisible) | Yes — back-out is the designed unjam; repeated jams exhaust the attempt budget | **The D-027 escalation observable: if IS8-17 dominates, promote T5's RCC geometry.** Note T4a deflection sensing is blind to this failure (symmetric jam ⇒ near-zero net deflection) — the fallbacks are not interchangeable |
 
 **Reading the table the way a cofounder would:** rows 3, 9, 10, 16 are the mechanical
 design agenda; rows 1, 5 are the perception agenda; rows 2, 4, 6, 7, 8, 13 are

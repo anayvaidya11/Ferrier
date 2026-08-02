@@ -258,6 +258,7 @@ recommend a human decision — never a metric pose from a non-visual source (D-0
 | 14 | Wrong-ID decode | Decoded ID outside expected variant block (§3.4) | Reject frame; persistent → escalate |
 | 15 | Comms loss mid-attempt | Link monitor | **Nominal, not a failure of the attempt**: continue autonomously (REQ-005, Q4); telemetry and any escalation queue store-and-forward |
 | 16 | Lip strike (added 2026-08-01 with the annulus derivation) | Contact wrench in the lip band [110, 125] mm before capture-plane crossing | Scored as its **own outcome class, never as capture or clean miss** — a deflected lip strike can fall into the mouth (false-capture path the taxonomy must count separately) or damage stud/fiducial; retry per D-005 with offset |
+| 17 | Jam at the throat (added 2026-08-02, D-027) | **Axial contact force > F_ax_jam ∧ \|lateral\| < F_lat_jam ∧ no latch confirm within t_jam** — a symmetric wedge is geometrically near-balanced, so it reads high-axial/near-zero-lateral, indistinguishable from "seated and latching" under T1's net-wrench signal without this explicit criterion. Thresholds are swept parameters (PHASE1_PARAMETERS #62) | Distinct outcome class, **never folded into generic insertion failure** — it is the observable that makes the D-027 T5-promotion trigger reachable. Response: back out per D-005 (the designed unjam), `abort_reason: jam_detected`; escalate on budget exhaustion |
 
 ## 9. Degradation assumptions Phase 1 will parameterize
 

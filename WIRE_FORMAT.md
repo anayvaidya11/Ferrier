@@ -39,7 +39,7 @@ semantics. Unknown fields MUST be ignored (forward compatibility).
 | `degradation` | object | `{"occlusion_est": [0,1], "illuminance_lux": >0, "dropout": bool}` — each key itself optional | — | O | That observation unavailable (omitted, not zeroed — 0 lux is a measurement, not a default) |
 | `stage` | string enum | `acquire` \| `outer_servo` \| `inner_servo` \| `contact_insert` \| `latched` \| `abort` \| `escalate` (D-004) | — | **R** | Line invalid — reject |
 | `attempt` | object | `{"n": int ≥1, "last_contact_offset": {"frame": "head_frame", "t": [x,y,z] m}}` (D-005) | n ≤ attempts-per-encounter | O | First approach; no prior contact data |
-| `abort_reason` | string enum | `low_confidence` \| `ambiguity_persistent` \| `inner_ring_absent` \| `contact_anomaly` \| `attempt_budget_exhausted` \| `constellation_inconsistent` \| `latch_fail` \| `command` | — | O (R when `stage` ∈ {abort, escalate}) | Not aborting |
+| `abort_reason` | string enum | `low_confidence` \| `ambiguity_persistent` \| `inner_ring_absent` \| `contact_anomaly` \| `jam_detected` \| `attempt_budget_exhausted` \| `constellation_inconsistent` \| `latch_fail` \| `command` | — | O (R when `stage` ∈ {abort, escalate}) | Not aborting |
 | `escalation` | object | `{"imagery_ref": string, "recommend": "human_decision"}` | — | O (R when `stage` = escalate) | Not escalating |
 
 Clock source: the producer's monotonic steady clock, named because DDIL forbids
