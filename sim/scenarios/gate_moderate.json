@@ -1,0 +1,16 @@
+{
+  "source": "DECISIONS.md D-029",
+  "description": "The kill-gate cell: 'moderate degradation' as committed before any trial ran. The gate number is the success rate over this band (D-022 definition; first-attempt and multi-attempt reported separately per D-005), with its confidence interval. Changing this band after any results exist is a recorded revision reporting both numbers.",
+  "band": {
+    "outer_occlusion": {"cells": [0.3, 0.4]},
+    "inner_occlusion": {"cells": [0.3, 0.4, 0.5]},
+    "illuminance_lux": {"cells": [50, 100]},
+    "rain": {"lo": 0.10, "hi": 0.20},
+    "dropout_p": {"value": 0.05, "bursts": true},
+    "lens_contamination": {"lo": 0.10, "hi": 0.25},
+    "tag_knockout_mask": {"value": 0}
+  },
+  "encounter_geometry": "host pitch/roll, view angle, and range marginalize over their full committed distributions (they are encounter geometry, not degradation dials)",
+  "system_parameters": "all swept system parameters sit at their labeled defaults (INTERFACE_SPEC 9.1)",
+  "sampling": "uniform over the listed cells/ranges"
+}
