@@ -1,6 +1,6 @@
-# WyZen: Ferrier— Autonomous Recovery for Unmanned Ground Fleets
+# WyZantium: Ferrier— Autonomous Recovery for Unmanned Ground Fleets
 
-WyZen builds the autonomous hand that keeps unmanned fleets in the fight: a robot that
+WyZantium builds the autonomous hand that keeps unmanned fleets in the fight: a robot that
 goes forward when another robot goes down, and does the physical work a human would
 otherwise walk into the kill zone to do. The load-bearing claim: **a standardized
 attachment interface turns autonomous battlefield recovery from a research problem

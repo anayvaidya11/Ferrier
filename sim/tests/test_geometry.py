@@ -9,7 +9,7 @@ PHASE1_PARAMETERS entries — a cross-check, not a re-declaration.
 """
 import math
 
-from wyzen_sim import frames, geometry, params
+from wyzantium_sim import frames, geometry, params
 
 
 def approx3(a, b, tol=1e-9):

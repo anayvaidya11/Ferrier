@@ -6,7 +6,7 @@ them; changing any is a recorded decision revision, not a code edit (D-016).
 """
 import math
 
-from wyzen_sim.frames import Pose
+from wyzantium_sim.frames import Pose
 
 # Stud and funnel (D-016; IS §2, §6)
 STUD_NECK_DIAMETER_MM = 25.0

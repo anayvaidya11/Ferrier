@@ -1,7 +1,7 @@
 # Army Battery-Interface Standards: MIL-STD-3078 and the STUB Family
 
 **Prepared:** 2026-07-31. All source URLs were retrieved on 2026-07-31 unless noted.
-**Purpose:** Establish precisely what existing Army battery-interoperability standards do and do not cover, as groundwork for WyZen's proposed recovery/docking interface for disabled UGVs (field recharging and battery swap).
+**Purpose:** Establish precisely what existing Army battery-interoperability standards do and do not cover, as groundwork for WyZantium's proposed recovery/docking interface for disabled UGVs (field recharging and battery swap).
 
 **Sourcing note:** The full text of MIL-STD-3078 (base issue, 14 Nov 2024, Distribution Statement A) was successfully downloaded from DLA's ASSIST/Quick Search system and read in its entirety; claims about that document are drawn from its actual text. The STUB family's governing performance specification (MIL-PRF-32383/7) could **not** be retrieved; STUB claims rest on MIL-STD-3078's Table I, a 2023 Power Sources Conference technical paper by the STUB manufacturer, and Army/trade press. All statements labeled *inference* are derived from what the fetched sources omit, not from unread document text.
 
@@ -92,12 +92,12 @@ Per the manufacturer's Power Sources 2023 paper (P-4 URL above, retrieved 2026-0
 
 ---
 
-## 3. Implications for WyZen (analysis — labeled inference throughout)
+## 3. Implications for WyZantium (analysis — labeled inference throughout)
 
-*The following is WyZen analysis derived from the fetched sources above, not a claim from any standard's text.*
+*The following is WyZantium analysis derived from the fetched sources above, not a claim from any standard's text.*
 
-1. **The white space is real.** MIL-STD-3078 standardizes *which battery* a developer picks; MIL-PRF slash sheets standardize *the battery itself*. Neither fetched source standardizes the platform-side mechanics of autonomous access: docking geometry, blind-mate tolerance, robotic latch actuation, recovery hard points, or vehicle-to-vehicle power transfer. A WyZen recovery/docking interface would not conflict with either document.
-2. **Constraints WyZen should design to anyway:** (a) any swap mechanism handling STUB/CWB/XX90/6T should accommodate full MIL-PRF dimensional tolerances, per MIL-STD-3078 Appendix A 2.3.3's admonition to design to the spec, not to sample hardware; (b) field recharging of STUB-class packs can ride on USB PD/PPS (any compliant source), while 6T-class recharging has no analogous universal external-port standard in the fetched material; (c) MIL-STD-3078 para 4.2 means a UGV's *permanently installed* traction pack sits entirely outside the standard — the exact case a battery-swap architecture would convert into a "replaceable battery," pulling it *into* MIL-STD-3078's scope.
+1. **The white space is real.** MIL-STD-3078 standardizes *which battery* a developer picks; MIL-PRF slash sheets standardize *the battery itself*. Neither fetched source standardizes the platform-side mechanics of autonomous access: docking geometry, blind-mate tolerance, robotic latch actuation, recovery hard points, or vehicle-to-vehicle power transfer. A WyZantium recovery/docking interface would not conflict with either document.
+2. **Constraints WyZantium should design to anyway:** (a) any swap mechanism handling STUB/CWB/XX90/6T should accommodate full MIL-PRF dimensional tolerances, per MIL-STD-3078 Appendix A 2.3.3's admonition to design to the spec, not to sample hardware; (b) field recharging of STUB-class packs can ride on USB PD/PPS (any compliant source), while 6T-class recharging has no analogous universal external-port standard in the fetched material; (c) MIL-STD-3078 para 4.2 means a UGV's *permanently installed* traction pack sits entirely outside the standard — the exact case a battery-swap architecture would convert into a "replaceable battery," pulling it *into* MIL-STD-3078's scope.
 3. **Precedent to cite:** the STUB program shows the Army's accepted pattern for a new interface — C5ISR-led requirements, an industry-built family, then capture as a MIL-PRF slash sheet plus a Table I row in MIL-STD-3078 (which the standard says can be updated "as new standard battery form factors are required" — battery.army.mil page, retrieved 2026-07-31). A recovery/docking interface could plausibly follow the same intake path.
 
 ---
@@ -110,4 +110,4 @@ Per the manufacturer's Power Sources 2023 paper (P-4 URL above, retrieved 2026-0
 - **APG News mirror dead:** https://apgnews.com/inside-the-innovation/army-modernizes-tactical-power-with-battery-interoperability/ returned HTTP 404 on 2026-07-31.
 - **battery.army.mil Table I detail:** the MIL-STD-3078 page states some associated technical details are distributed only to .mil email recipients (per the page as fetched 2026-07-31); a human with Army credentials should pull the System Integrator Hub materials and the March-2026 "MIL-STD-3078 AI Agent" tool outputs.
 - **Currency check:** the fetched MIL-STD-3078 PDF (14 Nov 2024 base) carries ASSIST's own warning to "check the source to verify that this is the current version before use." Confirm on ASSIST that no revision or change notice has issued since.
-- **OSCAR (Operational Single Cell for Accessory Readiness) and the PEO Soldier "battery hub"** — mentioned in fetched sources (P-4 paper Fig. 4; Defense News 2024) but not further sourced; relevant to WyZen's charging story and worth targeted retrieval.
+- **OSCAR (Operational Single Cell for Accessory Readiness) and the PEO Soldier "battery hub"** — mentioned in fetched sources (P-4 paper Fig. 4; Defense News 2024) but not further sourced; relevant to WyZantium's charging story and worth targeted retrieval.

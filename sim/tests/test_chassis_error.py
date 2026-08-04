@@ -12,8 +12,8 @@ import math
 import numpy as np
 import pytest
 
-from wyzen_sim import params, rng
-from wyzen_sim.kinematic import chassis_error
+from wyzantium_sim import params, rng
+from wyzantium_sim.kinematic import chassis_error
 
 ROOT = 20260804
 ALLOC_MM = 25.0  # chassis position allocation, params #23

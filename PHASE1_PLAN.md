@@ -43,7 +43,7 @@ the same fixture corpus.
 | `records.py` | Typed constructors + canonical NDJSON writer (shortest round-trip floats, fixed key order, LF) — required for bit-identical replay | WIRE_FORMAT; #60 |
 | `fixtures/` | Golden trial record + one negative fixture per rule (incl. the zeroed-pose anti-example from WIRE_FORMAT's worked failure) | WIRE_FORMAT |
 
-### `sim/wyzen_sim/` — the harness
+### `sim/wyzantium_sim/` — the harness
 
 | Module | Responsibility | Binds to |
 |---|---|---|

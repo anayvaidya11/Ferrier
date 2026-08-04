@@ -1,8 +1,8 @@
-# WyZen Industries — Master Context
+# WyZantium Industries — Master Context
 ### Autonomous recovery and servicing for unmanned ground fleets
 **Version 1.0 · 31 July 2026 · Target: YC Spring 2027, projected mid-February 2027**
 
-> **Read this first, every session.** This is the canonical description of what WyZen is, what is being built, in what order, and under what rules. If any other document, prompt, or memory conflicts with this file, this file wins. If reality conflicts with this file, update this file.
+> **Read this first, every session.** This is the canonical description of what WyZantium is, what is being built, in what order, and under what rules. If any other document, prompt, or memory conflicts with this file, this file wins. If reality conflicts with this file, update this file.
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### 1.1 One sentence
 
-WyZen builds the autonomous hand that keeps unmanned fleets in the fight: a robot that goes forward when another robot goes down, and does the physical work a human would otherwise walk into the kill zone to do.
+WyZantium builds the autonomous hand that keeps unmanned fleets in the fight: a robot that goes forward when another robot goes down, and does the physical work a human would otherwise walk into the kill zone to do.
 
 ### 1.2 The claim everything rests on
 
@@ -51,9 +51,9 @@ Four functions, ordered by increasing difficulty:
 
 ### 1.6 What killed the previous project, and why this is different
 
-Ghost Medic (offline AI first-aid assistant) was screened against five failure modes and failed all five. WyZen passes all five.
+Ghost Medic (offline AI first-aid assistant) was screened against five failure modes and failed all five. WyZantium passes all five.
 
-| # | Test | Ghost Medic | WyZen |
+| # | Test | Ghost Medic | WyZantium |
 |---|---|---|---|
 | 1 | Funded buyer exists | ✗ No medical UGV program of record | ✓ *weaker (A-008)* — AAL market-research RFI, 17 Jun 2026; no funded program yet |
 | 2 | Not already solved by a trained human | ✗ Medics are trained; edge case only | ✓ Current answer is four soldiers forward |
@@ -61,13 +61,13 @@ Ghost Medic (offline AI first-aid assistant) was screened against five failure m
 | 4 | Payload arithmetic closes | ✗ Quadruped: 10–14 kg, 3 hours | ✓ Tow force is gearing, not payload |
 | 5 | No regulatory/legal fork | ✗ FDA + Geneva Convention exclusivity | ✓ Materiel function; ITAR is a cost |
 
-**This does not mean WyZen works.** It means WyZen does not fail for the reasons Ghost Medic failed. Its own distinct failure mode is §1.7.
+**This does not mean WyZantium works.** It means WyZantium does not fail for the reasons Ghost Medic failed. Its own distinct failure mode is §1.7.
 
 ### 1.7 The real risk, stated plainly
 
 *Science Robotics* (2026) states that the reliability of robotic manipulation in unstructured environments is unknown. Published grasp success on unknown objects in cluttered scenes runs roughly 75–87% — indoors, well-lit, clean point clouds, human-hand-sized objects.
 
-WyZen attaches to a mud-covered 500 kg vehicle, at night, at an arbitrary angle, possibly damaged, possibly under observation.
+WyZantium attaches to a mud-covered 500 kg vehicle, at night, at an arbitrary angle, possibly damaged, possibly under observation.
 
 **The mitigation is the thesis.** You do not have to grasp an unknown object. Require a standardized recovery interface on the target — tow eye, fiducial, defined attachment geometry — and an open-ended grasping problem becomes a constrained docking problem. Docking is dramatically more tractable. Every drone dock on earth relies on this.
 
@@ -81,9 +81,9 @@ That converts a physics risk into a standards-adoption risk, which is a business
 
 ### 2.1 Build strategy: simulate the risk, model the rest
 
-WyZen is not building a vehicle in the next six months. It is building **evidence that the vehicle would work**, at near-zero capital cost.
+WyZantium is not building a vehicle in the next six months. It is building **evidence that the vehicle would work**, at near-zero capital cost.
 
-The distinction matters because of what kind of risk this is. Ghost Medic carried *market* risk, which no demo can retire. WyZen carries *technical* risk, which simulation genuinely can. NVIDIA released Newton 1.0 in April 2026 as a physics foundation purpose-built for contact-rich manipulation, and synthetic grasp training now transfers zero-shot to real hardware. A docking success distribution measured across ten thousand simulated approaches is real, falsifiable evidence produced on a laptop.
+The distinction matters because of what kind of risk this is. Ghost Medic carried *market* risk, which no demo can retire. WyZantium carries *technical* risk, which simulation genuinely can. NVIDIA released Newton 1.0 in April 2026 as a physics foundation purpose-built for contact-rich manipulation, and synthetic grasp training now transfers zero-shot to real hardware. A docking success distribution measured across ten thousand simulated approaches is real, falsifiable evidence produced on a laptop.
 
 Three tiers, applied per subsystem:
 
@@ -108,7 +108,7 @@ Tow forces, power budgets, and thermal envelopes are closed-form. Docking reliab
 Contract-first. One wire format between every stage, so any producer can be swapped for any other without touching consumers.
 
 ```
-GHOST MEDIC                          WyZEN
+GHOST MEDIC                          WyZantium
 sensor stream (NDJSON)          →    target-state stream (pose, fault, confidence)
 one wire contract               →    one wire contract
 parse, gate on ok flag          →    parse, gate on perception confidence
@@ -130,7 +130,7 @@ The Army has published MIL-STD-3078 (battery interoperability), and the C5ISR Ce
 
 So: one tow interface and one manipulator handling a bounded set of standardized attachment geometries, plus a software layer that knows each platform's electrical profile. **The hand is universal. The handshake is per-platform, and it is a config file, not a redesign.**
 
-This makes WyZen more valuable as MIL-STD-3078 adoption grows. You become the company that services the standard.
+This makes WyZantium more valuable as MIL-STD-3078 adoption grows. You become the company that services the standard.
 
 ### 2.5 Repository structure
 
@@ -329,7 +329,7 @@ Carried verbatim from Ghost Medic, because it is the most differentiated asset t
 ### 4.4 Vocabulary constraints
 
 - **Never use the word "lattice."** Anduril's Lattice was selected as the Army's NGC2 common data layer baseline in June 2026.
-- Never describe WyZen as a cost-savings product.
+- Never describe WyZantium as a cost-savings product.
 - Never claim autonomy the system does not have; say "under DDIL" only where it is demonstrated.
 
 ---
@@ -378,7 +378,7 @@ says the artifact to watch for is a NAMC RPP or AAL solicitation, not a FAR RFP
 
 ---
 
-*This document is the single source of truth for WyZen. Update it when reality changes. Commit every update.*
+*This document is the single source of truth for WyZantium. Update it when reality changes. Commit every update.*
 
 ---
 
@@ -390,7 +390,7 @@ recorded here; the body is touched only to apply a recorded amendment or to add 
 one-line supersession marker pointing at the governing amendment. Two earlier amendments
 were applied in-body before this mechanism existed: **A-001** (2026-08-01, commit
 `00b3c6a`) — §2.5 repository is `anayvaidya11/Ferrier`, not
-`wyzen-industries/recovery-stack`; **A-002** (2026-08-01, commit `2227701`) — §2.1
+`wyzantium-industries/recovery-stack`; **A-002** (2026-08-01, commit `2227701`) — §2.1
 compute rule, online-first.*
 
 ### A-003 (2026-08-01) — Procurement policy narrowed: instruments, not artifacts

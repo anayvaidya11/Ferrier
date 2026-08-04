@@ -28,7 +28,7 @@ nothing below was closed by invention.
 | Tow-angle limit ±20° | 3 DECIDED (on a shown derivation) | D-018 normative sector; D-003-R split; Phase 2 verifies incl. dynamic loads |
 | Annulus margin | 1 DERIVED | INTERFACE_SPEC §6 — 160 mm from lip band + head radius + drift + reserve; too-small hides lip strikes (incl. the false-capture path) |
 | Tolerance-budget allocations | 4 SWEPT | §5 — declared sweep centers, ×{0.5,1,2} via D-019 |
-| Obstruction cone / stud height / host attitude | 3 DECIDED | D-024 — requirements WyZen levies on integrators; renegotiated when platform data exists |
+| Obstruction cone / stud height / host attitude | 3 DECIDED | D-024 — requirements WyZantium levies on integrators; renegotiated when platform data exists |
 | Camera extrinsics (Cam B obliquity) | 3 DECIDED (bounds derived) | D-025 — β = 30°, band [15°, 45°] from studies/H08 §5; translations stay [ASSUMED] within band |
 
 ## Open (and recently closed from this list)

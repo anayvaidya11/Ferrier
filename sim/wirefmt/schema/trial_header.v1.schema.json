@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "wyzen/wirefmt/trial_header.v1",
+  "$id": "wyzantium/wirefmt/trial_header.v1",
   "title": "trial_header v1 — WIRE_FORMAT.md trial record header",
   "description": "A trial whose header cannot name its seed, SHA, and sweep point is not a result; it is an anecdote. sweep_point carries every INTERFACE_SPEC §9/§9.1 axis value for this trial. solver (optional in schema, always written by the harness) records the PHASE1_PARAMETERS #33 convergence-procedure values per run.",
   "type": "object",

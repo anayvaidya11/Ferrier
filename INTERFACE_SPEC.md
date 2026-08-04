@@ -1,4 +1,4 @@
-# WyZen Docking Interface Specification
+# WyZantium Docking Interface Specification
 
 **Status:** Phase 0 deliverable, v1.0, 2026-08-01. Every normative statement traces to a
 REQ-xxx (`research/REQUIREMENTS.md`) or D-xxx (`DECISIONS.md`); untraceable statements
@@ -23,7 +23,7 @@ scheme (§3.4) reserves fiducial space for that variant so nothing here foreclos
 ## 2. Target-side assembly
 
 The target vehicle carries the passive half: a machined stud and a fiducial plate. All
-active mechanism (funnel, latch, cameras, illumination) lives on the WyZen head — mud
+active mechanism (funnel, latch, cameras, illumination) lives on the WyZantium head — mud
 accumulates on the serviceable side (D-001).
 
 ### 2.1 The stud [ASSUMED dimensions per D-016]

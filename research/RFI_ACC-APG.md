@@ -70,7 +70,7 @@ The following is the complete description body from the SAM.gov API JSON (`descr
 
 ## Questions to industry — numbering note
 
-In the source document the four "QUESTIONS FOR CONSIDERATION" appear as an **unnumbered bulleted list** (HTML `<li>` items), not as numbered questions. For traceability, downstream documents in this repository refer to them as Q1–Q4 **in their original list order**; these labels are assigned by WyZen, not by the Army. Verbatim text of each question is quoted above and in REQUIREMENTS.md.
+In the source document the four "QUESTIONS FOR CONSIDERATION" appear as an **unnumbered bulleted list** (HTML `<li>` items), not as numbered questions. For traceability, downstream documents in this repository refer to them as Q1–Q4 **in their original list order**; these labels are assigned by WyZantium, not by the Army. Verbatim text of each question is quoted above and in REQUIREMENTS.md.
 
 ## Corroborating secondary sources (fetched 2026-07-31)
 

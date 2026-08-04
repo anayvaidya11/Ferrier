@@ -1,7 +1,7 @@
 [project]
-name = "wyzen-phase1"
+name = "wyzantium-phase1"
 version = "0.1.0"
-description = "WyZen Phase 1 docking experiment: wire contract package + sim harness"
+description = "WyZantium Phase 1 docking experiment: wire contract package + sim harness"
 requires-python = ">=3.11"
 dependencies = ["numpy>=1.26"]
 
@@ -13,7 +13,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["wirefmt", "wyzen_sim"]
+packages = ["wirefmt", "wyzantium_sim"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

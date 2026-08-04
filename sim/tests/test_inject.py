@@ -11,8 +11,8 @@ import copy
 import pytest
 
 from wirefmt import validator
-from wyzen_sim.frames import Pose
-from wyzen_sim.perception import curves, inject
+from wyzantium_sim.frames import Pose
+from wyzantium_sim.perception import curves, inject
 
 ROOT = 20260804
 

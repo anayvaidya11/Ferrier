@@ -3,7 +3,7 @@
 One integer root per trial; every stream derives from it by name,
 deterministically. Bit-identical replay depends on this.
 """
-from wyzen_sim import rng
+from wyzantium_sim import rng
 
 ROOT = 20260802
 

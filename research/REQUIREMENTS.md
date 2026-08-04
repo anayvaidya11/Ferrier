@@ -3,14 +3,14 @@
 Source of record: SAM.gov notice `cb5d64eee89d40f48a3fab599f16d290`, solicitation `Unmanned_Ground_Recovery_AAL`, posted 2026-06-17 by W6QK ACC-APG DURHAM, responses due 2026-07-31 11:59 AM CT.
 Primary source URL: `https://sam.gov/api/prod/opps/v2/opportunities/cb5d64eee89d40f48a3fab599f16d290` (raw JSON, retrieved 2026-07-31). Full verbatim text: see `RFI_ACC-APG.md` in this directory.
 
-Question labels Q1–Q4 refer to the four "QUESTIONS FOR CONSIDERATION" in their original list order. In the source they are an unnumbered bulleted list; the Q-numbers are WyZen-assigned reference labels, not Army numbering.
+Question labels Q1–Q4 refer to the four "QUESTIONS FOR CONSIDERATION" in their original list order. In the source they are an unnumbered bulleted list; the Q-numbers are WyZantium-assigned reference labels, not Army numbering.
 
 - Q1: "How would you autonomously find and navigate to a disabled, destroyed, or immobilized vehicle?"
 - Q2: "How would you conduct an autonomous rigging operation for a disabled, destroyed, or immobilized vehicle?"
 - Q3: "How would you accomplish the autonomous navigation and rigging operations in a degraded environment or geographically challenging terrain (i.e. inaccessible high ground, unstable soil, severe obstacles, etc.)"
 - Q4: "How would you complete the autonomous navigation and rigging operations in a degraded or denied communication environment?"
 
-Tagging: [DIRECT] = the Army stated it in the RFI text. [INFERRED] = WyZen's reading between the lines of what the Army asked; not stated by the Army.
+Tagging: [DIRECT] = the Army stated it in the RFI text. [INFERRED] = WyZantium's reading between the lines of what the Army asked; not stated by the Army.
 
 ---
 
@@ -56,7 +56,7 @@ Source: Introduction (verbatim quote). (SAM.gov API, retrieved 2026-07-31)
 The solution shall "enhance the Army's ability to conduct continuous recovery operations," addressing the stated constraint that current missions "are fundamentally constrained by human endurance limits."
 Source: Introduction and Problem Statement (verbatim quotes). (SAM.gov API, retrieved 2026-07-31)
 
-## Inferred requirements (WyZen interpretation — not stated by the Army)
+## Inferred requirements (WyZantium interpretation — not stated by the Army)
 
 ### REQ-011 [INFERRED] Onboard (edge) autonomy without reliance on persistent connectivity
 Because Q4 requires completing navigation and rigging when communications are degraded or denied (paraphrase of Q4), the autonomy stack — perception, planning, manipulation control, and mission logic — must execute onboard the vehicle without a persistent network link or remote teleoperation. The Army asked "how"; it did not prescribe onboard compute.

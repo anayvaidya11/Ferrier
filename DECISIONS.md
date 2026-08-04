@@ -10,7 +10,7 @@ auditable. Revisions carry an `-R` suffix.
 ---
 
 ### D-001 — Mating principle is split
-Compliant funnel + active latch live on the WyZen recovery head. A hardened male capture
+Compliant funnel + active latch live on the WyZantium recovery head. A hardened male capture
 stud + rigidly co-located fiducial live on the target vehicle.
 **Consequence:** capture and load transfer are separate mechanisms with opposite
 requirements. Adoption cost collapses to a machined stud and a plate. Mud accumulates on
@@ -99,7 +99,7 @@ MR-001 replaces it.**
 **What would make it wrong:** wet-mud specularity locally *raising* contrast, breaking
 monotonicity — MR-001 would show it.
 
-### D-024 — Host integration envelope (requirements WyZen levies, not facts)
+### D-024 — Host integration envelope (requirements WyZantium levies, not facts)
 Free cylinder Ø270 × 400 mm forward of the plate (funnel outer Ø250 + 20 mm clearance;
 depth 180 mm + drawbar + approach margin); stud axis height 400–800 mm; host resting
 attitude within ±20°. These are interface *requirements* on integrators, derived from

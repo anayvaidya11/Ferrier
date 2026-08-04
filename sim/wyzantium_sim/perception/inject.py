@@ -17,9 +17,9 @@ conservative flip case).
 import math
 from dataclasses import dataclass
 
-from wyzen_sim import params, rng
-from wyzen_sim.frames import Pose
-from wyzen_sim.perception import (
+from wyzantium_sim import params, rng
+from wyzantium_sim.frames import Pose
+from wyzantium_sim.perception import (
     curves, detection, dropout, flip, noise, timing,
 )
 

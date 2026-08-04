@@ -1,4 +1,4 @@
-# WyZen — Roadmap
+# WyZantium — Roadmap
 
 Status per phase. Canonical plan lives in [MASTER_CONTEXT.md](MASTER_CONTEXT.md) Part III; this file tracks state only. Updated every Friday per §4.1.
 

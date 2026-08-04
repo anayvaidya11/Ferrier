@@ -7,7 +7,7 @@ import math
 
 import pytest
 
-from wyzen_sim import frames
+from wyzantium_sim import frames
 
 TOL = 1e-12
 

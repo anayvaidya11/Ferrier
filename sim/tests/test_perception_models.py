@@ -11,8 +11,8 @@ import math
 import numpy as np
 import pytest
 
-from wyzen_sim import rng
-from wyzen_sim.perception import (
+from wyzantium_sim import rng
+from wyzantium_sim.perception import (
     curves, detection, dropout, flip, mud, noise, timing,
 )
 

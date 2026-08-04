@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "wyzen/wirefmt/target_state.v1",
+  "$id": "wyzantium/wirefmt/target_state.v1",
   "title": "target_state v1 — WIRE_FORMAT.md target-state stream line",
   "description": "Omitted-not-zeroed: an undetermined field is omitted, never zero/null/default. Unknown fields are ignored and preserved on relay. Semantic rules beyond JSON Schema: pose.q unit norm within 1e-6; |pose.t| <= 10 m; pose_cov PSD; t_emit >= t_capture.",
   "type": "object",

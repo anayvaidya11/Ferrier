@@ -1,4 +1,4 @@
-"""Producer-strict line validation for the WyZen wire contract (WIRE_FORMAT.md).
+"""Producer-strict line validation for the WyZantium wire contract (WIRE_FORMAT.md).
 
 validate_line(obj) returns a list of error strings, empty when the line is
 valid. Unknown fields are never errors (unknown-ignored-and-preserved rule);

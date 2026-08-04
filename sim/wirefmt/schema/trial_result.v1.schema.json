@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "wyzen/wirefmt/trial_result.v1",
+  "$id": "wyzantium/wirefmt/trial_result.v1",
   "title": "trial_result v1 — WIRE_FORMAT.md trial outcome line",
   "description": "Outcome classes per PHASE1_PARAMETERS #57: success | IS8-1..IS8-17 (INTERFACE_SPEC §8 row) | clean_miss (predicate: DECISIONS D-030). Unclassifiable failures extend §8 by recorded amendment before they get an outcome string. false_capture is the IS8-16 sub-path counter (H-16 revision, 2026-08-02): only valid with outcome IS8-16.",
   "type": "object",

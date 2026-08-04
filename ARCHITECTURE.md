@@ -1,4 +1,4 @@
-# WyZen System Architecture
+# WyZantium System Architecture
 
 **Status:** Phase 0 deliverable, v1.0, 2026-08-01. Traceability and labeling rules as in
 `INTERFACE_SPEC.md`. Contract-first per MASTER_CONTEXT §2.3.

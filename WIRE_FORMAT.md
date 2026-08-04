@@ -1,4 +1,4 @@
-# WyZen Target-State Stream — Wire Format
+# WyZantium Target-State Stream — Wire Format
 
 **Status:** Phase 0 deliverable, v1.0, 2026-08-01. One contract between every stage
 (MASTER_CONTEXT §2.3); traceability and labels as in `INTERFACE_SPEC.md`.

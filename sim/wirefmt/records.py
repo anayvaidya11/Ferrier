@@ -1,4 +1,4 @@
-"""Canonical NDJSON encoding for the WyZen wire contract (WIRE_FORMAT.md).
+"""Canonical NDJSON encoding for the WyZantium wire contract (WIRE_FORMAT.md).
 
 Canonical form: known fields in the WIRE_FORMAT documented order, unknown
 fields preserved after them in first-seen order (unknown-ignored-and-preserved

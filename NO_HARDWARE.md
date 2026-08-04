@@ -7,7 +7,7 @@ history (commit `bef4a85`).
 
 ## The rule
 
-**WyZen will not purchase, fabricate, or assemble any part of the product.** No chassis,
+**WyZantium will not purchase, fabricate, or assemble any part of the product.** No chassis,
 no recovery head, no funnel, no latch, no stud, no actuators, no mounting hardware, no
 powered rigs, no integration of any kind. The deliverable for YC Spring 2027 is a
 demonstrated and simulated design, and buildability is proven through physics,

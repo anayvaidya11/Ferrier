@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 
-from wyzen_sim import scenarios
+from wyzantium_sim import scenarios
 
 SCENARIO_DIR = Path(__file__).resolve().parent.parent / "scenarios"
 
@@ -99,9 +99,9 @@ def test_gate_moderate_matches_d029_committed_band():
     assert "defaults" in gate["system_parameters"]
 
 
-def test_gate_band_is_not_hardcoded_anywhere_in_wyzen_sim():
+def test_gate_band_is_not_hardcoded_anywhere_in_wyzantium_sim():
     # D-029: code reads the band from the JSON only. The distinctive band
-    # values must not appear as literals in any wyzen_sim module.
+    # values must not appear as literals in any wyzantium_sim module.
     package_dir = Path(scenarios.__file__).parent
     for py in package_dir.glob("*.py"):
         text = py.read_text()

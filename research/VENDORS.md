@@ -1,7 +1,7 @@
 # Project Sustainment — July 2026 Vendor Selection: Partner Research
 
-Prepared for WyZen (autonomous recovery of disabled UGVs). All facts below carry an inline
-source URL and retrieval date. Lines labeled **Assessment:** are WyZen analyst opinion, not
+Prepared for WyZantium (autonomous recovery of disabled UGVs). All facts below carry an inline
+source URL and retrieval date. Lines labeled **Assessment:** are WyZantium analyst opinion, not
 sourced fact. Retrieval date for all sources: **2026-07-31**.
 
 ## Selection: CONFIRMED from fetched sources
@@ -72,7 +72,7 @@ Program facts (all retrieved 2026-07-31):
 - **Assessment:** A multi-ton HUMVEE-derived UGV that dies on a contested resupply route is a
   mission-stopping recovery problem the Army currently solves with crewed wreckers, so AM
   General has a strong incentive to bolt on autonomous recovery to protect its
-  "keeps-the-route-open" value proposition — though WyZen would need to integrate through, or
+  "keeps-the-route-open" value proposition — though WyZantium would need to integrate through, or
   around, Carnegie Robotics' incumbent autonomy stack.
 
 ## 2. American Rheinmetall
@@ -96,7 +96,7 @@ Program facts (all retrieved 2026-07-31):
 - **Assessment:** A first-of-type commercial EV-hybrid chassis (Harbinger) entering
   contested-environment field trials carries elevated immobilization risk from powertrain,
   battery, and software faults, making autonomous recovery an attractive de-risking feature —
-  but Forterra's incumbency means WyZen's pitch must be a complementary recovery capability,
+  but Forterra's incumbency means WyZantium's pitch must be a complementary recovery capability,
   not a competing autonomy stack.
 
 ## 3. Carnegie Robotics
@@ -126,7 +126,7 @@ Program facts (all retrieved 2026-07-31):
   project (per Carnegie's own news page,
   https://www.carnegierobotics.com/news, retrieved 2026-07-31).
 - **Assessment:** As the autonomy supplier threaded through multiple Project Sustainment
-  teams, Carnegie is simultaneously WyZen's highest-leverage integration channel and its most
+  teams, Carnegie is simultaneously WyZantium's highest-leverage integration channel and its most
   likely build-it-in-house competitor for recovery behaviors — engage early, because whoever
   owns the autonomy stack decides whether recovery is a bought feature or a native one.
 
@@ -186,7 +186,7 @@ Program facts (all retrieved 2026-07-31):
   https://www.globenewswire.com/search/organization/Stratom, retrieved 2026-07-31).
 - **Assessment:** As the smallest selectee and a modular-autonomy-software specialist,
   Stratom could productize recovery as simply another "Summit Behavior" module — which makes
-  them either the easiest technical integration partner for WyZen or the vendor most tempted
+  them either the easiest technical integration partner for WyZantium or the vendor most tempted
   to write a lightweight recovery behavior themselves.
 
 ---

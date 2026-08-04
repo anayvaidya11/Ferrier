@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "wyzen/wirefmt/sim_truth.v1",
+  "$id": "wyzantium/wirefmt/sim_truth.v1",
   "title": "sim_truth v1 — WIRE_FORMAT.md ground-truth state line",
   "description": "The ground truth the injected perception model degrades from. Logged every physics step after capture-plane handoff and every kinematic step before it (D-006, PHASE1_PARAMETERS #59). contact_wrench is omitted before contact — its absence is meaningful (omitted-not-zeroed). World-frame poses are unbounded (the 10 m bound applies to T_head_stud on the target-state stream).",
   "type": "object",

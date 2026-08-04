@@ -13,7 +13,7 @@ Composite of multiplicative factors, each tied to its committed source:
 """
 import math
 
-from wyzen_sim.perception import mud as mud_model
+from wyzantium_sim.perception import mud as mud_model
 
 
 def _size_factor(px_size, curve):

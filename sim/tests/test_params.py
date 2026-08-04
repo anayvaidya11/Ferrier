@@ -1,14 +1,14 @@
 """Double-entry transcription test for PHASE1_PARAMETERS.md.
 
 EXPECTED below is transcribed directly from the committed document,
-independently of wyzen_sim/params.py — the two transcriptions must agree on
+independently of wyzantium_sim/params.py — the two transcriptions must agree on
 every load-bearing value. Encoding conventions (shared with params.py):
 discrete sweeps are tuples, continuous ranges are {"lo": x, "hi": y},
 structured values are dicts, recorded procedures are strings.
 """
 import pytest
 
-from wyzen_sim import params
+from wyzantium_sim import params
 
 # {num: (value, default, unit, citation-substring-of-source)}
 EXPECTED = {
