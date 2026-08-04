@@ -33,7 +33,10 @@ from wyzantium_sim.kinematic.handoff import HandoffState
 ROOT = 20260804
 DT = 0.001
 COV0 = tuple(tuple(0.0 for _ in range(6)) for _ in range(6))
-G_AXIAL = (9.81, 0.0, 0.0)  # axis-vertical drops: "down" = insertion direction
+# Official head_frame (T5/IS §6): approach +x, throat -x. Axis-vertical
+# drops: "down" = insertion direction = -x.
+G_AXIAL = (-9.81, 0.0, 0.0)
+Q_NOMINAL = (0.0, 0.0, 1.0, 0.0)  # 180° about +Y (IS §4 anti-parallel)
 
 _HAVE_NEWTON = importlib.util.find_spec("newton") is not None
 
@@ -67,18 +70,20 @@ def make_spec(**overrides):
 
 
 def handoff_at(head_center_mm, v_ms=(0.0, 0.0, 0.0)):
-    t = (head_center_mm[0] - 70.0, head_center_mm[1], head_center_mm[2])
-    return HandoffState(T_head_stud=frames.Pose(t=t, q=(1.0, 0.0, 0.0, 0.0)),
+    """Official frame, nominal anti-parallel orientation (IS §4)."""
+    t = (head_center_mm[0] + 70.0, head_center_mm[1], head_center_mm[2])
+    return HandoffState(T_head_stud=frames.Pose(t=t, q=Q_NOMINAL),
                         v_ms=v_ms, omega_rads=(0.0, 0.0, 0.0), pose_cov=COV0,
                         attempt=1, t_sim_s=0.0)
 
 
 def x_touch_mm(offset_mm, spec):
-    """x of head center when the sphere first touches the cone wall."""
+    """Official-frame x of the head center at first cone-wall touch
+    (interior is x<0)."""
     r0 = spec.mouth_d_mm / 2.0
     slope = (r0 - spec.throat_d_mm / 2.0) / spec.depth_mm
     norm = math.hypot(slope, 1.0)
-    return (r0 - offset_mm - (spec.stud_head_d_mm / 2.0) * norm) / slope
+    return -(r0 - offset_mm - (spec.stud_head_d_mm / 2.0) * norm) / slope
 
 
 def run_until_contact(eng, max_steps=3000, dt=DT):
@@ -103,7 +108,7 @@ class TestItem1LateralOffsetRecovery:
     def _drop(self, name, offset_mm):
         spec = make_spec()
         eng = load_engine(name, spec)
-        x0 = x_touch_mm(abs(offset_mm), spec) - 30.0
+        x0 = x_touch_mm(abs(offset_mm), spec) + 30.0
         eng.set_state(handoff_at((x0, offset_mm, 0.0)))
         window = impact_window(eng, run_until_contact(eng))
         f_y = sum(r.wall_wrench[1] for r in window)
@@ -133,14 +138,14 @@ class TestItem2SymmetricWedge:
         dt = 2.0e-4
         spec = make_spec(throat_d_mm=38.0, stiffness_k_n_mm=70.0)
         eng = load_engine(name, spec, engine.SolverSettings(timestep_s=dt))
-        eng.set_state(handoff_at((160.0, 0.0, 0.0), v_ms=(0.05, 0.0, 0.0)))
+        eng.set_state(handoff_at((-160.0, 0.0, 0.0), v_ms=(-0.05, 0.0, 0.0)))
         for _ in range(8000):
             r = eng.step(dt)
         weight = spec.stud_mass_kg * 9.81
         f_ax = r.wall_wrench[0]
         f_lat = math.hypot(r.wall_wrench[1], r.wall_wrench[2])
-        assert f_ax == pytest.approx(-weight, rel=0.2), (
-            "steady wedge must carry the stud weight axially")
+        assert f_ax == pytest.approx(weight, rel=0.2), (
+            "steady wedge must push back (+x) with the stud weight")
         assert f_lat < 0.05 * abs(f_ax), (
             "symmetric wedge must read near-zero lateral (IS8-17 split)")
         assert abs(r.stud_v_ms[0]) < 0.01
@@ -155,7 +160,7 @@ class TestItem3LipBandStrike:
         spec = make_spec(stiffness_k_n_mm=70.0)
         eng = load_engine(name, spec)
         mid = sum(spec.lip_band_mm) / 2.0  # 117.5
-        eng.set_state(handoff_at((-50.0, mid, 0.0)))
+        eng.set_state(handoff_at((50.0, mid, 0.0)))
         window = impact_window(eng, run_until_contact(eng), n=50)
         pts = [c for r in window for c in r.contacts]
         assert pts
@@ -166,7 +171,7 @@ class TestItem3LipBandStrike:
             # strike to come from the approach side (normal toward -x)
             rho = math.hypot(c.pos_head_mm[1], c.pos_head_mm[2])
             assert spec.lip_band_mm[0] - 3.0 <= rho <= spec.lip_band_mm[1] + 3.0
-            assert c.normal[0] < -0.5
+            assert c.normal[0] > 0.5  # strike from the approach side (+x)
 
 
 @pytest.mark.parametrize("name", ENGINES)
@@ -176,9 +181,9 @@ class TestItem4Determinism:
         # roots must give bit-identical trajectories, in-process.
         gen = rng.substream(ROOT, "contact")
         offset = 40.0 + 40.0 * gen.random()
-        v_x = 0.1 + 0.2 * gen.random()
+        v_x = -(0.1 + 0.2 * gen.random())
         eng = load_engine(name, make_spec())
-        eng.set_state(handoff_at((x_touch_mm(offset, make_spec()) - 20.0,
+        eng.set_state(handoff_at((x_touch_mm(offset, make_spec()) + 20.0,
                                   offset, 0.0), v_ms=(v_x, 0.0, 0.0)))
         rows, saw_contact = [], False
         for _ in range(400):
@@ -206,16 +211,17 @@ class TestItem5ClosedFormSanity:
         eng = load_engine(name, spec, engine.SolverSettings(timestep_s=dt))
         # baseline: stud far off-axis (outside the funnel), mount sags under
         # its own weight only
-        eng.set_state(handoff_at((-100.0, 300.0, 0.0)))
+        eng.set_state(handoff_at((100.0, 300.0, 0.0)))
         for _ in range(8000):
             r = eng.step(dt)
         baseline_mm = r.funnel_t_mm[0]
-        # settle the stud gently onto the wedge seat (~173 mm for throat 38)
-        eng.set_state(handoff_at((172.0, 0.0, 0.0)))
+        # settle the stud gently onto the wedge seat (~x=-173 for throat 38)
+        eng.set_state(handoff_at((-172.0, 0.0, 0.0)))
         for _ in range(12000):
             r = eng.step(dt)
+        # official frame: gravity is -x, added load deflects the base -x
         expected_mm = (spec.stud_mass_kg * 9.81) / spec.stiffness_k_n_mm
-        assert r.funnel_t_mm[0] - baseline_mm == pytest.approx(
+        assert baseline_mm - r.funnel_t_mm[0] == pytest.approx(
             expected_mm, rel=0.15)
 
     def test_sliding_force_ratio_matches_mu(self, name):
@@ -227,7 +233,7 @@ class TestItem5ClosedFormSanity:
             spec = make_spec(mu_contact=mu)
             eng = load_engine(name, spec)
             x0 = x_touch_mm(60.0, spec)
-            eng.set_state(handoff_at((x0 - 5.0, 60.0, 0.0)))
+            eng.set_state(handoff_at((x0 + 5.0, 60.0, 0.0)))
             ratios = []
             for _ in range(1200):
                 r = eng.step(DT)
@@ -255,15 +261,15 @@ class TestItem5ClosedFormSanity:
                              stud_mass_kg=1.0)
             solver = engine.SolverSettings(timestep_s=2.0e-4)
             eng = load_engine(name, spec, solver)
-            eng.set_state(handoff_at((-80.0, 117.5, 0.0)))
+            eng.set_state(handoff_at((80.0, 117.5, 0.0)))
             v_in, v_out, in_contact = 0.0, 0.0, False
             for _ in range(6000):
                 r = eng.step(2.0e-4)
                 if r.contacts:
                     in_contact = True
-                    v_in = max(v_in, r.stud_v_ms[0])
+                    v_in = max(v_in, -r.stud_v_ms[0])
                 elif in_contact:
-                    v_out = max(v_out, -r.stud_v_ms[0])
+                    v_out = max(v_out, r.stud_v_ms[0])
             assert v_in > 0.5, "no impact recorded"
             measured[e] = v_out / v_in
         assert measured[0.8] == pytest.approx(0.8, abs=0.2)

@@ -1,12 +1,18 @@
-"""MuJoCo adapter for the ContactEngine protocol (T4c).
+"""MuJoCo adapter for the ContactEngine protocol (T4c; boundary frame pinned
+by T5).
 
 Model (T1, #34/D-027): rigid stud (free body) vs rigid funnel mounted on a
-6-DOF spring-damper base with hard stops. World frame == head_frame: origin at
-the funnel mouth center, +X toward the throat (mouth plane x=0, throat at
-x=+180 mm). The funnel cone is a ring of N_FACETS thin boxes (MuJoCo
-convexifies meshes, which would fill the funnel; facets keep it hollow), plus
-the flat lip ring [110,125] mm at x=0 (IS8-16 band), a throat land, and a
-pocket floor.
+6-DOF spring-damper base with hard stops. The funnel cone is a ring of
+N_FACETS thin boxes (MuJoCo convexifies meshes, which would fill the funnel;
+facets keep it hollow), plus the flat lip ring [110,125] mm at x=0 (IS8-16
+band), a throat land, and a pocket floor.
+
+Frames: the BOUNDARY (set_state / StepResult) speaks the official head_frame
+(IS §4/§6, pinned by T5): approach side +x, mouth x=0, throat at x=-180 mm.
+The INTERNAL MuJoCo world keeps the original T4c convention (throat at
+x=+180); the two differ by a fixed 180° rotation about +Y (_FLIP), applied to
+every pose and world-frame vector crossing the boundary. Angular rate is
+body-frame (MuJoCo convention) and passes through unchanged.
 
 Committed numbers come in via T1ModelSpec (D-016 geometry, #31/#32/#35/#36).
 Everything below marked "arbitrary" is a code-level choice the docs do not
@@ -53,6 +59,14 @@ HARD_STOP_TRANS_M = 0.035     # ±35 mm (§5 capture envelope)
 HARD_STOP_ROT_RAD = math.radians(10.0)  # ±10°
 
 STUD_HEAD_CENTER_STUD_M = 0.070  # exposed 90 − head radius 20 (D-016)
+
+# official head_frame (approach +x) ↔ internal world (throat +x):
+# 180° about +Y; self-inverse for both poses and vectors
+_FLIP = frames.Pose(t=(0.0, 0.0, 0.0), q=(0.0, 0.0, 1.0, 0.0))
+
+
+def _flip_vec(v):
+    return (-v[0], v[1], -v[2])
 
 
 def _zeta_from_restitution(e: float) -> float:
@@ -127,7 +141,7 @@ def _build_xml(spec: T1ModelSpec, solver: SolverSettings) -> str:
         K_ROT_NM_PER_RAD * FUNNEL_DIAG_INERTIA)
     zeta = _zeta_from_restitution(spec.restitution_e)
     b_contact = 2.0 * zeta * math.sqrt(K_CONTACT_N_M * spec.stud_mass_kg)
-    g = spec.gravity_head_ms2
+    g = _flip_vec(spec.gravity_head_ms2)  # official → internal world
     head_r = spec.stud_head_d_mm / 2000.0
     neck_r = spec.stud_neck_d_mm / 2000.0
 
@@ -199,7 +213,7 @@ class MuJoCoEngine:
 
     def set_state(self, handoff) -> None:
         d = self._data
-        pose = handoff.T_head_stud
+        pose = _FLIP.compose(handoff.T_head_stud)  # official → internal
         d.qpos[:] = 0.0
         d.qvel[:] = 0.0
         jadr = self._model.jnt_qposadr[
@@ -208,8 +222,8 @@ class MuJoCoEngine:
             mujoco.mj_name2id(self._model, mujoco.mjtObj.mjOBJ_JOINT, "stud_free")]
         d.qpos[jadr:jadr + 3] = [v / 1000.0 for v in pose.t]
         d.qpos[jadr + 3:jadr + 7] = pose.q
-        d.qvel[vadr:vadr + 3] = handoff.v_ms
-        d.qvel[vadr + 3:vadr + 6] = handoff.omega_rads
+        d.qvel[vadr:vadr + 3] = _flip_vec(handoff.v_ms)
+        d.qvel[vadr + 3:vadr + 6] = handoff.omega_rads  # body-frame: unchanged
         d.time = handoff.t_sim_s
         mujoco.mj_forward(self._model, self._data)
 
@@ -228,19 +242,20 @@ class MuJoCoEngine:
             mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, "stud_free")]
         vadr = m.jnt_dofadr[
             mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, "stud_free")]
-        pose = frames.Pose(
+        pose_internal = frames.Pose(
             t=tuple(float(v) * 1000.0 for v in d.qpos[jadr:jadr + 3]),
             q=tuple(float(v) for v in d.qpos[jadr + 3:jadr + 7]))
         contacts, wrench = self._contact_reports()
         return StepResult(
             t_sim_s=float(d.time),
-            T_head_stud=pose,
-            stud_v_ms=tuple(float(v) for v in d.qvel[vadr:vadr + 3]),
+            T_head_stud=_FLIP.compose(pose_internal),  # internal → official
+            stud_v_ms=_flip_vec(tuple(
+                float(v) for v in d.qvel[vadr:vadr + 3])),
             stud_omega_rads=tuple(float(v) for v in d.qvel[vadr + 3:vadr + 6]),
             contacts=contacts,
             wall_wrench=wrench,
-            funnel_t_mm=tuple(
-                float(d.qpos[a]) * 1000.0 for a in self._base_qadr),
+            funnel_t_mm=_flip_vec(tuple(
+                float(d.qpos[a]) * 1000.0 for a in self._base_qadr)),
         )
 
     def _contact_reports(self):
@@ -264,10 +279,12 @@ class MuJoCoEngine:
                 n_world = -n_world
             pos = np.array(con.pos)
             pts.append(ContactPoint(
-                pos_head_mm=tuple(float(v) * 1000.0 for v in pos),
-                normal=tuple(float(v) for v in n_world),
-                force_n=tuple(float(v) for v in f_world)))
+                pos_head_mm=_flip_vec(tuple(float(v) * 1000.0 for v in pos)),
+                normal=_flip_vec(tuple(float(v) for v in n_world)),
+                force_n=_flip_vec(tuple(float(v) for v in f_world))))
             f_tot += f_world
             tau_tot += np.cross(pos, f_world)
-        wrench = tuple(float(v) for v in np.concatenate([f_tot, tau_tot]))
+        # proper rotation: force and torque both transform by the flip
+        wrench = _flip_vec(tuple(float(v) for v in f_tot)) + _flip_vec(
+            tuple(float(v) for v in tau_tot))
         return tuple(pts), wrench
