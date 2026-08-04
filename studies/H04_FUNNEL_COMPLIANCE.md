@@ -158,3 +158,13 @@ near-zero lateral, no latch: indistinguishable from "seated and latching." IS8-1
 (jam detection: axial force above threshold ∧ lateral below threshold ∧ no latch
 confirm) makes it observable; thresholds are declared sweeps in PHASE1_PARAMETERS.
 T4a is blind to the same failure (near-zero net deflection) — recorded in D-027.
+
+**A5 (2026-08-04, D-031 Stage B): open-access theory pair page-verified.** Whitney's
+own MIT OCW 2.875 "Rigid Part Mating" lecture (CC BY-NC-SA, 51 slides read) and the
+CJME 2025 OA review (Li et al., DOI 10.1186/s10033-025-01349-w, CC BY, pp. 1 and
+8–12 read) now carry the wedging/jamming/RCC theory content openly — including the
+jamming parallelogram a T5-promotion argument would consume (OCW slide 34; CJME
+Fig. 6, λ = (l_p − l)/2rμ) — and OCW slides 35–38 reproduce Whitney's theory-vs-data
+insertion-force validation figures (L_g = 45 mm and 1 mm cases). The A4-note's
+paywall caveat stands; its residual scope narrows to the 1982 paper's full
+experimental methodology. Extraction pointers: `research/OA_SUBSTITUTION.md`.

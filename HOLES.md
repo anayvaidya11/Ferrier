@@ -36,7 +36,7 @@ nothing below was closed by invention.
 | # | Hole | Status | What closes it |
 |---|---|---|---|
 | H-04 | Funnel compliance architecture | **CLOSED 2026-08-02 — Door 3 (DECIDED): D-027, T1 ratified by the human** (studies/H04, header + Addendum). Stiffness/mass swept per D-026 with the A1 feasibility mask; revised R4 and the IS8-17 jam class landed with the ratification | — |
-| H-07 | Literature perception curves | **CLOSED 2026-08-02 — Door 2** (`research/data/perception_prior.md`: Olson 2011, Wang & Olson 2016, Krogius 2019 fetched and page-verified; 34 extraction rows, text/table-sourced only; a fabricated fetch summary was caught and discarded). Kallwies 2020 UNAVAILABLE (P-07). Regions the corpus honestly cannot anchor (view-angle shape, covariance magnitudes) exited as declared sweeps in #39/#40 — Door 4 residuals, replaced by MR bench data | — |
+| H-07 | Literature perception curves | **CLOSED 2026-08-02 — Door 2** (`research/data/perception_prior.md`: Olson 2011, Wang & Olson 2016, Krogius 2019 fetched and page-verified; 34 extraction rows, text/table-sourced only; a fabricated fetch summary was caught and discarded). Kallwies 2020 UNAVAILABLE (P-07; settled negative per D-031). Regions the corpus honestly cannot anchor (view-angle shape, covariance magnitudes) exited as declared sweeps in #39/#40 — Door 4 residuals, replaced by MR bench data. *2026-08-04, D-031 Stage B: Paper 5 (Adámek 2023) page-verified and added as the covariance model's FORM anchor; magnitudes stay swept/MR* | — |
 
 ## Post-assessment holes (found 2026-08-02, Phase 1 planning session)
 

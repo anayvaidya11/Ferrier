@@ -21,14 +21,14 @@ No single OA source replaces Whitney 1982's four-component bundle. Coverage map:
 | (a) mating force-equilibrium conditions | W1 (same author restating), W2, W3 |
 | (b) wedging + jamming conditions / F–M parallelogram | W1, W2, W3, W4 |
 | (c) RCC parameter selection | W1 (partial W7) |
-| (d) experimental validation | **none — no OA substitute exists**; P-06's residual optional ask |
+| (d) experimental validation | **partial OA coverage found at Stage B**: W1 slides 35–38 reproduce Whitney's theory-vs-data insertion-force/tilt figures (L_g = 45 mm and 1 mm cases) and slides 47–48 the first-RCC experiment photos; the residual gap is the 1982 paper's full experimental methodology — P-06's optional ask, further narrowed |
 
 Fetch order (Stage B stops at the first pair that page-verifies for (a)–(c)):
 
 | # | Source | Access | Status |
 |---|---|---|---|
-| W1 | **MIT OCW 2.875 (Fall 2004) "Rigid Part Mating" lecture PDF — taught by D. E. Whitney himself** — `https://ocw.mit.edu/courses/2-875-mechanical-assembly-and-its-role-in-product-development-fall-2004/6abbc6934125042e12e9d153f87f9278_cls3_rgd_prt_mn4.pdf` (Fall 2002 mirror: dspace.mit.edu/handle/1721.1/35795) | CC BY-NC-SA | URL confirmed in OCW search listing 2026-08-04; content unread — lead |
-| W2 | **CJME 2025 OA review, "Advances in Robotic Peg-in-Hole Assembly"** — DOI 10.1186/s10033-025-01349-w, SpringerOpen | CC BY | lead (cloud-session research; unfetched) |
+| W1 | **MIT OCW 2.875 (Fall 2004) "Rigid Part Mating" lecture PDF — taught by D. E. Whitney himself** — `https://ocw.mit.edu/courses/2-875-mechanical-assembly-and-its-role-in-product-development-fall-2004/6abbc6934125042e12e9d153f87f9278_cls3_rgd_prt_mn4.pdf` (Fall 2002 mirror: dspace.mit.edu/handle/1721.1/35795) | CC BY-NC-SA | **PAGE-VERIFIED 2026-08-04** — all 51 slides read. (b) verified: wedging θ > c/μ (slide 28), jamming force-ratio analysis (31–33), jamming F–M parallelogram with λ = ℓ/2rμ (34), avoiding-wedging S = L_g/(L_g²+K_θ/K_x) (30); (c) verified: RCC (25, 40–49, 51); (a) present via the two-point K_x/K_θ contact model (21–24); (d) partial: theory-vs-data figures (35, 36, 38) + first-RCC photos (47–48). Caveat: several derivation figures "removed for copyright" (pointers to Whitney 2004, ISBN 0195157826) — conditions and diagrams present, not every derivation step |
+| W2 | **CJME 2025 OA review, "Advances in Robotic Peg-in-Hole Assembly"** — DOI 10.1186/s10033-025-01349-w, SpringerOpen | CC BY | **PAGE-VERIFIED 2026-08-04** (pp. 1, 8–12 read; 22 pp. total; Li, Gong, Liu, Li & Deng, CJME 38:196). Explicitly builds on "the two-dimensional peg-in-hole model analysis method proposed by Whitney [77]" (p. 8); single/two-point equilibrium Eqs. (6)–(9); jamming/wedging singularity conditions Eqs. (10)–(16); jamming diagram Fig. 6 with λ = (l_p−l)/2rμ (p. 11); RCC §4.1 (p. 12) |
 | W3 | **Simunovic 1979 Sc.D. thesis, "An information approach to parts mating," MIT** — dspace.mit.edu/handle/1721.1/16229; PDF bitstream `07c7c54f-e147-4db7-ba65-b81a4d124c31` | MIT DSpace open | **PDF download directly verified 2026-08-04** (HTTP 200, application/pdf, 9.65 MB); content unread — foundational Draper-era parts-mating analysis |
 | W4 | **Zhang et al. 2019, "Peg–hole disassembly using active compliance," R. Soc. Open Sci. 6:190476** — PMC6731726 | CC BY | strong lead (WebFetch digest 2026-08-04: full text on PMC, quasi-static single peg-hole two-point-contact analysis, builds on Whitney 1982 as ref [14]) — digest only, page-verify at Stage B |
 | W5 | Goli et al. 2024, dual peg-hole jamming, Proc. R. Soc. A 480:20230364 | OA status unconfirmed | lead; dual-peg (adjacent, not foundational) |
@@ -120,6 +120,19 @@ qualifies as of 2026-08-04; no cloud dependency)
   per their written terms.
 - **B7** Re-run the Stage A verification greps, inverted where a caveat was
   legitimately revised.
+
+## 5a. Stage B completion log (2026-08-04, local session)
+
+B0 ✔ (egress confirmed) · B1 ✔ (W1 all 51 slides + W2 pp. 1, 8–12 page-read) ·
+B2 ✔ (INTERFACE_SPEC §2.3 OA append with paywall clause verbatim; H04 Addendum A5;
+CLAIMS C-12 revised per its written terms) · B3 ✔ (K1 Adámek, all 20 pages read;
+**verdict: FORM anchor only** — ArUco 5×5/OpenCV basis, 3-DoF, 0.4–1.1 m; forms
+transfer, magnitudes don't) · B4 ✔ (Paper 5 added to perception_prior with full
+extraction table; **no #40 value change — no curve swap performed**; the sweep and
+MR path stand) · B5 not needed (K1 verified) · B6 ✔ (HOLES H-07 note, C-14 evidence
+pointer, PENDING P-06/P-07 per written terms) · B7 ✔ (verification greps re-run).
+W3 (Simunovic) and W4 (RSOS 2019) remain available as reinforcement, unread beyond
+the §3 infrastructure checks — optional, not required.
 
 ## 6. Standing rules inherited
 

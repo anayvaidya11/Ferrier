@@ -4,7 +4,7 @@
 
 **Provenance label:** literature-derived, **text/table-sourced only**. This extraction pass deliberately did NOT read numeric values off plot curves or interpret figure imagery. Every figure-only quantity is listed as a gap in the "Not covered by this corpus" section rather than estimated. All values below were read from a document fetched on the retrieval date noted in each section.
 
-**Status:** COMPLETE (text/table-only pass, 2026-08-02). Papers 1-3 fetched and page-verified; Paper 4 (Kallwies 2020) UNAVAILABLE — see UNVERIFIED section (settled negative per D-031; OA substitution pending — `research/OA_SUBSTITUTION.md`).
+**Status:** COMPLETE (text/table-only pass, 2026-08-02). Papers 1-3 fetched and page-verified; Paper 4 (Kallwies 2020) UNAVAILABLE — see UNVERIFIED section (settled negative per D-031). **Paper 5 (Adámek 2023) added 2026-08-04 — the D-031 Stage B substitute, page-verified; anchors the covariance model's functional FORM only (`research/OA_SUBSTITUTION.md`).**
 
 ---
 ## Paper 1: Olson 2011 — AprilTag (ICRA)
@@ -106,6 +106,21 @@
 **Impact:** this was the corpus's only source of quantified corner/edge localization accuracy in pixels (the paper's stated topic). Its absence leaves the pose-covariance class values unanchored by this pass.
 
 ---
+## Paper 5: Adámek et al. 2023 — Analytical Models for Pose Estimate Variance of Planar Fiducial Markers (Sensors) — D-031 Stage B substitute
+
+**Citation:** R. Adámek, M. Brablc, P. Vávra, B. Dobossy, M. Formánek, F. Radil, "Analytical Models for Pose Estimate Variance of Planar Fiducial Markers for Mobile Robot Localisation," Sensors 2023, 23, 5746. DOI 10.3390/s23125746. License: CC BY 4.0 (stated p. 1).
+**Retrieved:** 2026-08-04 (PDF fetched from mdpi-res.com; all 20 pages read directly).
+**Setup (§4.1, p. 5):** ArUco marker ID 0, resolution 5×5, edge 112 mm, on a stepper motor sweeping −90°…+90° in 0.45° steps; Logitech C922 at 1280×720; 100 photos per step (40,100 per experiment); 15 camera positions (7 in-line at 400→1000 mm, the rest off-centre); OpenCV 4.5.1 ArUco, default settings + sub-pixel corner refinement; Python 3.8.7.
+**Findings (text-sourced):**
+- Variance is not constant across the measurement range; σ²_mβ (rotation) has a sharp peak near the point where the marker surface is parallel to the camera — the pose-ambiguity effect (§4.2, p. 7).
+- With the marker offset (300 mm x, 600 mm z), the variance peak shifts to ≈30° = atan(m_x/m_z) = 29.5° — **the peak sits where the marker normal points directly at the camera** (Fig. 7 discussion, p. 8).
+- σ²_mβ between 40° and 70° is an order of magnitude lower than near the peak (§4.4, p. 9). Detectability extends to ≈±80° with sharp variance growth at the edge (§4.2, p. 6).
+**Models (equation-sourced):** area normalization S_n, Eqs. (2)–(5), pp. 10–11; **σ²_mβ = p₁·S_n^(−p₂)·e^(−φ/p₃) + |p₄/(90−|φ|)| + p₅** (Eq. 6, p. 12) with **φ = m_β − atan(m_x/m_z)** (Eq. 7); **σ²_mx/z = p₁·S_n^(−p₂)/(90−|φ|) + p₃** (Eq. 8, p. 12). Levenberg–Marquardt fits; RMSE as printed: 0.1000 (σ²_mβ), 0.0076 (σ²_mx), 1.3596 (σ²_mz) — the PDF typesets all three units as °², ambiguous for the position models; recorded as printed, magnitudes not carried forward.
+**Estimation recipe (§6.1, pp. 13–14):** yaw points ≈{0°, 15°, 40°, 70°}, ≥5 distances across the range, ≥100 photos per configuration; symmetry → measure half-range and mirror. **Multi-marker fusion (§6.3, Eqs. 17–18):** inverse-covariance-weighted product of Gaussians. **EKF validation (§6.5, Table 1, p. 17):** variance-model localisation RMSE 0.0128/0.0161 m (x/z) beats fixed Min/Mean/Max variance settings.
+**Limitations (§7, pp. 17–18):** static-camera scope (motion blur and vibration unmodeled); multi-marker independence assumption can yield unrealistically low fused variances; demonstrated in 2D (x, z, β), stated generalizable to 3D.
+**Applicability verdict for #40 (D-031 B3 check): FORM ANCHOR ONLY.** Experimental basis is ArUco 5×5 / OpenCV at 0.4–1.1 m with 3-DoF planar pose — not AprilTag 36h11 6-DoF. What transfers: variance growth as S_n^(−p) with shrinking marker area; the ambiguity-driven Gaussian peak at the normal-points-at-camera angle; the 1/(90−|φ|) edge-of-detectability blow-up; the peak shift with lateral offset via φ. What does not: absolute magnitudes and fitted p-values (detector- and marker-specific). Consequence: **#40's swept σ_px class values and the MR `reproj_rms_px` measurement path are unchanged; the covariance model's functional form is now sourced.** The normal-points-at-camera variance peak independently corroborates studies/H08's near-head-on flip concentration.
+
+---
 
 ## Proposed injected-model parameters
 
@@ -121,7 +136,7 @@ All entries below trace to an extracted row above. Where the text/table corpus i
 
 ### Pose-covariance class values (PHASE1_PARAMETERS #40)
 
-- **Corner/pixel noise: UNANCHORED by this pass.** The only text statement is qualitative — corner estimates "accurate to a small fraction of a pixel" (row 1.5). The one paper that quantifies corner accuracy in px (Kallwies 2020) is UNAVAILABLE. Do not inject a numeric px sigma from this corpus; take it from MR reprojection residuals.
+- **Corner/pixel noise: UNANCHORED by this pass.** The only text statement is qualitative — corner estimates "accurate to a small fraction of a pixel" (row 1.5). The one paper that quantifies corner accuracy in px (Kallwies 2020) is UNAVAILABLE. Do not inject a numeric px sigma from this corpus; take it from MR reprojection residuals. *(2026-08-04, D-031: the covariance model's functional FORM — area/angle dependence, ambiguity peak, edge blow-up — is now sourced from Paper 5; magnitudes remain swept/MR-measured.)*
 - **Translation / range error covariance: UNANCHORED.** All range-error magnitudes are figure-only (Olson Fig. 10; Wang Fig. 5, Fig. 9). Not extracted.
 - **Rotation error covariance: UNANCHORED.** All orientation-error magnitudes are figure-only (Olson Fig. 9; Wang Fig. 6). Not extracted.
 

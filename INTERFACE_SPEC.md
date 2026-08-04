@@ -91,7 +91,15 @@ US Patent 4,098,001 (Watson, filed 1976, granted 1978): compliance projected to 
 contact point makes rigid-part insertion self-correcting; Whitney, "Quasi-Static
 Assembly of Compliantly Supported Rigid Parts," ASME J. Dyn. Sys., Meas., and Control
 104(1):65–77, 1982, DOI 10.1115/1.3149634 (cited by verified metadata/abstract; full
-text paywalled); the device class is commercially alive today (ATI 9116-series
+text paywalled); **theory content page-verified open-access per D-031 Stage B
+(2026-08-04):** Whitney's own MIT OCW 2.875 "Rigid Part Mating" lecture (Fall 2004,
+CC BY-NC-SA — wedging condition θ > c/μ, slide 28; jamming F–M parallelogram with
+λ = ℓ/2rμ, slide 34; RCC, slides 25 and 40–49; theory-vs-data insertion-force
+validation figures, slides 35–38), and Li et al., "Advances in Robotic Peg-in-Hole
+Assembly: A Comprehensive Review," Chin. J. Mech. Eng. 38:196, 2025, DOI
+10.1186/s10033-025-01349-w, CC BY (Whitney-model equations pp. 8–11; jamming diagram
+Fig. 6; RCC §4.1) — extraction pointers in `research/OA_SUBSTITUTION.md`; the device
+class is commercially alive today (ATI 9116-series
 compliance compensators, ati-ia.com). Whitney & Nevins 1979 could not be retrieved and
 is **demoted to an unverified analogy** — cite the patent and the 1982 DOI instead.
 (2) *Spacecraft soft capture*: IDSS Interface Definition Document Rev E (Oct 2016,
