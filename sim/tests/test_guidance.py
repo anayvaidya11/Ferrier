@@ -178,31 +178,65 @@ class TestRow3InnerOccluded:
                     tags=[{"id": 2, "reproj_err": 0.5,
                            "ambiguity_flag": False, "ambiguity_ratio": 1.0}])
 
-    def test_below_two_inner_aborts_and_retries(self):
+    def test_single_marginal_ring_frame_only_rejects(self):
+        # Per-frame tag detection is stochastic; one 33 ms frame below the
+        # two-tag minimum is not an occluded ring. Like rows 1/5, the
+        # row-3 response requires persistence (T8 composition finding,
+        # 2026-08-04).
         m = make_machine()
         d = m.observe(self._one_inner(), range_mm=250.0, t_s=5.0)
+        assert d.action == "reject_frame"
+        assert m.attempt_n == 1
+
+    def test_persistent_below_two_inner_aborts_and_retries(self):
+        m = make_machine()
+        d = None
+        for _ in range(machine.RING_PERSIST_FRAMES):
+            d = m.observe(self._one_inner(), range_mm=250.0, t_s=5.0)
         assert d.action == "abort_retry"
         assert d.abort_reason == "inner_ring_absent"
         assert m.attempt_n == 2
 
+    def test_good_ring_frame_resets_the_streak(self):
+        m = make_machine()
+        for _ in range(machine.RING_PERSIST_FRAMES - 1):
+            m.observe(self._one_inner(), range_mm=250.0, t_s=5.0)
+        m.observe(line(), range_mm=250.0, t_s=5.1)   # two inner tags
+        d = m.observe(self._one_inner(), range_mm=250.0, t_s=5.2)
+        assert d.action == "reject_frame"
+
     def test_budget_exhaustion_escalates(self):
         m = make_machine()
         d = None
-        for _ in range(ATTEMPTS_MAX + 1):
+        for _ in range(machine.RING_PERSIST_FRAMES * (ATTEMPTS_MAX + 1)):
             d = m.observe(self._one_inner(), range_mm=250.0, t_s=5.0)
         assert d.action == "escalate"
         assert d.abort_reason == "attempt_budget_exhausted"
+
+    def test_below_handoff_boundary_ring_jitter_never_aborts(self):
+        # D-004 stage 3 is force-guided (pose_source contact_force):
+        # below the handoff boundary, terminal foreshortening starving
+        # the ring count is not an occluded ring — frames are rejected,
+        # the insertion is not aborted (T8 composition finding,
+        # 2026-08-04). Row 4 (ring dead + outer pose OK) still escalates.
+        m = make_machine()
+        for _ in range(3 * machine.RING_PERSIST_FRAMES):
+            d = m.observe(self._one_inner(), range_mm=60.0, t_s=8.0)
+            assert d.action == "reject_frame"
+        assert m.attempt_n == 1
 
 
 class TestRow4InnerDestroyed:
     def test_zero_inner_at_handoff_range_never_attempts(self):
         m = make_machine()
-        d = m.observe(line(stage="inner_servo", pose_source="outer_tag",
-                           conf=0.92,
-                           tags=[{"id": 0, "reproj_err": 0.3,
-                                  "ambiguity_flag": False,
-                                  "ambiguity_ratio": 1.0}]),
-                      range_mm=60.0, t_s=8.0)
+        d = None
+        for _ in range(machine.RING_PERSIST_FRAMES):
+            d = m.observe(line(stage="inner_servo", pose_source="outer_tag",
+                               conf=0.92,
+                               tags=[{"id": 0, "reproj_err": 0.3,
+                                      "ambiguity_flag": False,
+                                      "ambiguity_ratio": 1.0}]),
+                          range_mm=60.0, t_s=8.0)
         assert d.action == "escalate"
         assert d.abort_reason == "inner_ring_absent"
         assert m.attempt_n == 1, "D-013: no insertion attempt is consumed"
@@ -235,6 +269,19 @@ class TestRow5AmbiguityFlip:
         m.observe(line(), range_mm=150.0, t_s=5.1)
         d = m.observe(self._flagged(), range_mm=150.0, t_s=5.2)
         assert d.action == "reject_frame"
+
+    def test_outer_range_ambiguity_rejects_but_never_aborts(self):
+        # Row 5's remedy is "require multi-tag or oblique confirmation" —
+        # impossible beyond inner range with one coplanar tag, where the
+        # H08 model makes face-on ambiguity structural (ratio < 1 beyond
+        # ~1.2 m). The streak-abort is therefore scoped to inner range;
+        # far-field flagged frames are rejected, never aborted (T8
+        # composition finding, 2026-08-04).
+        m = make_machine()
+        for _ in range(3 * machine.AMBIGUITY_PERSIST_FRAMES):
+            d = m.observe(self._flagged(), range_mm=2000.0, t_s=5.0)
+            assert d.action == "reject_frame"
+        assert m.attempt_n == 1
 
 
 class TestBudgets:

@@ -58,6 +58,14 @@ class TestNominalHandoff:
         assert v[0] == pytest.approx(-SPEEDS[2], rel=1e-6)
         assert math.hypot(v[1], v[2]) == pytest.approx(0.0, abs=1e-9)
 
+    def test_speeds_override_honored_default_unchanged(self):
+        # T8: the speed_* sweep axes must reach the stage, or the trial
+        # header would record a sweep_point the run never realized.
+        slow = make_stage(speeds=(1.0, 0.2, 0.025)).run()
+        assert slow.handoff.v_ms[0] == pytest.approx(-0.025, rel=1e-6)
+        default = make_stage().run()
+        assert default.handoff.v_ms[0] == pytest.approx(-SPEEDS[2], rel=1e-6)
+
     def test_nominal_orientation_is_anti_parallel(self):
         result = make_stage().run()
         assert result.handoff.T_head_stud.q == pytest.approx(

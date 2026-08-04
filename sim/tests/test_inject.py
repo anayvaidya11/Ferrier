@@ -96,6 +96,20 @@ def test_dropout_frame_reports_degradation():
     assert line["degradation"]["dropout"] is True
 
 
+def test_conf_is_evidence_mass_not_mean_p():
+    # conf is the labeled-arbitrary confidence proxy. The original mean-p
+    # form under-reported multi-tag evidence: four detected tags at
+    # p = 0.3 each are far stronger evidence than one tag at 0.3, but the
+    # mean said 0.3 either way — structurally below any commit threshold
+    # at close range, where per-tag p ≈ cos(view angle) is low while the
+    # fused constellation is excellent (T8 composition finding,
+    # 2026-08-04). Evidence-mass form: 1 − Π(1 − p_i), ratio-scaled.
+    assert inject._conf([0.3, 0.3, 0.3, 0.3], ratio=2.0) == pytest.approx(
+        1.0 - 0.7 ** 4)
+    assert inject._conf([0.9], ratio=0.5) == pytest.approx(0.45)
+    assert inject._conf([1.0, 0.1], ratio=5.0) == 1.0
+
+
 def test_curve_swap_changes_output_only_via_registry():
     # A synthetic set with the decode floor above the outer tag's px size
     # kills detection; identical config otherwise.

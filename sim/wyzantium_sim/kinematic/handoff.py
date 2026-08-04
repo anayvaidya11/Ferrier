@@ -21,6 +21,8 @@ class HandoffState:
     T_head_stud: object   # frames.Pose, translation in mm
     v_ms: tuple           # closing velocity, head_frame, m/s
     omega_rads: tuple     # angular rate, rad/s
-    pose_cov: tuple       # 6x6, row-major nested tuples
+    pose_cov: tuple       # 6x6, row-major nested tuples, SI (m², m·rad,
+                          # rad²) — same units as the wire pose_cov upper
+                          # triangle it is rebuilt from (T8 decision)
     attempt: int
     t_sim_s: float

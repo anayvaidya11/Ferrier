@@ -34,6 +34,7 @@ from dataclasses import dataclass, field
 
 HOLD_TIMEOUT_S = 5.0
 AMBIGUITY_PERSIST_FRAMES = 5
+RING_PERSIST_FRAMES = 5
 POLICY_CLOSE_WITHOUT_OUTER = False
 INNER_RANGE_MM = 300.0    # IS §8 row 3: "inside 300 mm"
 HANDOFF_RANGE_MM = 100.0
@@ -93,6 +94,7 @@ class GuidanceMachine:
         self.attempt_n = 1
         self.stage = "acquire"
         self._ambiguity_streak = 0
+        self._ring_streak = 0
         self._hold_since = None
 
     def _escalate(self, reason: str) -> Decision:
@@ -118,26 +120,51 @@ class GuidanceMachine:
         tags = line.get("tags") or []
         conf = line.get("conf", 0.0)
 
-        # IS §8 row 5: ambiguity flip
+        # IS §8 row 5: ambiguity flip. The streak-abort is scoped to inner
+        # range: the row's remedy is "require multi-tag or oblique
+        # confirmation", which is impossible beyond inner range with one
+        # coplanar tag — the H08 model makes face-on ambiguity structural
+        # (ratio < 1 beyond ~1.2 m), so an unscoped streak would abort
+        # every approach at its fifth frame (T8 composition finding,
+        # 2026-08-04; code-level choice, flagged for amendment). Far-field
+        # flagged frames are still rejected.
         if any(t.get("ambiguity_flag") for t in tags):
-            self._ambiguity_streak += 1
-            if self._ambiguity_streak >= AMBIGUITY_PERSIST_FRAMES:
-                self._ambiguity_streak = 0
-                return self._abort_retry("ambiguity_persistent")
+            if range_mm <= INNER_RANGE_MM:
+                self._ambiguity_streak += 1
+                if self._ambiguity_streak >= AMBIGUITY_PERSIST_FRAMES:
+                    self._ambiguity_streak = 0
+                    return self._abort_retry("ambiguity_persistent")
             return Decision(action="reject_frame", stage=self.stage)
         self._ambiguity_streak = 0
 
-        # IS §8 rows 3/4: inner ring below the commit minimum
+        # IS §8 rows 3/4: inner ring below the commit minimum. Like rows
+        # 1/5, the response requires persistence (RING_PERSIST_FRAMES):
+        # per-frame tag detection is stochastic, and one marginal 30 Hz
+        # frame is not an occluded ring — a per-frame abort would end
+        # every approach on detection jitter (T8 composition finding,
+        # 2026-08-04; code-level choice, flagged for amendment). The
+        # streak-completing frame decides row 4 vs row 3 by its own shape.
         if range_mm <= INNER_RANGE_MM:
             inner = [t for t in tags if t.get("id") != 0]
             if len(inner) < 2:
-                if (not inner and range_mm <= HANDOFF_RANGE_MM
-                        and line.get("pose_source") in ("outer_tag",
-                                                        "multi_tag_fused")
-                        and conf >= self.conf_min):
-                    # row 4: outer pose OK, ring dead — never attempt (D-013)
-                    return self._escalate("inner_ring_absent")
-                return self._abort_retry("inner_ring_absent")
+                self._ring_streak += 1
+                if self._ring_streak >= RING_PERSIST_FRAMES:
+                    self._ring_streak = 0
+                    if (not inner and range_mm <= HANDOFF_RANGE_MM
+                            and line.get("pose_source") in ("outer_tag",
+                                                            "multi_tag_fused")
+                            and conf >= self.conf_min):
+                        # row 4: outer OK, ring dead — never attempt (D-013)
+                        return self._escalate("inner_ring_absent")
+                    if range_mm > HANDOFF_RANGE_MM:
+                        return self._abort_retry("inner_ring_absent")
+                    # Below the handoff boundary D-004 stage 3 is
+                    # force-guided (pose_source contact_force): terminal
+                    # foreshortening starving the ring count is not an
+                    # occluded ring — reject, don't abort the insertion
+                    # (T8 composition finding, 2026-08-04).
+                return Decision(action="reject_frame", stage=self.stage)
+            self._ring_streak = 0
 
         # IS §8 row 2: no outer detection at expected range
         if line.get("pose_source") == "none" and not tags:

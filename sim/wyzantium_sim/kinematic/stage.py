@@ -86,7 +86,7 @@ class KinematicStage:
 
     def __init__(self, root: int, scale: float = 1.0, start_mm=START_MM,
                  aim_mm=(0.0, 0.0, 0.0), attempt: int = 1, t0_s: float = 0.0,
-                 pose_cov=None, ds_mm: float = DS_MM):
+                 pose_cov=None, ds_mm: float = DS_MM, speeds=None):
         self._start = tuple(float(v) for v in start_mm)
         self._aim = tuple(float(v) for v in aim_mm)
         self._attempt = attempt
@@ -94,7 +94,9 @@ class KinematicStage:
         self._cov = ZERO_COV if pose_cov is None else pose_cov
         self._ds = ds_mm
 
-        sp = params.PARAMS[26].default          # (outer, inner, insertion)
+        # (outer, inner, insertion); the T8 trial passes the speed_* sweep
+        # axes here — defaults are the #26 committed values.
+        sp = params.PARAMS[26].default if speeds is None else speeds
         self._speeds = tuple(float(v) for v in sp)
         self._outer_to_mm = params.PARAMS[25].value["outer_m"][1] * 1000.0
         alloc = params.PARAMS[23].value

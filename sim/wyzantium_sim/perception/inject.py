@@ -10,11 +10,14 @@ the #19/#20 camera models, flips per studies/H08 §4, timing per #37/#38.
 Omitted-not-zeroed is enforced structurally: a frame with no detections
 carries no pose/pose_cov/tags at all.
 
-Arbitrary code-level choices, labeled: conf = mean detection probability of
-the detected tags scaled by min(1, worst ambiguity ratio); lens
-contamination applies to Cam B only (#44 names Cam B dominant); layout
-defaults to coplanar (D-011 selection is MR-003's; coplanar is the
-conservative flip case).
+Arbitrary code-level choices, labeled: conf = evidence mass of the detected
+tags, 1 − Π(1 − p_i), scaled by min(1, worst ambiguity ratio) — revised
+from mean-p 2026-08-04 (T8 composition finding: the mean under-reported
+multi-tag evidence and sat structurally below the #30 commit threshold at
+close range, where per-tag p ≈ cos(view angle) is low while the fused
+constellation is excellent); lens contamination applies to Cam B only
+(#44 names Cam B dominant); layout defaults to coplanar (D-011 selection
+is MR-003's; coplanar is the conservative flip case).
 """
 import math
 from dataclasses import dataclass
@@ -36,6 +39,15 @@ _FOCAL_PX = {"A": params.PARAMS[19].value, "B": params.PARAMS[20].value}
 
 class ConfigError(ValueError):
     pass
+
+
+def _conf(ps, ratio):
+    """Evidence-mass confidence proxy (labeled arbitrary, see module
+    docstring): 1 − Π(1 − p_i) over the detected tags, ambiguity-scaled."""
+    miss = 1.0
+    for p in ps:
+        miss *= 1.0 - p
+    return max(0.0, min(1.0, (1.0 - miss) * min(1.0, ratio)))
 
 
 @dataclass(frozen=True)
@@ -162,6 +174,5 @@ class PerceptionInjector:
              "ambiguity_ratio": float(ratio)}
             for s, _ in detected
         ]
-        mean_p = sum(p for _, p in detected) / len(detected)
-        line["conf"] = max(0.0, min(1.0, mean_p * min(1.0, ratio)))
+        line["conf"] = _conf([p for _, p in detected], ratio)
         return line
