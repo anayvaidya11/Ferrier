@@ -106,6 +106,37 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-031 — Open-access literature substitution for the two paywalled dependencies (re-scopes P-06, P-07)
+The program's evidence base had exactly two paywalled-paper dependencies, both
+parked as .edu favors in PENDING_HUMAN. Decision, executed in two stages
+(`research/OA_SUBSTITUTION.md` is the work-order): **Stage A** (2026-08-04) commits
+the decision and candidate tables with every caveat left standing; **Stage B**
+page-verifies the substitutes per the source-integrity rule and only then revises
+caveats, per their written terms.
+**Kallwies 2020 (P-07): replaced; the obtain-the-PDF ask is dropped.** Grounds:
+nine dead retrieval routes (a settled negative); a public, unresolved ~40×
+reproduction failure of its headline figure (github.com/UniBwTAS/apriltags_tas
+issue #4 — caution-grade, not peer-reviewed); and the abstract's figures measure
+the authors' improved method and OpenCV cornerSubPix, not stock-detector corner σ —
+so the paper would not have anchored #40 even if obtained. Replacement path:
+Adámek 2023 (Sensors, CC BY — closed-form pose-variance models; ArUco basis, so
+candidate form-anchor with magnitudes staying swept/MR-measured) first, ranked
+alternates behind it.
+**Whitney 1982 (P-06): supplemented, not replaced.** An OA pair (Whitney's own MIT
+OCW 2.875 "Rigid Part Mating" lecture + the CJME 2025 OA review, with Simunovic
+1979 and R. Soc. Open Sci. 2019 as reinforcement) covers the theory components
+(force equilibrium, wedging/jamming conditions, RCC parameter selection). The 1982
+paper's **experimental validation has no OA substitute** — P-06 narrows to that one
+component, optional, needed only if IS8-17 promotes T5 (D-027). The C-12 prior-art
+DOI citation stands regardless.
+**Consequence:** #40's sweep and the params/test transcriptions are untouched by
+this decision; any future anchoring runs through the ROADMAP curve-swap protocol as
+a recorded revision. No caveat is struck in Stage A; MR-004's fallback paragraph is
+repaired (it named Kallwies as usable, contradicting its own UNAVAILABLE status).
+**What would make it wrong:** Stage B failing to page-verify the candidates — then
+the ranked backups are walked in order, and if all fail, the original paywalled
+asks are reinstated in PENDING_HUMAN as written before this decision.
+
 ### D-030 — `clean_miss` outcome predicate (closes H-14)
 `clean_miss` ⟺ all four hold: **(a)** the trial fails D-022; **(b)** no contact ever
 occurred — no `sim_truth.contact_wrench` line exists in the record (no annulus

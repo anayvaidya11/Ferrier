@@ -233,6 +233,11 @@ three-working-day bound on its own. Under D-014 the headline sensitivity axis is
 **detection rate**, not pose error, so the program's exposure to this number is second
 order.
 
-**Fallback (in effect now):** literature-derived covariance (Olson 2011; Kallwies et al.
-2020 accuracy figures), labeled *literature-derived, not measured on this system*.
-Recorded here so the gap is visible rather than forgotten.
+**Fallback (in effect now):** PHASE1_PARAMETERS #40's swept corner-noise class value
+σ_px ∈ {0.3, 0.5, 1.0} px propagated through the committed camera models, labeled
+*swept class value; not measured, not literature-anchored*. Recorded here so the gap
+is visible rather than forgotten. *(Repaired 2026-08-04 per D-031: the previous text
+named "Kallwies et al. 2020 accuracy figures" as a usable fallback — contradicting
+`perception_prior.md`'s UNAVAILABLE status — and Olson 2011, whose only
+corner-accuracy statement is qualitative. Literature anchoring, if it lands, arrives
+via `research/OA_SUBSTITUTION.md` §2 under the ROADMAP curve-swap protocol.)*

@@ -4,7 +4,7 @@
 
 **Provenance label:** literature-derived, **text/table-sourced only**. This extraction pass deliberately did NOT read numeric values off plot curves or interpret figure imagery. Every figure-only quantity is listed as a gap in the "Not covered by this corpus" section rather than estimated. All values below were read from a document fetched on the retrieval date noted in each section.
 
-**Status:** COMPLETE (text/table-only pass, 2026-08-02). Papers 1-3 fetched and page-verified; Paper 4 (Kallwies 2020) UNAVAILABLE — see UNVERIFIED section.
+**Status:** COMPLETE (text/table-only pass, 2026-08-02). Papers 1-3 fetched and page-verified; Paper 4 (Kallwies 2020) UNAVAILABLE — see UNVERIFIED section (settled negative per D-031; OA substitution pending — `research/OA_SUBSTITUTION.md`).
 
 ---
 ## Paper 1: Olson 2011 — AprilTag (ICRA)
@@ -161,3 +161,7 @@ All entries below trace to an extracted row above. Where the text/table corpus i
   - Web searches for a preprint/author copy (incl. athene-forschung.unibw.de) — none found.
   No values were recorded for this paper; nothing was taken from memory.
 - **Discarded intermediate output:** the automated summary returned by the first fetch of Olson 2011 contained numbers not present in the paper (e.g., "0.3 pixels", "587 codewords for 36h11 min-Hamming-11 family", "640x480 camera, 10 cm tags, 1-5 m"). It was discarded; every Olson 2011 value above was re-verified by reading the PDF pages directly. The same direct-page-read verification was applied to Papers 2 and 3.
+- **2026-08-04 — ninth dead route:** Kalaitzakis author-copy route checked by the D-031 planning session — publications page carries DOI links only, no PDF.
+- **2026-08-04 — reproduction caution (fetched raw via GitHub API, not a digest):** github.com/UniBwTAS/apriltags_tas/issues/4, opened 2021-06-18, still open, 8 comments — an independent user running the authors' published `refineCornerPointsByDirectEdgeOptimization` on the authors' own dataset (image `0019.png`, random.zip) could not reproduce the paper's 0.017 px median corner error; the thread records ≈0.70–0.71 px (~40×). **Not peer-reviewed — recorded as caution only, never a CLAIMS source.**
+- **2026-08-04 — abstract semantics:** the paper's 0.017 px is the authors' improved edge-refinement method and 0.17 px is OpenCV cornerSubPix; neither is stock-AprilTag corner σ, so the paper would not have directly anchored #40 even if obtained.
+- **2026-08-04 — substitution path:** open-access anchor leads (Adámek 2023 first) are tracked in `research/OA_SUBSTITUTION.md` §2; substitutes enter this file only as new numbered papers after Stage B page-verification.
