@@ -40,6 +40,9 @@ Fetch order (Stage B stops at the first pair that page-verifies for (a)–(c)):
 1982 full text for its experimental-validation content only — optional, needed only
 if an IS8-17-driven T5-promotion argument wants it (D-027). The C-12 prior-art
 citation of the 1982 DOI stands regardless (metadata citation of a named tradition).
+*(2026-08-04, route change at the human's direction: the .edu email route is
+REMOVED. If ever triggered: W3 Simunovic 1979 page-read first (open, Claude's task);
+final fallback a self-serve ASME PDF purchase (~US$38). No favor-ask exists.)*
 
 ## 2. Kallwies slot (P-07) — replace; obtain-the-PDF ask dropped
 
