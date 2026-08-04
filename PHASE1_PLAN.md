@@ -123,6 +123,13 @@ T4a/T4b/T4c parallel after T0–T3; T9/T11/T12 parallel with DOE runs after T8.
 
 ## 5. Week-by-week (build start ≈ Aug 4, on P-05 sign-off)
 
+*Schedule note (2026-08-04): the week-1 provisioning day (Day 2–3) slides to after T8
+lands and cloud credits arrive (~1 week out). No committed decision fixes a provisioning
+date, and A-004's own definition of a representative workload (§3) requires T4c, T6, T7,
+and T8 to exist first — so the local build queue (T4c MuJoCo half → T5 → T6 → T7 → T8)
+proceeds in the interim on the M4. A-004 content unchanged; this is a sequencing note,
+not an amendment.*
+
 | Week | Work | Must land |
 |---|---|---|
 | 1 (Aug 4–10) | T0–T3 + T4c. Day 2–3 = first provisioning day: **engine conformance suite → fallback decision recorded**. Day 5–7: #33 first-pass probe → **A-004 cost test, both $/1k committed, winner provisioned**. From measured force scales: **#62 jam thresholds recalibrated, recorded revision** | All three week-one obligations (ARCH §4, §5; #62) |
