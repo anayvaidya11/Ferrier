@@ -120,3 +120,18 @@ class TestLipStrike:
         out = runner.run_contact(eng, handoff_at((50.0, 0.0, 0.0)),
                                  jam=JAM_MID, max_time_s=8.0)
         assert not out.lip_strike
+
+    def test_soft_base_lip_strike_measured_about_displaced_axis(self):
+        # At k = 3 N/mm the axial dead load sags the compliant base by
+        # tens of mm, so the head meets the lip after crossing the fixed
+        # x = 0 plane but before the displaced mouth (probed: base_x ≈
+        # -25 mm at first lip contact, in-band radii 111.7..124.8 mm about
+        # the displaced axis). IS §6 defines the band about the funnel
+        # axis, so this is a lip strike; a fixed-frame formula misses it.
+        eng = make_engine(stiffness_k_n_mm=3.0)
+        out = runner.run_contact(eng, handoff_at((50.0, 117.5, 0.0)),
+                                 jam=JAM_MID, max_time_s=1.5)
+        assert out.lip_strike
+        assert out.lip_radii_mm
+        for rho in out.lip_radii_mm:
+            assert 110.0 - 3.0 <= rho <= 125.0 + 3.0

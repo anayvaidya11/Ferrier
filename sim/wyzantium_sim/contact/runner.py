@@ -27,6 +27,9 @@ precedent):
   resets when it breaks.
 - The caller supplies the insertion driver (gravity or initial velocity);
   no actuator model exists pre-T8.
+- Base rotation is neglected for the radial and lip-band tests (small
+  angle): StepResult exposes only funnel_t_mm — the base's rotation is
+  not available at the ContactEngine boundary.
 
 The optional on_step callback receives every StepResult — the T8 logging
 seam (sim_truth every physics step post-handoff, #59).
@@ -89,10 +92,14 @@ def run_contact(eng, handoff, jam: JamThresholds, max_time_s: float,
         c = _head_center(r)
         base = r.funnel_t_mm
 
-        # IS8-16: lip-band contact before capture-plane crossing
-        if c[0] > 0.0:
+        # IS8-16: lip-band contact before capture-plane crossing. The lip
+        # band is defined about the funnel axis (IS §6), which follows the
+        # compliant base like the D-020 throat axis below — so both rho and
+        # the capture plane are measured against the displaced base.
+        if c[0] - base[0] > 0.0:
             for cp in r.contacts:
-                rho = math.hypot(cp.pos_head_mm[1], cp.pos_head_mm[2])
+                rho = math.hypot(cp.pos_head_mm[1] - base[1],
+                                 cp.pos_head_mm[2] - base[2])
                 if lip_lo <= rho <= lip_hi:
                     lip_radii.append(rho)
 
