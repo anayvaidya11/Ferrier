@@ -2,8 +2,10 @@
 
 Consumes ground truth (T_head_stud) plus a per-frame scene description (which
 tags could geometrically be seen, at what range/angle/camera — supplied by
-the kinematic stage from T5 onward) and emits WIRE_FORMAT target_state
-lines: detections sampled per #39/D-023/#43–#45, pose noise per #40 through
+the kinematic stage from T5 onward; NOTE: `truth.t` here must be METRES per
+the WIRE_FORMAT pose contract, while the kinematic stage produces mm — the
+T8 trial composition owns that /1000 conversion) and emits WIRE_FORMAT
+target_state lines: detections sampled per #39/D-023/#43–#45, pose noise per #40 through
 the #19/#20 camera models, flips per studies/H08 §4, timing per #37/#38.
 Omitted-not-zeroed is enforced structurally: a frame with no detections
 carries no pose/pose_cov/tags at all.

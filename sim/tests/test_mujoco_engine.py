@@ -1,9 +1,11 @@
 """T4c cycle B / T5 frame pinning — MuJoCo adapter behind ContactEngine.
 
-Official head_frame (pinned by T5 per IS §4/§6): origin at the funnel mouth
-center; the APPROACH side is +x — the stud descends from x>0, handoff fires
-at x=+50 mm ("50 mm before the mouth", IS §6), the mouth is x=0, the funnel
-interior and throat are at x<0. At nominal engagement stud +X and head +X are
+Official head_frame (pinned by T5 per IS §6's handoff arithmetic and §4's
+anti-parallel engagement note; §4's "+X into the funnel" axis wording
+contradicted both and carries a dated correction): origin at the funnel
+mouth center; the APPROACH side is +x — the stud descends from x>0, handoff
+fires at x=+50 mm ("50 mm before the mouth", IS §6), the mouth is x=0, the
+funnel interior and throat are at x<0. At nominal engagement stud +X and head +X are
 anti-parallel (IS §4); the nominal stud orientation is a 180° rotation about
 +Y: q = (0, 0, 1, 0). The head-sphere center sits at T_head_stud · (70, 0, 0)
 mm (exposed 90 − head radius 20, D-016).

@@ -200,7 +200,7 @@ frame explicitly (WIRE_FORMAT consumer checklist enforces this).
 |---|---|---|
 | `stud_frame` | Intersection of stud axis with plate front face | +X along stud axis away from plate (toward approach); +Z toward outer tag ("plate up"); +Y = Z × X (right-handed) |
 | `plate_frame` | Plate geometric center, front face | Parallel to stud_frame; T_stud_plate = translation (0, 0, +185 mm) [D-016] |
-| `head_frame` | Funnel mouth center | +X along funnel axis **into** the funnel (insertion direction); +Z head-up; +Y = Z × X |
+| `head_frame` | Funnel mouth center | +X along funnel axis toward the **approach side** (out of the mouth); +Z head-up; +Y = Z × X. *Corrected 2026-08-04 (T5 frame pinning): originally written "+X into the funnel (insertion direction)", which contradicted both §6's handoff arithmetic (x = +50 mm is 50 mm* before *the mouth) and the anti-parallel engagement note below; §6 governs. Approach at x > 0, mouth x = 0, throat at x = −180 mm.* |
 | `capture_plane_frame` | Alias of head_frame | The capture plane is head_frame's YZ plane (x = 0); named separately because §5 and §6 reference it |
 | `cam_a_frame` | Cam A optical center | Camera convention: +Z optical axis, +X image-right, +Y image-down. Boresight ∥ head +X. Extrinsic T_head_camA = ((−50, 0, +140) mm, boresight-parallel) [ASSUMED, D-012] |
 | `cam_b_frame` | Cam B optical center | Same convention. Mounted off-axis: T_head_camB = ((+100, −250, 0) mm, yawed +30° toward funnel axis) [ASSUMED, D-012 — obliqueness is load-bearing: Cam B is never head-on, breaking the coplanar flip by construction] |

@@ -15,6 +15,9 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class HandoffState:
+    # NOTE: translation is mm (repo convention); the WIRE_FORMAT pose is
+    # METRES — T8's trial composition owns the /1000 conversion before any
+    # pose reaches the perception injector or a wire line.
     T_head_stud: object   # frames.Pose, translation in mm
     v_ms: tuple           # closing velocity, head_frame, m/s
     omega_rads: tuple     # angular rate, rad/s

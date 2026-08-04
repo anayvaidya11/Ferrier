@@ -63,9 +63,12 @@ def commit_allowed(line: dict, conf_min: float,
             return False, (f"only {len(inner)} inner-ring tags decoded "
                            f"(≥{INNER_TAGS_MIN} required, H-08)")
     pose = line.get("pose")
-    if pose is not None:
-        mis = heading_misalign_deg(pose["q"])
-        if mis > sector_deg:
-            return False, (f"heading {mis:.1f}° outside the ±{sector_deg}° "
-                           "D-018 sector")
+    if pose is None:
+        # WIRE_FORMAT: absent pose means "no pose available this frame —
+        # guidance must not act on position (D-013)"; committing is acting.
+        return False, "pose absent — cannot commit without a pose (D-013)"
+    mis = heading_misalign_deg(pose["q"])
+    if mis > sector_deg:
+        return False, (f"heading {mis:.1f}° outside the ±{sector_deg}° "
+                       "D-018 sector")
     return True, "commit"

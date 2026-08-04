@@ -8,7 +8,11 @@ facets keep it hollow), plus the flat lip ring [110,125] mm at x=0 (IS8-16
 band), a throat land, and a pocket floor.
 
 Frames: the BOUNDARY (set_state / StepResult) speaks the official head_frame
-(IS §4/§6, pinned by T5): approach side +x, mouth x=0, throat at x=-180 mm.
+pinned by T5: approach side +x, mouth x=0, throat at x=-180 mm. Authority is
+IS §6's handoff arithmetic (x=+50 is "50 mm before the mouth") plus §4's
+anti-parallel engagement note; §4's head_frame row's literal "+X into the
+funnel" wording contradicts both and was corrected in IS §4 with a dated
+note (flagged inconsistency, 2026-08-04).
 The INTERNAL MuJoCo world keeps the original T4c convention (throat at
 x=+180); the two differ by a fixed 180° rotation about +Y (_FLIP), applied to
 every pose and world-frame vector crossing the boundary. Angular rate is
@@ -18,8 +22,11 @@ Committed numbers come in via T1ModelSpec (D-016 geometry, #31/#32/#35/#36).
 Everything below marked "arbitrary" is a code-level choice the docs do not
 commit (spec gaps recorded 2026-08-04): mount damping ratio, rotational
 stiffness, stud body mass/inertia, contact stiffness, facet count, pocket
-depth. Changing a committed number is a decision revision; changing an
-arbitrary constant is tuning.
+depth, and the HARD_STOP travel/rotation limits — D-027 R4 sizes the real
+stop stack against D-003-R structural load cases as a Phase 2 item; the
+±35 mm/±10° used here merely borrows the §5 capture-envelope numbers as a
+placeholder scale. Changing a committed number is a decision revision;
+changing an arbitrary constant is tuning.
 
 Units at the boundary: mm poses, m/s velocities, N / N·m wrench, head_frame
 (WIRE_FORMAT). Internally MuJoCo is metres. Free-joint angular rate is
@@ -55,8 +62,8 @@ STUD_DIAG_INERTIA = 5.0       # kg·m², stud body
 K_CONTACT_N_M = 2.0e5         # contact normal stiffness for solref
 POCKET_FLOOR_X_M = 0.2225     # pocket floor center (face at x=220 mm)
 THROAT_LAND_LEN_M = 0.040     # throat tube length behind x=180 mm
-HARD_STOP_TRANS_M = 0.035     # ±35 mm (§5 capture envelope)
-HARD_STOP_ROT_RAD = math.radians(10.0)  # ±10°
+HARD_STOP_TRANS_M = 0.035     # arbitrary placeholder scale (see docstring);
+HARD_STOP_ROT_RAD = math.radians(10.0)  # real sizing is D-027 R4, Phase 2
 
 STUD_HEAD_CENTER_STUD_M = 0.070  # exposed 90 − head radius 20 (D-016)
 

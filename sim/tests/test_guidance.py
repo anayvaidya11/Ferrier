@@ -96,6 +96,14 @@ class TestCommitPredicate:
         ok, reason = gate.commit_allowed(bad, conf_min=CONF_MIN)
         assert not ok
 
+    def test_pose_absent_cannot_commit(self):
+        # WIRE_FORMAT: absent pose = "guidance must not act on position"
+        no_pose = line()
+        del no_pose["pose"]
+        ok, reason = gate.commit_allowed(no_pose, conf_min=CONF_MIN)
+        assert not ok
+        assert "pose" in reason
+
 
 class TestHeadingSector:
     def test_nominal_antiparallel_is_zero(self):
