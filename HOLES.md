@@ -1,6 +1,8 @@
 # HOLES — Phase 0 Gate Ledger
 
-Updated 2026-08-02 (H-04/H-07 closures; D-028 reconciliation; post-assessment holes H-13..H-16). Four sanctioned doors: **DERIVED** (Door 1),
+Updated 2026-08-08 (H-17 opened during T10 — host attitude unrealized; previously
+2026-08-02: H-04/H-07 closures; D-028 reconciliation; post-assessment holes
+H-13..H-16). Four sanctioned doors: **DERIVED** (Door 1),
 **SOURCED** (Door 2), **DECIDED** (Door 3, promoted to a D-xxx), **SWEPT** (Door 4,
 declared Phase 1 parameter with range + arbitrary-labeled default). No fifth door;
 nothing below was closed by invention.
@@ -35,6 +37,7 @@ nothing below was closed by invention.
 
 | # | Hole | Status | What closes it |
 |---|---|---|---|
+| H-17 | **Host pitch/roll are swept axes (IS §9, D-024 attitude envelope, D-029 marginalization) but realized nowhere in the harness** — the sweep_point carries them, the kinematic/contact stages ignore them (recorded in `trial_logger.py`'s docstring since T8; surfaced as a hole at T10, 2026-08-08). D-032 excludes them from Tier-1/Tier-2 rather than emitting fake-flat curves; the D-029 gate's "marginalize over their full committed distributions" is currently a no-op | **OPEN** | Realize host attitude in the harness (target-frame tilt through kinematic truth, sightings, and the contact model), then add their grids/domains by recorded revision — or a recorded D-029 revision re-scoping the gate's marginalization claim |
 | H-04 | Funnel compliance architecture | **CLOSED 2026-08-02 — Door 3 (DECIDED): D-027, T1 ratified by the human** (studies/H04, header + Addendum). Stiffness/mass swept per D-026 with the A1 feasibility mask; revised R4 and the IS8-17 jam class landed with the ratification | — |
 | H-07 | Literature perception curves | **CLOSED 2026-08-02 — Door 2** (`research/data/perception_prior.md`: Olson 2011, Wang & Olson 2016, Krogius 2019 fetched and page-verified; 34 extraction rows, text/table-sourced only; a fabricated fetch summary was caught and discarded). Kallwies 2020 UNAVAILABLE (P-07; settled negative per D-031). Regions the corpus honestly cannot anchor (view-angle shape, covariance magnitudes) exited as declared sweeps in #39/#40 — Door 4 residuals, replaced by MR bench data. *2026-08-04, D-031 Stage B: Paper 5 (Adámek 2023) page-verified and added as the covariance model's FORM anchor; magnitudes stay swept/MR* | — |
 
@@ -50,8 +53,9 @@ Recorded here as holes — not silently patched — and closed through the same 
 | H-15 | PHASE1_PARAMETERS #57 omitted IS8-17 (added by D-027 but never propagated); INTERFACE_SPEC §8 row 3 said "< 1 inner tag" against the ≥2-tag commit rule | consistency repair — applies committed D-027 / D-011, no new decision | #57 revised in place; IS §8 row 3 corrected |
 | H-16 | `trial_result` had no field for §8 row 16's mandated false-capture sub-path count; #63's required-band citation pointed at the wrong §6 item | 3 DECIDED (additive schema revision) | WIRE_FORMAT `trial_result.false_capture` (optional, v1 additive); ARCHITECTURE §6.7 |
 
-**Open count: 0.** All sixteen holes and every ratification placeholder have exited
-through a sanctioned door — twelve from the original ledger, four found
+**Open count: 1** (H-17, found 2026-08-08 during T10 — a build-phase hole, not a
+Phase 0 gate condition; the gate's sixteen holes and every ratification placeholder
+exited through a sanctioned door — twelve from the original ledger, four found
 post-assessment (a passed self-assessment is evidence, not immunity).
 `PHASE1_PARAMETERS.md` reads 65/65 (post-D-028). The gate's technical condition is
-met; formal sign-off is PENDING_HUMAN P-05.
+met; formal sign-off was PENDING_HUMAN P-05 (done).

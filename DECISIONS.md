@@ -106,6 +106,39 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-032 — DOE execution semantics: committed grids, seed rule, spend metering, resume (T10, 2026-08-08)
+D-021 fixed the tier *shapes* but left the runner's semantics open; T10 closes them,
+committed here and as scenario data so "tier cell counts correct" has a referent.
+**(a) Grids are data:** `sim/scenarios/nominal.json` (IS §9.1 defaults + zero
+degradation), `tier1.json` (per-axis marginal grids; arbitrary steps labeled per axis
+where §9/§9.1 gives only a range), `tier2.json` (LHS domains, degradation axes only) —
+transcription-tested, never hardcoded (the D-029 gate_moderate.json discipline
+extended). Tier-1 grid points equal to nominal collapse into one shared nominal cell.
+**(b) Seed rule:** trial seed = top 63 bits of sha1("{sweep_root}|{tag}"), tag unique
+within the sweep. Pure, order-independent, resume-stable; replicates at the same
+sweep point get distinct seeds, so `trial_id` (engine-seed-sweephash) never collides —
+closing the silent-overwrite hazard the pre-D-032 id scheme allowed. Samplers draw
+from per-plan streams derived the same way (mutually independent, deterministic).
+**(c) Spend metering:** the ceiling is read from `sim/scenarios/spend_p02.json`
+(P-02/A-011(c)) only; cumulative spend persists in a ledger under `sim/results/`;
+the $/trial rate is a committed input (from the A-004 measurements when they exist;
+0 for local runs). Two trips, both hard stops raising for a recorded amendment:
+*projected* (plan × rate + spent would cross the ceiling — refuse to start, risk #3's
+wording) and *imminent* (the next trial would cross it — stop before dispatching).
+**(d) Resume:** per-trial granularity; the completeness oracle is
+`validator.validate_trial_file(path) == []`, never bare existence; sound because the
+record writer is atomic (serialize-all, tmp + os.replace). A valid on-disk record is
+skipped; anything else is re-run and overwritten.
+**(e) Exclusions:** host pitch/roll are in the sweep_point but realized nowhere in
+the harness — excluded from both tiers rather than emitting fake-flat curves,
+recorded as **H-17** (open); their grids land with the realization. `curve_set` is
+the swap seam, re-run under the ROADMAP protocol, not a marginal axis.
+**(f) #33 probe reading:** "success-rate delta < 1%" is absolute percentage points.
+**What would make it wrong:** H-17's realization shifting outcomes enough that
+committed Tier-1/Tier-2 datasets need re-runs (a recorded revision reporting both);
+or A-004 measuring a $/trial rate that makes the committed replicate counts cross
+the P-02 ceiling — then the counts are revised by recorded amendment, never quietly.
+
 ### D-031 — Open-access literature substitution for the two paywalled dependencies (re-scopes P-06, P-07)
 The program's evidence base had exactly two paywalled-paper dependencies, both
 parked as .edu favors in PENDING_HUMAN. Decision, executed in two stages

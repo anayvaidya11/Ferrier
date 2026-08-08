@@ -1,0 +1,34 @@
+{
+  "source": "DECISIONS.md D-021 (Tier 1: one-factor marginal grids at nominal elsewhere); D-032 (grids committed as data)",
+  "description": "Per-axis marginal grids for the Tier-1 sweep. Committed here so 'tier cell counts correct' has a referent; code reads this file and never hardcodes a grid (gate_moderate.json discipline). Cells duplicating the nominal point collapse into one shared nominal cell (D-032). Where INTERFACE_SPEC §9/§9.1 gives only a range, the grid step is arbitrary and labeled in its basis.",
+  "replicates_default": 50,
+  "grids": {
+    "outer_occlusion": {"cells": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7], "basis": "IS §9 committed: 0–70%, 10% steps"},
+    "inner_occlusion": {"cells": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], "basis": "IS §9 committed: 0–90%, 10% steps"},
+    "illuminance_lux": {"cells": [1, 2, 5, 10, 50, 100, 1000, 10000], "basis": "IS §9 committed log grid (#47)"},
+    "rain": {"cells": [0.0, 0.1, 0.2, 0.3], "basis": "arbitrary 10% steps over the committed 0–30% range (occlusion-step convention)"},
+    "dropout_p": {"cells": [0.0, 0.05, 0.1, 0.2, 0.3], "basis": "IS §9 committed set"},
+    "lens_contamination": {"cells": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5], "basis": "arbitrary 10% steps over the committed 0–50% range"},
+    "tag_knockout_mask": {"cells": [0, 1, 2, 4, 8, 16, 32, 64, 128, 256], "basis": "arbitrary Tier-1 marginal: none + each single-tag knockout; joint combinations are Tier-2 territory (IS §9: sampled over 2^9)"},
+    "attempts_per_encounter": {"cells": [1, 2, 3, 5], "basis": "IS §9.1 committed set (H-01)"},
+    "speed_outer_ms": {"cells": [0.5, 1.0, 1.5, 2.0], "basis": "arbitrary 4-point grid over the committed 0.5–2.0 range (H-02)"},
+    "speed_inner_ms": {"cells": [0.1, 0.2, 0.3], "basis": "arbitrary 3-point grid over the committed 0.1–0.3 range (H-02)"},
+    "speed_insertion_ms": {"cells": [0.02, 0.05, 0.1, 0.15], "basis": "arbitrary 4-point grid over the committed 0.02–0.15 range (H-02)"},
+    "mu_contact": {"cells": [0.1, 0.2, 0.4, 0.6, 0.8], "basis": "arbitrary 5-point grid over the committed 0.1–0.8 range (H-03)"},
+    "restitution_e": {"cells": [0.1, 0.2, 0.3, 0.4], "basis": "arbitrary 4-point grid over the committed 0.1–0.4 range (H-03)"},
+    "perception_rate_hz": {"cells": [10, 30, 60], "basis": "IS §9.1 committed set (H-06)"},
+    "perception_latency_ms": {"cells": [10, 30, 100], "basis": "IS §9.1 committed set (H-06)"},
+    "chassis_error_scale": {"cells": [0.5, 1.0, 2.0], "basis": "IS §9.1 committed set (D-019)"},
+    "conf_min_attempt": {"cells": [0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95], "basis": "arbitrary 7-point grid over the committed 0.50–0.95 range, default included (D-017 — the tradeoff curve is the deliverable)"},
+    "time_budget_min": {"cells": [5, 15, 30], "basis": "IS §9.1 committed set (D-022)"},
+    "mud_f_c": {"cells": [0.6, 0.8, 1.0], "basis": "IS §9.1 committed set (D-023)"},
+    "flip_kappa": {"cells": [0.5, 1.0, 2.0], "basis": "IS §9.1 committed set (studies/H08)"},
+    "stiffness_k_n_mm": {"cells": [1.0, 3.0, 10.0, 30.0, 70.0], "basis": "IS §9.1 committed log grid (D-026); #63 feasibility mask applies at analysis, not here (D-028: emits data, not verdicts)"},
+    "head_mass_kg": {"cells": [8.0, 15.0, 30.0], "basis": "IS §9.1 committed set (D-026)"}
+  },
+  "excluded": {
+    "host_pitch_deg": "unrealized in the harness (H-17) — a grid over a no-op axis would emit fake-flat curves; grid lands with the realization",
+    "host_roll_deg": "unrealized in the harness (H-17) — same",
+    "curve_set": "the curve-swap seam, not a marginal axis — affected axes re-run under the ROADMAP swap protocol"
+  }
+}

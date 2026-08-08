@@ -1,0 +1,14 @@
+{
+  "source": "DECISIONS.md D-021 (Tier 2: LHS, N ≥ 4,000 joint degradation space); D-032",
+  "description": "Latin-hypercube domains for the joint degradation sweep. Grid-valued axes stratify over their committed cells; range axes stratify continuously; tag knockout samples the full 2^9 joint space (its Tier-1 grid was singles only). System parameters sit at nominal.json values — D-021's joint space is the DEGRADATION space. Host pitch/roll excluded: unrealized in the harness (H-17).",
+  "n_min": 4000,
+  "domains": {
+    "outer_occlusion": {"cells": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]},
+    "inner_occlusion": {"cells": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]},
+    "illuminance_lux": {"cells": [1, 2, 5, 10, 50, 100, 1000, 10000]},
+    "rain": {"lo": 0.0, "hi": 0.3},
+    "dropout_p": {"cells": [0.0, 0.05, 0.1, 0.2, 0.3]},
+    "lens_contamination": {"lo": 0.0, "hi": 0.5},
+    "tag_knockout_mask": {"int_lo": 0, "int_hi": 511}
+  }
+}

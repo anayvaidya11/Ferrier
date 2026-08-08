@@ -1,0 +1,7 @@
+{
+  "source": "PENDING_HUMAN P-02 (ratified by the human 2026-08-02); MASTER_CONTEXT A-011(c); D-032",
+  "ceiling_usd": 100,
+  "expected_usd_lo": 20,
+  "expected_usd_hi": 60,
+  "rule": "Hard ceiling for Phase 1 cloud compute. Exceeding it requires a recorded amendment, never a quiet overrun: the runner refuses to start a sweep whose projected spend crosses the ceiling and stops before dispatching any trial that would cross it."
+}

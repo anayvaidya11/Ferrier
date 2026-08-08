@@ -1,0 +1,31 @@
+{
+  "source": "INTERFACE_SPEC §9.1 defaults column + zero degradation; D-032",
+  "description": "The committed nominal sweep point: every degradation axis at zero/undegraded, every swept system parameter at its IS §9.1 labeled default. 41000 lux is undegraded daylight, deliberately off the #47 sweep grid (the grid probes degradation; nominal is the absence of it). stiffness_k_n_mm = 10 is the D-026 log-grid midpoint — IS §9.1 lists no default for k (derived envelope; Phase 1 outputs the required-stiffness band) — arbitrary, labeled.",
+  "sweep_point": {
+    "outer_occlusion": 0.0,
+    "inner_occlusion": 0.0,
+    "illuminance_lux": 41000,
+    "rain": 0.0,
+    "dropout_p": 0.0,
+    "lens_contamination": 0.0,
+    "host_pitch_deg": 0.0,
+    "host_roll_deg": 0.0,
+    "tag_knockout_mask": 0,
+    "attempts_per_encounter": 3,
+    "speed_outer_ms": 1.0,
+    "speed_inner_ms": 0.2,
+    "speed_insertion_ms": 0.05,
+    "mu_contact": 0.4,
+    "restitution_e": 0.2,
+    "perception_rate_hz": 30,
+    "perception_latency_ms": 30,
+    "chassis_error_scale": 1.0,
+    "conf_min_attempt": 0.85,
+    "time_budget_min": 15,
+    "mud_f_c": 0.8,
+    "flip_kappa": 1.0,
+    "stiffness_k_n_mm": 10.0,
+    "head_mass_kg": 15.0,
+    "curve_set": "prior_v1"
+  }
+}
