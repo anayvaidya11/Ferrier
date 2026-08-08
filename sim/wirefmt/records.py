@@ -7,6 +7,7 @@ Nulls are rejected outright: a field that could not be determined is omitted,
 never emitted as zero, null, or a default (omitted-not-zeroed rule).
 """
 import json
+import os
 
 # Field order as documented in WIRE_FORMAT.md, per line type.
 CANONICAL_ORDER = {
@@ -57,10 +58,17 @@ def dumps_line(obj):
 
 
 def write_ndjson(path, lines):
-    with open(path, "w", encoding="utf-8", newline="\n") as f:
-        for obj in lines:
-            f.write(dumps_line(obj))
-            f.write("\n")
+    """Atomic: serialize everything first (an EncodingError touches nothing),
+    then write a tmp sibling and os.replace it in — a kill mid-write never
+    leaves a truncated record at the destination, which is what lets a
+    resuming sweep treat an on-disk file as evidence."""
+    payload = "".join(dumps_line(obj) + "\n" for obj in lines)
+    tmp = f"{path}.tmp"
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
+        f.write(payload)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, path)
 
 
 def read_ndjson(path):
