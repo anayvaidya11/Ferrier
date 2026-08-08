@@ -16,6 +16,9 @@ timeout, evaluating per step:
   lip band [110, 125] mm while the head center is still before the capture
   plane (x > 0) → lip_strike flagged with the observed radii; scored as its
   own outcome class by the T9 classifier, never folded into capture or miss.
+- IS8-10 input (#57): full_stroke ⟺ the at-depth half of the D-020 predicate
+  ever held — §8 row 10's "full stroke, no confirm" is full_stroke without
+  latched; the confirm half stays with the latch logic above.
 
 Arbitrary code-level choices (spec gaps recorded 2026-08-04, chassis_error
 precedent):
@@ -62,6 +65,7 @@ class ContactOutcome:
     jam_time_s: float | None
     lip_strike: bool
     lip_radii_mm: tuple
+    full_stroke: bool  # at-depth ever held: IS8-10's "full stroke" half (T9)
     timed_out: bool
     abort_reason: str | None
     t_end_s: float
@@ -81,6 +85,7 @@ def run_contact(eng, handoff, jam: JamThresholds, max_time_s: float,
     hold_s = 0.0
     jam_timer_s = 0.0
     lip_radii = []
+    full_stroke = False
     r = eng.state()
     n_steps = int(max_time_s / dt)
 
@@ -106,6 +111,7 @@ def run_contact(eng, handoff, jam: JamThresholds, max_time_s: float,
         # D-020 latch predicate, evaluated against the displaced throat axis
         radial = math.hypot(c[1] - base[1], c[2] - base[2])
         at_depth = (c[0] - base[0]) <= ENGAGEMENT_DEPTH_X_MM + ENGAGE_BAND_MM
+        full_stroke = full_stroke or at_depth
         slow = math.hypot(*r.stud_v_ms) <= latch["speed_max_ms"]
         if radial <= latch["radial_mm"] and at_depth and slow:
             hold_s += dt
@@ -114,8 +120,8 @@ def run_contact(eng, handoff, jam: JamThresholds, max_time_s: float,
                     latched=True, latch_time_s=r.t_sim_s - t0,
                     jam=False, jam_time_s=None,
                     lip_strike=bool(lip_radii),
-                    lip_radii_mm=tuple(lip_radii), timed_out=False,
-                    abort_reason=None, t_end_s=r.t_sim_s)
+                    lip_radii_mm=tuple(lip_radii), full_stroke=full_stroke,
+                    timed_out=False, abort_reason=None, t_end_s=r.t_sim_s)
         else:
             hold_s = 0.0
 
@@ -129,12 +135,14 @@ def run_contact(eng, handoff, jam: JamThresholds, max_time_s: float,
                     latched=False, latch_time_s=None,
                     jam=True, jam_time_s=r.t_sim_s - t0,
                     lip_strike=bool(lip_radii),
-                    lip_radii_mm=tuple(lip_radii), timed_out=False,
-                    abort_reason="jam_detected", t_end_s=r.t_sim_s)
+                    lip_radii_mm=tuple(lip_radii), full_stroke=full_stroke,
+                    timed_out=False, abort_reason="jam_detected",
+                    t_end_s=r.t_sim_s)
         else:
             jam_timer_s = 0.0
 
     return ContactOutcome(
         latched=False, latch_time_s=None, jam=False, jam_time_s=None,
         lip_strike=bool(lip_radii), lip_radii_mm=tuple(lip_radii),
-        timed_out=True, abort_reason=None, t_end_s=r.t_sim_s)
+        full_stroke=full_stroke, timed_out=True, abort_reason=None,
+        t_end_s=r.t_sim_s)

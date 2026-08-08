@@ -105,6 +105,25 @@ class TestSymmetricWedgeJam:
         assert out.jam_time_s is not None
 
 
+class TestFullStroke:
+    # full_stroke = the at-depth predicate ever held — the "full stroke"
+    # half of IS8-10's "full stroke, no confirm" signature (T9 input)
+
+    def test_latched_run_reports_full_stroke(self):
+        eng = make_engine()
+        out = runner.run_contact(eng, handoff_at((50.0, 0.0, 0.0)),
+                                 jam=JAM_MID, max_time_s=8.0)
+        assert out.latched
+        assert out.full_stroke
+
+    def test_short_timeout_never_reaches_depth(self):
+        eng = make_engine()
+        out = runner.run_contact(eng, handoff_at((50.0, 0.0, 0.0)),
+                                 jam=JAM_MID, max_time_s=0.05)
+        assert not out.latched
+        assert not out.full_stroke
+
+
 class TestLipStrike:
     def test_lip_band_contact_flagged_before_crossing(self):
         eng = make_engine()
