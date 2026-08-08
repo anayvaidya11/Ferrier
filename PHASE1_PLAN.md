@@ -136,7 +136,9 @@ lands and cloud credits arrive (~1 week out). No committed decision fixes a prov
 date, and A-004's own definition of a representative workload (§3) requires T4c, T6, T7,
 and T8 to exist first — so the local build queue (T4c MuJoCo half → T5 → T6 → T7 → T8)
 proceeds in the interim on the M4. A-004 content unchanged; this is a sequencing note,
-not an amendment.*
+not an amendment. 2026-08-08 update: cloud credits are abandoned (human decision —
+the application process is not worth a $20–60 expected spend); provisioning waits
+only on T8 (done) and pays retail under the P-02 ceiling. Still a sequencing note.*
 
 | Week | Work | Must land |
 |---|---|---|
