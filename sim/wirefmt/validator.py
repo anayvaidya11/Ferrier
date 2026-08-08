@@ -124,7 +124,7 @@ def _validate_target_state(obj, errors):
             errors.append("attempt.n must be an int >= 1")
 
 
-OUTCOMES = {"success", "clean_miss"} | {f"IS8-{r}" for r in range(1, 18)}
+OUTCOMES = {"success", "clean_miss"} | {f"IS8-{r}" for r in range(1, 19)}
 
 
 def _validate_trial_header(obj, errors):

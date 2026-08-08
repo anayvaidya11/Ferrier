@@ -1,6 +1,6 @@
 """T9 — table-driven trace→outcome mapping under the committed precedence.
 
-Contract (PHASE1_PLAN §2): success | IS8-1..17 | clean_miss (D-030),
+Contract (PHASE1_PLAN §2): success | IS8-1..18 | clean_miss (D-030, D-033),
 documented precedence order, one row per trial; an unmatchable trace raises
 UnclassifiedFailure — the recorded-amendment path, never a guess.
 
@@ -11,12 +11,23 @@ outcome unique per trial (FAILURE_TAXONOMY: exactly one row). IS8-15
 deliberately absent from the table; it stays in the wire enum for schema
 stability.
 
+Never-a-guess is enforced up front as well as by fall-through: classify()
+refuses any escalation reason or abort reason outside the sets the table
+was written against, even when the attempt history would otherwise fit a
+shape row — a future GuidanceMachine reason lands on the amendment path,
+not on a plausible row.
+
 Double-entry transcription:
   D-022 / D-020: success ⟺ any latch within the attempt budget; t ≤ T is
       structural (the trial loop never runs past budget).
   D-030: clean_miss is the residual — (a) holds because the success row
       failed, (d) holds by table position; (b) and (c) are checked here.
+      Clause (c)'s two arms (crossed at r > 160 mm; ended on budget before
+      the plane) both leave handoff_reached False, which is the check.
       The refusal path is never clean_miss (it classifies IS8-1).
+  D-033: IS8-18 ⟺ a contact-stage timeout (AttemptEnd.timed_out) — the
+      attempt crossed the plane and the budget, not the mechanism, ended
+      the insertion.
   H-16 / IS §8 row 16: false_capture = a striking leg's own latch, emitted
       only with IS8-16.
 
@@ -32,10 +43,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
 
-# WIRE_FORMAT abort_reason values with a §8 row of their own; "command" and
-# the never-yet-produced reasons have none, so traces carrying them fall
-# through to UnclassifiedFailure by design.
-_KINEMATIC_MISSES = ("r_gt_annulus", "no_crossing")
+# The reasons the table was written against. Anything else raises — the
+# never-a-guess rule made mechanical (a new machine reason or abort enum
+# value must extend the taxonomy before it gets an outcome).
+_KNOWN_ESCALATIONS = (None, "attempt_budget_exhausted",
+                      "ambiguity_persistent", "inner_ring_absent",
+                      "low_confidence")
+_KNOWN_ABORTS = (None, "low_confidence", "ambiguity_persistent",
+                 "inner_ring_absent", "jam_detected")
 
 
 @dataclass(frozen=True)
@@ -53,16 +68,21 @@ class AttemptEnd:
     lip_strike: bool = False         # lip-band contact pre-capture-plane (#12)
     latched: bool = False            # D-020 predicate confirmed (#54)
     jam: bool = False                # #62 criterion fired
-    full_stroke: bool = False        # at-depth ever held (IS8-10's stroke half)
-    timed_out: bool = False          # contact budget expired
+    full_stroke: bool = False        # D-020 position (depth ∧ radial) ever held
+    timed_out: bool = False          # contact budget expired (IS8-18, D-033)
 
 
 @dataclass(frozen=True)
 class Trace:
-    """What the classifier consumes: one per trial."""
+    """What the classifier consumes: one per trial.
+
+    outer_tag_seen has no default on purpose: defaulting it to the nominal
+    value would let a constructor that forgets the field silently make
+    IS8-2 unreachable — every caller decides explicitly.
+    """
+    outer_tag_seen: bool             # any ID-0 detection (IS8-2 vs IS8-1)
     attempts: tuple = ()             # tuple[AttemptEnd, ...]
     escalation_reason: str | None = None
-    outer_tag_seen: bool = True      # any ID-0 detection (IS8-2 vs IS8-1)
     # no Phase 1 producer:
     stud_wrench_inconsistent: bool = False    # IS8-6
     no_contact_at_expected_depth: bool = False  # IS8-7
@@ -87,21 +107,23 @@ def _last_abort(tr: Trace) -> str | None:
 
 
 def _low_confidence_shape(tr: Trace) -> bool:
+    # the two producible IS8-1 signals: terminal low-confidence escalation
+    # or a gate refusal (refusal attempts also carry abort_reason
+    # "low_confidence", so a last-abort disjunct would be dead code)
     return (tr.escalation_reason == "low_confidence"
-            or any(a.refused for a in tr.attempts)
-            or _last_abort(tr) == "low_confidence")
+            or any(a.refused for a in tr.attempts))
 
 
 def _clean_miss(tr: Trace) -> bool:
-    # (a) holds: the success row failed. (d) holds: rows 1-17 failed.
+    # (a) holds: the success row failed. (d) holds: rows 1-18 failed.
     if tr.escalation_reason not in (None, "attempt_budget_exhausted"):
         return False
     if any(a.contact or a.refused or a.abort_reason is not None
            for a in tr.attempts):
         return False  # stream was not nominal / target was touched
-    # (c): every attempt missed kinematically or was truncated mid-approach
-    return all(a.miss_reason in _KINEMATIC_MISSES or not a.handoff_reached
-               for a in tr.attempts)
+    # (c): both arms — crossed at r > 160 mm (miss_reason), or ended on
+    # the budget before the plane — leave handoff_reached False
+    return all(not a.handoff_reached for a in tr.attempts)
 
 
 @dataclass(frozen=True)
@@ -143,8 +165,14 @@ TABLE: tuple[Row, ...] = (
         "every presence-of-evidence row [no Phase 1 producer]",
         lambda tr: tr.no_contact_at_expected_depth),
     Row("IS8-10", "full stroke, no confirm — requires the runner's "
-        "full_stroke observable, not mere contact",
+        "full_stroke observable (D-020 position: depth AND radial), not "
+        "mere contact",
         lambda tr: any(a.full_stroke and not a.latched for a in tr.attempts)),
+    Row("IS8-18", "insertion incomplete at budget (D-033): a contact-stage "
+        "timeout — the budget, not the mechanism, ended it; after IS8-10 "
+        "(a completed stroke is more specific), before the perception "
+        "rows (contact evidence outranks stream-shape inference)",
+        lambda tr: any(a.timed_out and not a.latched for a in tr.attempts)),
     Row("IS8-2", "zero ID-0 across the approach with the low-confidence "
         "shape; total outer loss outranks partial degradation",
         lambda tr: not tr.outer_tag_seen and _low_confidence_shape(tr)),
@@ -155,18 +183,18 @@ TABLE: tuple[Row, ...] = (
         "the statistics rows 5/3/1 read [no Phase 1 producer]",
         lambda tr: tr.wrong_id_persistent),
     Row("IS8-5", "ambiguity: terminal escalation, or exhaustion whose "
-        "proximate abort was ambiguity_persistent",
+        "proximate abort was ambiguity_persistent (a final-attempt abort "
+        "rides Decision.underlying_abort into the trace)",
         lambda tr: (tr.escalation_reason == "ambiguity_persistent"
                     or _last_abort(tr) == "ambiguity_persistent")),
     Row("IS8-3", "exhaustion whose proximate abort was inner_ring_absent "
         "(the commit rule never satisfied)",
         lambda tr: _last_abort(tr) == "inner_ring_absent"),
-    Row("IS8-1", "outer degradation: low_confidence escalation, any gate "
-        "refusal, or last abort low-confidence; D-030's refusal path lands "
-        "here, never clean_miss",
+    Row("IS8-1", "outer degradation: low_confidence escalation or any gate "
+        "refusal; D-030's refusal path lands here, never clean_miss",
         _low_confidence_shape),
-    Row("clean_miss", "D-030 residual: no contact ever, every attempt a "
-        "kinematic miss or budget-truncated with a nominal stream",
+    Row("clean_miss", "D-030 residual: no contact ever, every attempt "
+        "ended short of the capture plane with a nominal stream",
         _clean_miss),
 )
 
@@ -178,6 +206,17 @@ def classify(trace: Trace) -> tuple[str, bool | None]:
     leg itself latched — the deflected-into-the-mouth sub-path §8 row 16
     counts separately.
     """
+    if trace.escalation_reason not in _KNOWN_ESCALATIONS:
+        raise UnclassifiedFailure(
+            f"escalation reason {trace.escalation_reason!r} is outside the "
+            "committed table — extend §8 by recorded amendment, never a "
+            f"guess (D-030): {trace!r}")
+    for a in trace.attempts:
+        if a.abort_reason not in _KNOWN_ABORTS:
+            raise UnclassifiedFailure(
+                f"abort reason {a.abort_reason!r} is outside the committed "
+                "table — extend §8 by recorded amendment, never a guess "
+                f"(D-030): {trace!r}")
     for row in TABLE:
         if row.match(trace):
             if row.outcome == "IS8-16":

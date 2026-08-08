@@ -38,8 +38,12 @@ def attempt(**kw):
     return outcomes.AttemptEnd(**kw)
 
 
-def trace(*attempts_, **kw):
-    return outcomes.Trace(attempts=tuple(attempts_), **kw)
+def trace(*attempts_, outer_tag_seen=True, **kw):
+    # outer_tag_seen is a required Trace field (no silent nominal default
+    # in production code — the review's IS8-2-reachability hazard); the
+    # test helper supplies the nominal explicitly
+    return outcomes.Trace(outer_tag_seen=outer_tag_seen,
+                          attempts=tuple(attempts_), **kw)
 
 
 def row_index(outcome):
@@ -73,6 +77,9 @@ CANONICAL = {
                    no_contact_at_expected_depth=True),
     "IS8-10": trace(attempt(handoff_reached=True, contact=True,
                             full_stroke=True, timed_out=True),
+                    escalation_reason="attempt_budget_exhausted"),
+    "IS8-18": trace(attempt(handoff_reached=True, contact=True,
+                            timed_out=True),
                     escalation_reason="attempt_budget_exhausted"),
     "IS8-2": trace(attempt(refused=True, abort_reason="low_confidence"),
                    escalation_reason="low_confidence", outer_tag_seen=False),
@@ -108,6 +115,11 @@ class TestOneTracePerClass:
         # budget expired before any attempt ran: nominal stream, target
         # never touched — the D-030 residual
         assert outcomes.classify(trace()) == ("clean_miss", None)
+
+    def test_canonical_covers_exactly_the_table(self):
+        # the T9 gate: one constructed trace per classifiable class —
+        # pinned so a table change cannot silently shed coverage
+        assert set(CANONICAL) == {r.outcome for r in outcomes.TABLE}
 
 
 # Risk-5 mandate: a test per overlapping pair. Each trace satisfies both
@@ -165,6 +177,25 @@ PAIRS = [
     ("IS8-10", "IS8-1",
      trace(attempt(handoff_reached=True, contact=True, full_stroke=True,
                    timed_out=True),
+           attempt(refused=True, abort_reason="low_confidence"),
+           escalation_reason="attempt_budget_exhausted")),
+    ("IS8-10", "IS8-18",  # a completed stroke is the more specific signature
+     trace(attempt(handoff_reached=True, contact=True, full_stroke=True,
+                   timed_out=True),
+           escalation_reason="attempt_budget_exhausted")),
+    ("IS8-16", "IS8-18",
+     trace(attempt(handoff_reached=True, contact=True, lip_strike=True,
+                   timed_out=True))),
+    ("success", "IS8-18",  # timeout then recovered latch is a success
+     trace(attempt(handoff_reached=True, contact=True, timed_out=True),
+           attempt(handoff_reached=True, contact=True, full_stroke=True,
+                   latched=True))),
+    ("IS8-17", "IS8-18",
+     trace(attempt(handoff_reached=True, contact=True, jam=True),
+           attempt(handoff_reached=True, contact=True, timed_out=True),
+           escalation_reason="attempt_budget_exhausted")),
+    ("IS8-18", "IS8-1",  # contact evidence outranks stream-shape inference
+     trace(attempt(handoff_reached=True, contact=True, timed_out=True),
            attempt(refused=True, abort_reason="low_confidence"),
            escalation_reason="attempt_budget_exhausted")),
     ("IS8-2", "IS8-1",  # total outer loss outranks partial degradation
@@ -254,25 +285,31 @@ class TestIS815Excluded:
 
 
 class TestUnclassifiedRaises:
-    def test_contact_timeout_without_full_stroke_raises(self):
-        # the interim map guessed IS8-10 here; D-030 says never guess —
-        # contact without full stroke matches no signature
-        with pytest.raises(outcomes.UnclassifiedFailure):
-            outcomes.classify(
-                trace(attempt(handoff_reached=True, contact=True,
-                              timed_out=True),
-                      escalation_reason="attempt_budget_exhausted"))
-
     def test_unknown_escalation_reason_raises(self):
         with pytest.raises(outcomes.UnclassifiedFailure):
             outcomes.classify(trace(attempt(),
                                     escalation_reason="not_a_reason"))
+
+    def test_unknown_escalation_raises_even_when_a_shape_row_matches(self):
+        # never-a-guess: an unrecognized reason must reach the amendment
+        # path even if the attempt history happens to fit IS8-1/IS8-5
+        with pytest.raises(outcomes.UnclassifiedFailure):
+            outcomes.classify(
+                trace(attempt(refused=True, abort_reason="low_confidence"),
+                      escalation_reason="future_reason"))
 
     def test_command_abort_raises(self):
         # abort_reason "command" names no §8 row
         with pytest.raises(outcomes.UnclassifiedFailure):
             outcomes.classify(
                 trace(attempt(abort_reason="command"),
+                      escalation_reason="attempt_budget_exhausted"))
+
+    def test_unknown_abort_raises_even_with_classifiable_history(self):
+        with pytest.raises(outcomes.UnclassifiedFailure):
+            outcomes.classify(
+                trace(attempt(abort_reason="ambiguity_persistent"),
+                      attempt(abort_reason="command"),
                       escalation_reason="attempt_budget_exhausted"))
 
     def test_raise_carries_the_trace_as_amendment_evidence(self):
@@ -285,7 +322,7 @@ class TestUnclassifiedRaises:
 class TestTableShape:
     def test_one_row_per_outcome(self):
         names = [r.outcome for r in outcomes.TABLE]
-        assert len(names) == len(set(names)) == 18
+        assert len(names) == len(set(names)) == 19
 
     def test_clean_miss_is_the_residual_row(self):
         assert outcomes.TABLE[-1].outcome == "clean_miss"
@@ -296,10 +333,14 @@ class TestTableShape:
 
 class TestDocTranscription:
     def section(self):
+        # bounded at the next H2 so later sections can never leak into
+        # (or satisfy) the transcription assertions
         text = TAXONOMY_MD.read_text()
         m = re.search(r"^## Classifier precedence.*$", text, re.M)
         assert m, "FAILURE_TAXONOMY.md lacks the precedence section"
-        return text[m.start():]
+        nxt = re.search(r"^## ", text[m.end():], re.M)
+        return text[m.start(): m.end() + nxt.start()] if nxt \
+            else text[m.start():]
 
     def test_doc_order_equals_table_order(self):
         listed = re.findall(

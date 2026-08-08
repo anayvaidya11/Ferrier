@@ -106,6 +106,32 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-033 — IS8-18: insertion incomplete at encounter budget (extends §8; T9 review, 2026-08-08)
+The T9 code review confirmed two trace shapes today's sim produces that no §8 row
+names: a contact-stage timeout with contact but no full stroke (shallow stall below
+the #62 jam thresholds — static stall force ~30 N against F_ax_jam = 100 N mid-grid),
+and a budget-truncated insertion window (handoff lands with seconds of budget left;
+the contact stage gets the sliver and times out). The classifier's contract raises
+`UnclassifiedFailure` on both — correct discipline, but the raise fires inside
+`run_trial`, so a T10 sweep would crash mid-batch on a physically ordinary outcome
+and lose the trial record. FAILURE_TAXONOMY's own rule names the fix: *unclassifiable
+failures extend §8 by recorded amendment first*. This is that amendment: **§8 row 18,
+"insertion incomplete at encounter budget"** — the attempt crossed the capture plane
+and the insertion window ended on the time/attempt budget with no latch confirm and
+no other §8 signature. Never folded into IS8-10 (a latch-mechanism signature, not a
+budget artifact; row 10 now also requires the D-020 positional predicate — depth AND
+radial — so out-of-funnel trajectories cannot masquerade as full strokes) and never
+clean_miss (the plane was crossed; D-030 (b)/(c)). Wire enum, schema, #57, taxonomy,
+precedence order (position 12, after IS8-10, before the perception rows), and the
+classifier table extend together; `AttemptEnd.timed_out` is the detection signature.
+**Consequence:** if IS8-18 dominates a sweep, the finding indicts the encounter time
+budget T (#55, arbitrary and unsourced) and the insertion speed class (H-02), not the
+mechanism — the honest dial is mission-exposure sourcing. The #62 recalibration hook
+(sub-threshold stalls reading as IS8-18 instead of IS8-17) is the recorded revision
+path if week-one force scales show the jam thresholds miss real stalls.
+**What would make it wrong:** #62 recalibration reclassifying most IS8-18 mass as
+IS8-17 — then the row shrinks to true budget truncations, reported as the revision.
+
 ### D-032 — DOE execution semantics: committed grids, seed rule, spend metering, resume (T10, 2026-08-08)
 D-021 fixed the tier *shapes* but left the runner's semantics open; T10 closes them,
 committed here and as scenario data so "tier cell counts correct" has a referent.

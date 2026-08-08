@@ -317,3 +317,42 @@ class TestRetryGeometry:
         off = machine.contact_offset_mm(cps)
         assert off[0] == pytest.approx(22.5)  # (30*30 + 0*10) / 40
         assert off[1] == pytest.approx(2.5)   # (0*30 + 10*10) / 40
+
+
+class TestUnderlyingAbort:
+    # T9 review fix: _abort_retry on the final allowed attempt escalates
+    # attempt_budget_exhausted, but the proximate perception abort must
+    # survive on Decision.underlying_abort — otherwise the classifier
+    # never sees the reason and misfiles the trial (clean_miss or a
+    # stale row instead of IS8-5/IS8-3)
+
+    def _flagged(self):
+        return line(tags=[{"id": 1, "reproj_err": 0.4,
+                           "ambiguity_flag": True, "ambiguity_ratio": 1.0},
+                          {"id": 2, "reproj_err": 0.5,
+                           "ambiguity_flag": False,
+                           "ambiguity_ratio": 1.0}])
+
+    def test_final_attempt_abort_reason_rides_the_escalation(self):
+        m = make_machine(attempts_max=1)
+        d = None
+        for _ in range(machine.AMBIGUITY_PERSIST_FRAMES):
+            d = m.observe(self._flagged(), range_mm=150.0, t_s=5.0)
+        assert d.action == "escalate"
+        assert d.abort_reason == "attempt_budget_exhausted"
+        assert d.underlying_abort == "ambiguity_persistent"
+
+    def test_time_budget_escalation_has_no_underlying_abort(self):
+        m = make_machine()
+        d = m.observe(line(), range_mm=400.0, t_s=TIME_BUDGET_S + 1.0)
+        assert d.action == "escalate"
+        assert d.underlying_abort is None
+
+    def test_non_final_abort_retry_is_unchanged(self):
+        m = make_machine(attempts_max=3)
+        d = None
+        for _ in range(machine.AMBIGUITY_PERSIST_FRAMES):
+            d = m.observe(self._flagged(), range_mm=150.0, t_s=5.0)
+        assert d.action == "abort_retry"
+        assert d.abort_reason == "ambiguity_persistent"
+        assert d.underlying_abort is None

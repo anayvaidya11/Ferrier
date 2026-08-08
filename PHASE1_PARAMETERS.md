@@ -101,7 +101,7 @@ output is success as a function of detection rate (D-014).**
 | 54 | Latch predicate | 3 mm radial @ engagement depth, ≤0.1 m/s, 100 ms | D-020 |
 | 55 | Encounter time budget T | {5, 15, 30} min, default 15 (arbitrary) | D-022 |
 | 56 | Success definition | D-020 within attempts ∧ t ≤ T; first/multi-attempt reported separately | D-022, D-005 |
-| 57 | Outcome classes | success \| IS8-1…IS8-17 \| clean_miss (predicate D-030) — revised 2026-08-02 (H-15): row 17 was omitted when D-027 added it | IS §8 (17 rows); FAILURE_TAXONOMY.md; D-030 |
+| 57 | Outcome classes | success \| IS8-1…IS8-18 \| clean_miss (predicate D-030) — revised 2026-08-02 (H-15): row 17 was omitted when D-027 added it; revised 2026-08-08 (D-033): row 18 added — budget-truncated insertion was producible but had no row | IS §8 (18 rows); FAILURE_TAXONOMY.md; D-030; D-033 |
 | 58 | Trial record schema | header/state/result per WIRE_FORMAT | WIRE_FORMAT |
 | 59 | sim_truth logging rate | every physics step post-handoff; every kinematic step pre-handoff | WIRE_FORMAT |
 | 60 | Seed policy | single RNG root per trial in `trial_header`; all streams derive | WIRE_FORMAT |

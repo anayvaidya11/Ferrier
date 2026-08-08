@@ -168,10 +168,10 @@ _ENTRIES = [
           "reported separately",
           None, "", "D-022, D-005", "decided"),
     Param(57, "outcome_classes",
-          ("success",) + tuple(f"IS8-{r}" for r in range(1, 18))
+          ("success",) + tuple(f"IS8-{r}" for r in range(1, 19))
           + ("clean_miss",),
-          None, "", "IS §8 (17 rows); FAILURE_TAXONOMY.md; D-030",
-          "decided (revised 2026-08-02, H-15)"),
+          None, "", "IS §8 (18 rows); FAILURE_TAXONOMY.md; D-030; D-033",
+          "decided (revised 2026-08-02 H-15; 2026-08-08 D-033)"),
     Param(58, "trial_record_schema", "header/state/result per WIRE_FORMAT",
           None, "", "WIRE_FORMAT", "decided"),
     Param(59, "sim_truth_logging_rate",

@@ -113,7 +113,7 @@ def test_valid_outcomes_accepted(outcome):
     assert errs(RESULT, {"outcome": outcome}) == []
 
 
-@pytest.mark.parametrize("outcome", ["IS8-0", "IS8-18", "latched", ""])
+@pytest.mark.parametrize("outcome", ["IS8-0", "IS8-19", "latched", ""])
 def test_invalid_outcomes_rejected(outcome):
     assert any("outcome" in e for e in errs(RESULT, {"outcome": outcome}))
 

@@ -169,7 +169,6 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
     attempt = 1
     start_mm, aim_mm = START_MM, (0.0, 0.0, 0.0)
     t_clock = 0.0
-    handoff_reached_ever = False
     attempt_ends = []       # one classify.AttemptEnd per attempt started
     outer_seen = False      # any ID-0 detection ever (IS8-2 vs IS8-1)
     escalation_reason = None
@@ -244,11 +243,11 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
 
         if decision is not None and decision.action == "escalate":
             escalation_reason = decision.abort_reason
-            # "attempt_budget_exhausted" is a budget truncation, not a
-            # perception abort on this attempt (machine reuses the enum
-            # value for both budgets — enum gap noted in machine.py)
+            # a budget escalation is a truncation, not a perception abort —
+            # except when the machine converted the final attempt's real
+            # abort into it, in which case the reason rides underlying_abort
             attempt_ends.append(AttemptEnd(
-                abort_reason=(None
+                abort_reason=(decision.underlying_abort
                               if escalation_reason == "attempt_budget_exhausted"
                               else escalation_reason)))
             break
@@ -272,7 +271,6 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
             start_mm, aim_mm = START_MM, (0.0, 0.0, 0.0)
             continue
 
-        handoff_reached_ever = True
         handoff = kin.handoff
         if commit_line is None:     # no frame allowed commit by onset
             attempt_ends.append(AttemptEnd(
@@ -336,6 +334,6 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
                first_attempt_success=(outcome == "success"
                                       and attempts_used == 1),
                attempts_used=attempts_used, t_total=float(t_clock),
-               handoff_reached=handoff_reached_ever,
+               handoff_reached=any(a.handoff_reached for a in attempt_ends),
                false_capture=false_capture)
     return log.write()

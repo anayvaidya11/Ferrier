@@ -123,6 +123,17 @@ class TestFullStroke:
         assert not out.latched
         assert not out.full_stroke
 
+    def test_off_axis_depth_crossing_is_not_a_full_stroke(self):
+        # T9 review fix: an x-only predicate counted any crossing of the
+        # depth plane, even outside the funnel body — full stroke is the
+        # D-020 position (depth AND radial), so a laterally-deflected
+        # trajectory sailing past x = -195 mm at 200 mm radius is not one
+        eng = make_engine()
+        out = runner.run_contact(eng, handoff_at((50.0, 200.0, 0.0)),
+                                 jam=JAM_MID, max_time_s=1.5)
+        assert not out.latched
+        assert not out.full_stroke
+
 
 class TestLipStrike:
     def test_lip_band_contact_flagged_before_crossing(self):

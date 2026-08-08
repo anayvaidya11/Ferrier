@@ -33,11 +33,9 @@ CHEAP = {
     "curve_set": "prior_v1",
 }
 # NOTE on the budget values: 0.05 min ends as a fast clean_miss before
-# handoff; 0.2 min latches. In between (≈0.1) the budget truncates the
-# insertion itself — contact, timeout, no full stroke — which no §8
-# signature names, so classify() raises UnclassifiedFailure by design
-# (the D-030 amendment path; a committed-cell sweep can hit the same
-# tail when a retry reaches handoff seconds before the budget).
+# handoff; 0.2 min latches; in between (≈0.1) the budget truncates the
+# insertion itself — originally an UnclassifiedFailure, now IS8-18 per
+# D-033 (the recorded amendment this exact shape forced).
 
 N = 50
 

@@ -95,7 +95,7 @@ EXPECTED = {
     55: ((5, 15, 30), 15, "min", "D-022"),
     56: ("D-020 latch within attempt budget AND t <= T; first/multi-attempt "
          "reported separately", None, "", "D-022"),
-    57: (("success",) + tuple(f"IS8-{r}" for r in range(1, 18))
+    57: (("success",) + tuple(f"IS8-{r}" for r in range(1, 19))
          + ("clean_miss",), None, "", "D-030"),
     58: ("header/state/result per WIRE_FORMAT", None, "", "WIRE_FORMAT"),
     59: ("every physics step post-handoff; every kinematic step pre-handoff",

@@ -50,6 +50,10 @@ class Decision:
     stage: str
     abort_reason: str = None
     escalation: dict = None
+    # When _abort_retry converts the final attempt's perception abort into
+    # the attempt_budget_exhausted escalation, the real reason rides here —
+    # off-wire, for the T9 classifier's trace (review fix, 2026-08-08).
+    underlying_abort: str = None
 
 
 @dataclass(frozen=True)
@@ -97,15 +101,18 @@ class GuidanceMachine:
         self._ring_streak = 0
         self._hold_since = None
 
-    def _escalate(self, reason: str) -> Decision:
+    def _escalate(self, reason: str, underlying: str = None) -> Decision:
         self.stage = "escalate"
         return Decision(action="escalate", stage=self.stage,
-                        abort_reason=reason, escalation=dict(_ESCALATION))
+                        abort_reason=reason, escalation=dict(_ESCALATION),
+                        underlying_abort=underlying)
 
     def _abort_retry(self, reason: str) -> Decision:
         self.attempt_n += 1
         if self.attempt_n > self.attempts_max:
-            return self._escalate("attempt_budget_exhausted")
+            # the budget escalation must not destroy the proximate abort
+            return self._escalate("attempt_budget_exhausted",
+                                  underlying=reason)
         self.stage = "abort"
         return Decision(action="abort_retry", stage=self.stage,
                         abort_reason=reason)

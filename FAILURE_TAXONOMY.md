@@ -27,6 +27,7 @@ tells a cofounder what to fix is worth as much as the success number.
 | 15 | Comms loss mid-attempt | Link monitor only — wire stream unaffected | Common in DDIL | n/a — **not a failure** (REQ-005) | None; it is the operating condition |
 | 16 | Lip strike | Contact wrench in lip band pre-capture-plane | Occasional | Yes — offset retry (D-005's designed case) | Mouth diameter / wall angle rebalance; **false-capture sub-path counted separately** |
 | 17 | Jam at the throat | `sim_truth.contact_wrench`: axial > F_ax_jam, lateral < F_lat_jam, no latch confirm within t_jam; `abort_reason: jam_detected` | Occasional (a-priori guess — this class exists precisely because it was invisible) | Yes — back-out is the designed unjam; repeated jams exhaust the attempt budget | **The D-027 escalation observable: if IS8-17 dominates, promote T5's RCC geometry.** Note T4a deflection sensing is blind to this failure (symmetric jam ⇒ near-zero net deflection) — the fallbacks are not interchangeable |
+| 18 | Insertion incomplete at budget | Contact-stage timeout: attempt crossed the capture plane, insertion window ended on the time/attempt budget, no latch confirm, no other §8 signature (D-033) | Occasional (a-priori guess; concentrates where the budget truncates late handoffs) | Yes — retry while budget remains; the budget itself is the constraint | Encounter time budget T (#55) and insertion speed class (H-02) are the dials; if it dominates, the mission-exposure number needs sourcing, not the mechanism |
 
 **Reading the table the way a cofounder would:** rows 3, 9, 10, 16 are the mechanical
 design agenda; rows 1, 5 are the perception agenda; rows 2, 4, 6, 7, 8, 13 are
@@ -73,30 +74,39 @@ gets exactly one outcome. A trace matching no row raises
     Phase 1 producer.*
 11. **IS8-10** — full stroke, no confirm: the residual contact failure once
     lip/jam/anomaly explanations are exhausted. Requires the runner's
-    full_stroke observable — mere contact is not a stroke (the interim
-    map's guess, retired here).
-12. **IS8-2** — zero ID-0 detections across the whole approach with the
-    low-confidence shape (escalation, refusal, or last abort). Total outer
-    loss outranks partial degradation (row 1).
-13. **IS8-4** — terminal escalation `inner_ring_absent`: outer pose OK,
+    full_stroke observable (at engagement depth AND radially in the
+    pocket, the D-020 positional predicate) — mere contact is not a
+    stroke (the interim map's guess, retired here).
+12. **IS8-18** — insertion incomplete at budget: a contact-stage timeout
+    (attempt crossed the plane; the budget, not the mechanism, ended it —
+    D-033). After IS8-10 because a completed stroke is the more specific
+    signature; before the perception rows because physical contact
+    evidence outranks stream-shape inference.
+13. **IS8-2** — zero ID-0 detections across the whole approach with the
+    low-confidence shape (escalation or refusal). Total outer loss
+    outranks partial degradation (row 1).
+14. **IS8-4** — terminal escalation `inner_ring_absent`: outer pose OK,
     zero inner at handoff (guidance's row-4 escalate shape).
-14. **IS8-14** — persistent out-of-block ID decode (§3.4). Frame-integrity
+15. **IS8-14** — persistent out-of-block ID decode (§3.4). Frame-integrity
     fault; would corrupt the statistics rows 5/3/1 read. *No Phase 1
     producer.*
-15. **IS8-5** — ambiguity: terminal `ambiguity_persistent` escalation, or
-    budget exhaustion whose proximate (last) abort was ambiguity.
-16. **IS8-3** — budget exhaustion whose proximate abort was
+16. **IS8-5** — ambiguity: terminal `ambiguity_persistent` escalation, or
+    budget exhaustion whose proximate (last) abort was ambiguity —
+    including a final-attempt abort the machine converts into the budget
+    escalation (its underlying reason rides the Decision).
+17. **IS8-3** — budget exhaustion whose proximate abort was
     `inner_ring_absent` (the back-out/reapproach cycle that never
     satisfied the ≥2-tag commit rule).
-17. **IS8-1** — outer degradation: `low_confidence` escalation, any gate
-    refusal, or last abort low-confidence. D-030's rule: the refusal path
-    classifies here, never clean_miss.
-18. **clean_miss** — the D-030 residual, all four clauses: fails D-022
-    (rows 1–4 unmatched); no contact ever; every attempt either missed at
-    r > 160 mm / never crossed, or was truncated by the budget
-    mid-approach with a nominal stream (no aborts, no refusals); no §8
-    signature matched (holds by position). Anything else **raises
-    `UnclassifiedFailure`**.
+18. **IS8-1** — outer degradation: `low_confidence` escalation or any gate
+    refusal. D-030's rule: the refusal path classifies here, never
+    clean_miss.
+19. **clean_miss** — the D-030 residual, all four clauses: fails D-022
+    (rows 1–4 unmatched); no contact ever; every attempt ended short of
+    the capture plane — missed at r > 160 mm, never crossed, or was
+    truncated by the budget mid-approach — with a nominal stream (no
+    aborts, no refusals); no §8 signature matched (holds by position).
+    Anything else — including any escalation reason or abort reason the
+    table does not know — **raises `UnclassifiedFailure`**.
 
 **IS8-15 (comms loss) is not a classifier output.** Three specs agree it is
 nominal, not a failure (IS §8 row 15 / REQ-005; row 15 above; D-030). It

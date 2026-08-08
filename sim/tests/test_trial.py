@@ -175,6 +175,17 @@ class TestOutcomes:
                      and l["stage"] == "escalate"]
         assert escalated and "escalation" in escalated[-1]
 
+    def test_budget_truncated_insertion_is_is8_18(self, tmp_path):
+        # handoff lands with a sliver of budget left; the truncated
+        # contact stage times out — D-033's row, not a crash (T9 review
+        # confirmed the pre-D-033 classifier raised here and lost the
+        # record; probed: handoff ≈ 4.30 s against a 4.5 s budget)
+        path = run(tmp_path, time_budget_min=0.075)
+        assert validator.validate_trial_file(path) == []
+        result = read(path)[-1]
+        assert result["outcome"] == "IS8-18"
+        assert result["handoff_reached"] is True
+
     def test_time_budget_short_circuit_is_clean_miss(self, tmp_path):
         # budget expires mid-approach: stream nominal, no contact ever —
         # the D-030 residual, all four clauses checked by the T9 classifier
