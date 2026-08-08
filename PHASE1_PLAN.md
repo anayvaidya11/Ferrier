@@ -121,6 +121,14 @@ path by design (that is the point of D-006).
 
 T4a/T4b/T4c parallel after T0–T3; T9/T11/T12 parallel with DOE runs after T8.
 
+*Gate note (2026-08-08, T9): the T9 gate reads "one constructed trace per class
+(success, IS8-1..17, clean_miss)" — but IS8-15 is nominal, not a failure (IS §8 row 15
+/ REQ-005 / D-030), so per this file's header (the specs win) the gate is read as: one
+trace per classifiable class (success, IS8-1..14, 16, 17, clean_miss), plus a test
+asserting IS8-15 is unreachable as a classifier output while remaining in the wire
+enum. The committed precedence order lives in FAILURE_TAXONOMY.md §"Classifier
+precedence", transcription-tested against the code table.*
+
 ## 5. Week-by-week (build start ≈ Aug 4, on P-05 sign-off)
 
 *Schedule note (2026-08-04): the week-1 provisioning day (Day 2–3) slides to after T8

@@ -9,7 +9,8 @@ instance replays identically.
 Composition (D-006 two-stage split; D-005 retry loop; #59 cadence):
 kinematic attempt → perception frames along the trajectory → guidance
 machine per frame → confidence gate at the handoff crossing → contact stage
-→ interim outcome. Perception frames are generated post-hoc along the
+→ outcome classification (classify/outcomes.py, T9). Perception frames are
+generated post-hoc along the
 OPEN-LOOP kinematic trajectory: T5 has no perception-in-the-loop by design,
 so hold/reject_frame decisions cannot slow the approach — only
 abort/escalate/retry alter the record (labeled limitation, revisit at T10).
@@ -51,9 +52,13 @@ precedent):
   retry_plan. The chassis substream restarts identically each attempt, so
   retries replay the same noise realization (deterministic; fidelity
   limitation, revisit at T10).
-- _interim_outcome is the pre-T9 placeholder mapping, replaced by
-  classify/outcomes.py; documented precedence below, raises on anything
-  it cannot name (never guesses).
+- The loop records one classify.AttemptEnd per attempt started, plus
+  whether any ID-0 detection ever appeared; classify() maps the trace
+  under the FAILURE_TAXONOMY §"Classifier precedence" order. A machine
+  escalation with reason "attempt_budget_exhausted" is recorded as a
+  budget truncation (no abort_reason on that attempt): the machine reuses
+  that enum value for both time and attempt budgets (enum gap noted in
+  machine.py), and neither is a perception abort.
 """
 
 from __future__ import annotations
@@ -63,10 +68,11 @@ import hashlib
 import json
 import math
 import subprocess
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from pathlib import Path
 
 from wyzantium_sim import params, scenarios
+from wyzantium_sim.classify.outcomes import AttemptEnd, Trace, classify
 from wyzantium_sim.contact import runner
 from wyzantium_sim.contact.engine import SolverSettings, T1ModelSpec
 from wyzantium_sim.guidance import gate
@@ -93,60 +99,6 @@ _INJECTOR_KEYS = ("outer_occlusion", "inner_occlusion", "illuminance_lux",
                   "rain", "dropout_p", "lens_contamination", "mud_f_c",
                   "flip_kappa", "perception_rate_hz", "perception_latency_ms",
                   "curve_set")
-
-
-class UnclassifiedInterim(ValueError):
-    """A trace the interim map cannot name — extend by amendment, not guess."""
-
-
-@dataclass(frozen=True)
-class TrialTrace:
-    """What the interim outcome map consumes (pre-T9, minimal by design)."""
-    lip_strike: bool = False
-    latched_after_lip: bool = False   # the striking leg's own latch (H-16)
-    latched: bool = False
-    jam: bool = False
-    contact_ever: bool = False
-    escalation_reason: str | None = None
-    last_abort_reason: str | None = None
-    refused: bool = False
-
-
-def _interim_outcome(tr: TrialTrace):
-    """(outcome, false_capture) — pre-T9 placeholder, documented precedence:
-
-    1. any lip strike → IS8-16, false_capture = that leg latched (H-16);
-    2. latched → success (a retry that recovers is a success);
-    3. jam ever, never latched → IS8-17;
-    4. machine escalation by reason (budget exhaustion consults history);
-    5. mechanical exhaustion: contact → IS8-10; refusal → IS8-1; else
-       clean_miss (D-030 a-c mechanical, d approximated as "no refusals").
-    """
-    if tr.lip_strike:
-        return "IS8-16", tr.latched_after_lip
-    if tr.latched:
-        return "success", None
-    if tr.jam:
-        return "IS8-17", None
-    esc = tr.escalation_reason
-    if esc == "ambiguity_persistent":
-        return "IS8-5", None
-    if esc == "inner_ring_absent":
-        return "IS8-4", None
-    if esc == "low_confidence":
-        return "IS8-1", None
-    if esc == "attempt_budget_exhausted":
-        if tr.last_abort_reason == "inner_ring_absent":
-            return "IS8-3", None
-        if tr.last_abort_reason == "ambiguity_persistent":
-            return "IS8-5", None
-    if esc in (None, "attempt_budget_exhausted"):
-        if tr.contact_ever:
-            return "IS8-10", None
-        if tr.refused:
-            return "IS8-1", None
-        return "clean_miss", None
-    raise UnclassifiedInterim(f"escalation_reason {esc!r} has no interim row")
 
 
 @functools.cache
@@ -218,10 +170,9 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
     start_mm, aim_mm = START_MM, (0.0, 0.0, 0.0)
     t_clock = 0.0
     handoff_reached_ever = False
-    lip_seen = False
-    latched_after_lip = False
-    latched = jam_seen = contact_ever = refused = False
-    escalation_reason = last_abort_reason = None
+    attempt_ends = []       # one classify.AttemptEnd per attempt started
+    outer_seen = False      # any ID-0 detection ever (IS8-2 vs IS8-1)
+    escalation_reason = None
 
     while True:
         if t_clock > budget_s:
@@ -243,13 +194,15 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
         prev_step = None
 
         def frame(tf, step):
-            nonlocal commit_line
+            nonlocal commit_line, outer_seen
             truth_m = pose_mm_to_m(step.T_head_stud)
             line = injector.observe(
                 float(tf), truth_m,
                 sightings_for(truth_m, knockout_mask=knockout),
                 machine.stage)
             line["attempt"] = {"n": attempt}
+            if any(t.get("id") == 0 for t in line.get("tags") or ()):
+                outer_seen = True
             d = machine.observe(line, step.range_mm, float(tf))
             if d.action in ("abort_retry", "escalate"):
                 line["stage"] = d.stage
@@ -291,9 +244,17 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
 
         if decision is not None and decision.action == "escalate":
             escalation_reason = decision.abort_reason
+            # "attempt_budget_exhausted" is a budget truncation, not a
+            # perception abort on this attempt (machine reuses the enum
+            # value for both budgets — enum gap noted in machine.py)
+            attempt_ends.append(AttemptEnd(
+                abort_reason=(None
+                              if escalation_reason == "attempt_budget_exhausted"
+                              else escalation_reason)))
             break
         if decision is not None and decision.action == "abort_retry":
-            last_abort_reason = decision.abort_reason
+            attempt_ends.append(AttemptEnd(
+                abort_reason=decision.abort_reason))
             attempt = machine.attempt_n     # _abort_retry already advanced it
             plan = retry_plan(abort_center, (0.0, 0.0), attempt - 1)
             start_mm, aim_mm = plan.start_mm, plan.aim_mm
@@ -303,6 +264,7 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
         if not kin.handoff_reached:
             # kinematic miss (r_gt_annulus / no_crossing): consumes the
             # attempt, fresh approach from the committed start
+            attempt_ends.append(AttemptEnd(miss_reason=kin.miss_reason))
             attempt += 1
             machine.attempt_n = attempt
             if attempt > attempts_max:
@@ -313,8 +275,9 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
         handoff_reached_ever = True
         handoff = kin.handoff
         if commit_line is None:     # no frame allowed commit by onset
-            refused = True
-            last_abort_reason = "low_confidence"
+            attempt_ends.append(AttemptEnd(
+                handoff_reached=True, refused=True,
+                abort_reason="low_confidence"))
             attempt += 1
             machine.attempt_n = attempt
             if attempt > attempts_max:
@@ -330,11 +293,12 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
 
         last_contacts = []
         end_pose = [handoff.T_head_stud]
+        contact_this = False
 
         def on_step(r):
-            nonlocal contact_ever
+            nonlocal contact_this
             if r.contacts:
-                contact_ever = True
+                contact_this = True
                 last_contacts.clear()
                 last_contacts.extend(r.contacts)
             end_pose[0] = r.T_head_stud
@@ -347,14 +311,13 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
             dt=solver.timestep_s, on_step=on_step)
         t_clock = out.t_end_s
 
-        if out.lip_strike and not lip_seen:
-            lip_seen = True
-            latched_after_lip = out.latched
+        attempt_ends.append(AttemptEnd(
+            handoff_reached=True, contact=contact_this,
+            lip_strike=out.lip_strike, latched=out.latched, jam=out.jam,
+            full_stroke=out.full_stroke, timed_out=out.timed_out,
+            abort_reason=out.abort_reason))
         if out.latched:
-            latched = True
             break
-        if out.jam:
-            jam_seen = True
         # jam or contact timeout: consumes the attempt, D-005 retry
         attempt += 1
         machine.attempt_n = attempt
@@ -365,12 +328,9 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
         plan = retry_plan(_head_center(end_pose[0]), offset, attempt - 1)
         start_mm, aim_mm = plan.start_mm, plan.aim_mm
 
-    trace = TrialTrace(
-        lip_strike=lip_seen, latched_after_lip=latched_after_lip,
-        latched=latched, jam=jam_seen, contact_ever=contact_ever,
-        escalation_reason=escalation_reason,
-        last_abort_reason=last_abort_reason, refused=refused)
-    outcome, false_capture = _interim_outcome(trace)
+    outcome, false_capture = classify(Trace(
+        attempts=tuple(attempt_ends), escalation_reason=escalation_reason,
+        outer_tag_seen=outer_seen))
     attempts_used = min(attempt, attempts_max)
     log.result(outcome=outcome,
                first_attempt_success=(outcome == "success"

@@ -13,8 +13,6 @@ abort/escalate/retry alter the record.
 """
 import math
 
-import pytest
-
 from wirefmt import records, validator
 from wyzantium_sim import scenarios, trial
 from wyzantium_sim.contact.mujoco_engine import MuJoCoEngine
@@ -163,11 +161,15 @@ class TestOutcomes:
         assert result["attempts_used"] == 1
         assert result["handoff_reached"] is True
 
-    def test_saturated_dropout_escalates_low_confidence(self, tmp_path):
+    def test_saturated_dropout_is_outer_destroyed(self, tmp_path):
+        # zero ID-0 detections across the whole approach is §8 row 2's
+        # signature ("No ID-0 across approach; mission context positive"),
+        # not row 1's sparse-with-degradation shape — the interim map's
+        # IS8-1 label was signature-wrong
         path = run(tmp_path, dropout_p=1.0)
         assert validator.validate_trial_file(path) == []
         lines = read(path)
-        assert lines[-1]["outcome"] == "IS8-1"
+        assert lines[-1]["outcome"] == "IS8-2"
         assert lines[-1]["handoff_reached"] is False
         escalated = [l for l in lines if l["type"] == "target_state"
                      and l["stage"] == "escalate"]
@@ -175,53 +177,8 @@ class TestOutcomes:
 
     def test_time_budget_short_circuit_is_clean_miss(self, tmp_path):
         # budget expires mid-approach: stream nominal, no contact ever —
-        # D-030 clauses a-c mechanically, (d) approximated (labeled interim)
+        # the D-030 residual, all four clauses checked by the T9 classifier
+        # (constructed-trace coverage lives in test_outcomes.py)
         path = run(tmp_path, time_budget_min=0.05)
         assert validator.validate_trial_file(path) == []
         assert read(path)[-1]["outcome"] == "clean_miss"
-
-
-class TestInterimOutcomeTable:
-    def out(self, **kw):
-        return trial._interim_outcome(trial.TrialTrace(**kw))
-
-    def test_lip_strike_wins_over_jam_and_latch(self):
-        assert self.out(lip_strike=True, jam=True) == ("IS8-16", False)
-        assert self.out(lip_strike=True, latched_after_lip=True,
-                        latched=True) == ("IS8-16", True)
-
-    def test_clean_latch_is_success(self):
-        assert self.out(latched=True) == ("success", None)
-
-    def test_jam_without_recovery_is_is8_17(self):
-        assert self.out(jam=True, contact_ever=True) == ("IS8-17", None)
-
-    def test_jam_then_recovered_latch_is_success(self):
-        assert self.out(jam=True, latched=True,
-                        contact_ever=True) == ("success", None)
-
-    def test_escalations_map_by_reason(self):
-        assert self.out(escalation_reason="ambiguity_persistent") == ("IS8-5", None)
-        assert self.out(escalation_reason="inner_ring_absent") == ("IS8-4", None)
-        assert self.out(escalation_reason="low_confidence") == ("IS8-1", None)
-
-    def test_budget_exhaustion_maps_by_history(self):
-        assert self.out(escalation_reason="attempt_budget_exhausted",
-                        last_abort_reason="inner_ring_absent") == ("IS8-3", None)
-        assert self.out(escalation_reason="attempt_budget_exhausted",
-                        last_abort_reason="ambiguity_persistent") == ("IS8-5", None)
-        assert self.out(escalation_reason="attempt_budget_exhausted",
-                        contact_ever=True) == ("IS8-10", None)
-        assert self.out(escalation_reason="attempt_budget_exhausted",
-                        refused=True) == ("IS8-1", None)
-        assert self.out(escalation_reason="attempt_budget_exhausted") == (
-            "clean_miss", None)
-
-    def test_mechanical_exhaustion_without_escalation(self):
-        assert self.out(contact_ever=True) == ("IS8-10", None)
-        assert self.out(refused=True) == ("IS8-1", None)
-        assert self.out() == ("clean_miss", None)
-
-    def test_unknown_escalation_raises(self):
-        with pytest.raises(trial.UnclassifiedInterim):
-            self.out(escalation_reason="not_a_reason")
