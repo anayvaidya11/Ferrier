@@ -20,6 +20,45 @@ action was not added — recorded in the session report.*
 
 ---
 
+## P-03 execution packet (added 2026-08-09 — read on a phone in ~5 minutes)
+
+**What P-03 is:** the only remaining human lever on the Phase 1 gate number.
+The simulation currently runs on literature-derived perception curves
+(`prior_v1`); the entire moderate-band result is dominated by how mud degrades
+tag detection — a number the literature honestly cannot supply. Three
+measurements, three working days, replace the stand-ins with reality
+(`mr_v1`), and the gate is evaluated only after that swap, reporting before
+and after.
+
+**What signing costs:** ≤ 3 working days + instrument-class purchases
+(NO_HARDWARE rev 2 compliant, three-question test already answered per item in
+`MEASUREMENT_REQUESTS.md`): a manually-exposable camera + lens, two tripods, a
+dimmable lamp, printed AprilTags on matte paper, shop-bought spacers (arbitrary
+heights, never machined to spec), soil/water/board consumables. Order of
+magnitude $10¹–10² total.
+
+**The three days:**
+1. **MR-001 (~1.5 days)** — tag detection vs. mud: 14 camera/tag geometries ×
+   8 mud levels × 100 frames. This is the axis your entire gate band hangs on.
+2. **MR-002 (~0.5 day)** — detection below 10 lux: 20 dark-room conditions.
+   Camera-specific, carries the non-transferable label.
+3. **MR-003 (~1 day)** — pose-flip rate vs. view angle, both candidate tag
+   layouts. Highest-value entry: it also decides the D-011 layout selection.
+
+Hard bound: any overrun defers remaining cells, never extends the budget.
+
+**What happens with the data:** three CSVs (+ the `reproj_rms_px` column that
+replaces the swept σ_px) commit under `research/data/`; Claude registers the
+`mr_v1` curve set, re-runs every affected axis, reports before/after both
+(ROADMAP protocol), and only then computes the gate number against
+`gate_moderate.json`.
+
+**To approve:** say so in a session (it gets recorded here with the date), buy
+the list, and schedule the days — the procedures in `MEASUREMENT_REQUESTS.md`
+§"Execution grids" are written to need zero design decisions from you.
+
+---
+
 ## P-05 review packet (~45 minutes)
 
 What to read before signing, in order. The signature asserts one sentence: *"The
