@@ -106,6 +106,19 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-038 — Gate-cell trial count: N = 5,000 (DOE addendum to D-032; 2026-08-09)
+D-021 fixed tier shapes and D-029 fixed the gate band, but no committed number set
+the gate cell's own trial count (`gate_plan(n)` left n a CLI argument). Recorded
+now, before the formal freeze: **N = 5,000**. Sizing: the D-029 gate number carries
+a 95% CI; at worst-case p ≈ 0.3 the Wilson half-width at N = 5,000 is ≈ 1.3 pp (≈
+0.6 pp at p ≈ 0.05) — comfortably inside the 1 pp reporting granularity of the gate
+table's thresholds. Totals: 4,400 (Tier 1) + 4,000 (Tier 2, n_min) + 5,000 (gate) =
+13,400 ≥ the committed 10,000 (D-021), before post-swap re-runs. Approved plan,
+2026-08-09 ("Phase 1 completion plan", step 4).
+**What would make it wrong:** a gate number landing within ~1 pp of a decision
+boundary — then N grows by recorded revision until the CI excludes the boundary,
+never silently.
+
 ### D-037 — Closed-loop kinematic stage: holds are physically real (retires the T5 open-loop limitation; 2026-08-09)
 T5 was open-loop by design: perception frames were generated post-hoc along a
 precomputed trajectory, so hold/reject decisions could not slow the vehicle —
