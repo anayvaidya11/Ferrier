@@ -1,0 +1,17 @@
+{
+  "source": "#33 (H-03); D-032 (f) absolute-pp reading; probe_driver",
+  "sweep_root": 20260808,
+  "probe_n": 500,
+  "chosen_timestep_s": 0.0002,
+  "halted": true,
+  "steps": [
+    {
+      "timestep_s": 0.0002,
+      "success_rate": 1.0
+    },
+    {
+      "timestep_s": 0.0001,
+      "success_rate": 1.0
+    }
+  ]
+}
