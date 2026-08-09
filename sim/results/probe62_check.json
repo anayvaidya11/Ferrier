@@ -1,0 +1,39 @@
+{
+ "source": "#62 week-one recalibration check (PHASE1_PLAN \u00a75 wk-1 obligation) \u2014 logged wall-wrench scales from a nominal successful insertion (freeze-class record, regenerated), vs the committed jam-threshold grid",
+ "record": "mujoco-8192818184298793502-5f428a24.ndjson",
+ "n_contact_steps": 2122,
+ "axial_N": {
+  "p50": 0.0,
+  "p90": 272.19675425534973,
+  "p99": 2519.3686381595253,
+  "max": 18310.410531909016
+ },
+ "lateral_N": {
+  "p50": 0.0,
+  "p90": 11.727675009564711,
+  "p99": 6400.794924087023,
+  "max": 15270.715969398649
+ },
+ "committed_grid": {
+  "F_ax_N": [
+   50.0,
+   100.0,
+   200.0
+  ],
+  "F_lat_N": [
+   10.0,
+   25.0
+  ],
+  "t_s": [
+   0.5,
+   1.0,
+   2.0
+  ]
+ },
+ "mid_grid_thresholds": {
+  "F_ax_N": 100.0,
+  "F_lat_N": 25.0,
+  "t_s": 1.0
+ },
+ "finding": "Thresholds stand operationally (IS8-17 fired 0x in freeze-prior-v1) but the discrimination is carried by the 1.0 s persistence window, not the force cells: successful-insertion transients exceed F_ax_jam at p90 (272 N vs 100 N) and F_lat_jam at p99 (6.4 kN vs 25 N). Whether the force grid should recalibrate to measured scales is a recorded-revision decision (IS8-17 semantics), queued for the human with the T13 report; no unilateral change made."
+}

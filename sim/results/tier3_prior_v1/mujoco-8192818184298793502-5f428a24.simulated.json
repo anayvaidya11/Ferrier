@@ -1,0 +1,10 @@
+{
+ "label": "simulated",
+ "trial_id": "mujoco-8192818184298793502-5f428a24",
+ "outcome": "success",
+ "attempts_used": 1,
+ "t_total": 7.826466666670997,
+ "source_record": "/private/tmp/claude-501/-Users-anayvaidya-Wyzantium-Ferrier/70de5066-78f1-4beb-924e-2100331f9618/scratchpad/tier3-hunt/mujoco-8192818184298793502-5f428a24.ndjson",
+ "code_git_sha": "a2a5bab25e5d455cc8cd104edfa9b141c09c0185",
+ "source": "A-007; PHASE1_PLAN \u00a72 replay/ row; rendered from logged state only (D-007)"
+}
