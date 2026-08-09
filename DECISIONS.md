@@ -106,6 +106,30 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-037 — Closed-loop kinematic stage: holds are physically real (retires the T5 open-loop limitation; 2026-08-09)
+T5 was open-loop by design: perception frames were generated post-hoc along a
+precomputed trajectory, so hold/reject decisions could not slow the vehicle —
+a labeled limitation ("revisit at T10", trial.py docstring). Consequence: the
+D-034/035/036 walls fired on a clock while the vehicle kept driving; refusal
+timing and retry geometry were approximations a diligence reader would find in
+one read. **Realization from here: the spatial path and its D-019 chassis-error
+realization are unchanged (error is indexed by arc length — a stationary
+vehicle does not accrue slip); what closes the loop is the time mapping. A
+"hold" freezes position (v = 0) while frames keep arriving at the perception
+cadence — stop, stare, reacquire; "continue" resumes along the same path;
+abort/escalate end the attempt at the held position. Walls fire on sim time at
+a fixed position. Frames zero-order-hold truth at the last grid point
+(pre-existing behavior). The handoff state's time is the pause-aware crossing
+time; the encounter budget therefore counts hold time, as it should.**
+Ratified by the human (plan session, 2026-08-09, "Fix now"). Every pre-D-037
+record regenerates; pre-D-037 summaries stay committed as historical evidence.
+Retry noise realization (chassis substream restarting identically per attempt)
+remains a separate labeled limitation — not expanded here.
+**What would make it wrong:** a real platform whose hold behavior is not
+station-keeping (e.g., drift under mud creep while "stopped") — an MR/Phase 3
+observable; or doctrine forbidding stationary dwell in the open (would bound
+HOLD_TIMEOUT_S, not the mechanism).
+
 ### D-036 — Rows 3/4 ring persistence is a time window on the shared wall (closes H-18's third cause; 2026-08-09)
 Post-D-035 gate re-probe still returned 0.0: every attempt died `inner_ring_absent`
 in the 300→200 mm band and no frame ever reached inner_servo. The instrumented

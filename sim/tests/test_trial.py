@@ -170,12 +170,10 @@ class TestOutcomes:
         assert validator.validate_trial_file(path) == []
         lines = read(path)
         assert lines[-1]["outcome"] == "IS8-2"
-        # D-034: the T5 open-loop trajectory crosses the handoff boundary
-        # before the row-2 dark wall fires (holds cannot slow the approach
-        # — the labeled T5 limitation), so handoff_reached records the
-        # crossing. What blindness must still never do is commit: the
-        # crossing gate refuses, and no contact step ever runs.
-        assert lines[-1]["handoff_reached"] is True
+        # D-037: holds are physically real — a blind vehicle freezes at the
+        # first dark frame, the D-034 wall escalates in place, and the
+        # handoff boundary is never crossed. No contact step ever runs.
+        assert lines[-1]["handoff_reached"] is False
         assert not any("contact_wrench" in l for l in lines)
         escalated = [l for l in lines if l["type"] == "target_state"
                      and l["stage"] == "escalate"]
@@ -185,8 +183,9 @@ class TestOutcomes:
         # handoff lands with a sliver of budget left; the truncated
         # contact stage times out — D-033's row, not a crash (T9 review
         # confirmed the pre-D-033 classifier raised here and lost the
-        # record; probed: handoff ≈ 4.30 s against a 4.5 s budget)
-        path = run(tmp_path, time_budget_min=0.075)
+        # record; re-probed under D-037 closed-loop holds: handoff
+        # ≈ 5.13 s against a 5.4 s budget)
+        path = run(tmp_path, time_budget_min=0.09)
         assert validator.validate_trial_file(path) == []
         result = read(path)[-1]
         assert result["outcome"] == "IS8-18"

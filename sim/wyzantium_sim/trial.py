@@ -7,13 +7,14 @@ same-seed gate), engine.load() unconditional per call so a reused engine
 instance replays identically.
 
 Composition (D-006 two-stage split; D-005 retry loop; #59 cadence):
-kinematic attempt → perception frames along the trajectory → guidance
-machine per frame → confidence gate at the handoff crossing → contact stage
-→ outcome classification (classify/outcomes.py, T9). Perception frames are
-generated post-hoc along the
-OPEN-LOOP kinematic trajectory: T5 has no perception-in-the-loop by design,
-so hold/reject_frame decisions cannot slow the approach — only
-abort/escalate/retry alter the record (labeled limitation, revisit at T10).
+kinematic attempt → perception frames in the loop → guidance machine per
+frame → confidence gate at the handoff crossing → contact stage → outcome
+classification (classify/outcomes.py, T9). D-037 closed the loop: the
+spatial path (and its D-019 error realization, indexed by arc length) is
+committed per attempt, and the closed_loop walker maps it to time — a
+"hold" freezes the vehicle while frames keep arriving (stop, stare,
+reacquire); "continue" resumes; abort/escalate end the attempt at the held
+position. The former open-loop limitation is retired.
 
 Arbitrary code-level choices (spec gaps recorded 2026-08-04, chassis_error
 precedent):
@@ -66,7 +67,6 @@ from __future__ import annotations
 import functools
 import hashlib
 import json
-import math
 import subprocess
 from dataclasses import replace
 from pathlib import Path
@@ -79,15 +79,16 @@ from wyzantium_sim.guidance import gate
 from wyzantium_sim.guidance.machine import (
     GuidanceMachine, contact_offset_mm, retry_plan,
 )
+from wyzantium_sim.kinematic import closed_loop
+from wyzantium_sim.kinematic.handoff import HandoffState
 from wyzantium_sim.kinematic.stage import (
-    INSERTION_ONSET_RANGE_MM, START_MM, KinematicStage,
+    INSERTION_ONSET_RANGE_MM, START_MM, ZERO_COV, KinematicStage,
 )
 from wyzantium_sim.logging.trial_logger import (
     TrialLogger, pose_mm_to_m, upper21_to_6x6,
 )
 from wyzantium_sim.perception.inject import PerceptionInjector
 from wyzantium_sim.perception.sightings import sightings_for
-from wyzantium_sim.perception import timing
 
 CONTACT_MAX_S = 10.0                    # arbitrary per-attempt contact cap
 G_INSERTION_STANDIN = (-0.1, 0.0, 0.0)  # insertion drive stand-in (docstring)
@@ -178,23 +179,16 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
             escalation_reason = "attempt_budget_exhausted"
             break
         machine.stage = "acquire"       # every attempt re-acquires (resync)
-        kin = KinematicStage(root=seed, scale=sp["chassis_error_scale"],
-                             start_mm=start_mm, aim_mm=aim_mm,
-                             attempt=attempt, t0_s=t_clock,
-                             speeds=speeds).run()
+        path = KinematicStage(root=seed, scale=sp["chassis_error_scale"],
+                              start_mm=start_mm, aim_mm=aim_mm,
+                              attempt=attempt, t0_s=t_clock,
+                              speeds=speeds).spatial_path()
 
-        n_frames = int(math.floor((kin.t_end_s - t_clock) * rate_hz)) + 1
-        frame_ts = timing.frame_times(rate_hz, t_clock, n_frames)
-
-        decision = None
         commit_line = None
-        abort_center = None
-        fi = 0
-        prev_step = None
 
-        def frame(tf, step):
+        def frame(tf, point):
             nonlocal commit_line, outer_seen
-            truth_m = pose_mm_to_m(step.T_head_stud)
+            truth_m = pose_mm_to_m(point.T_head_stud)
             line = injector.observe(
                 float(tf), truth_m,
                 sightings_for(truth_m, knockout_mask=knockout),
@@ -202,7 +196,7 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
             line["attempt"] = {"n": attempt}
             if any(t.get("id") == 0 for t in line.get("tags") or ()):
                 outer_seen = True
-            d = machine.observe(line, step.range_mm, float(tf))
+            d = machine.observe(line, point.range_mm, float(tf))
             if d.action in ("abort_retry", "escalate"):
                 line["stage"] = d.stage
                 line["abort_reason"] = d.abort_reason
@@ -210,36 +204,23 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
                     line["escalation"] = d.escalation
             log.target_state(line)
             if (commit_line is None
-                    and step.range_mm > INSERTION_ONSET_RANGE_MM
+                    and point.range_mm > INSERTION_ONSET_RANGE_MM
                     and gate.commit_allowed(line,
                                             sp["conf_min_attempt"])[0]):
                 commit_line = line  # first allowing inner-servo frame
             return d
 
-        for step in kin.steps:
-            while (fi < n_frames and frame_ts[fi] < step.t_sim_s
-                   and prev_step is not None):
-                decision = frame(frame_ts[fi], prev_step)
-                fi += 1
-                if decision.action in ("abort_retry", "escalate"):
-                    break
-            if decision is not None and decision.action in ("abort_retry",
-                                                            "escalate"):
-                abort_center = _head_center(prev_step.T_head_stud)
-                t_clock = float(frame_ts[fi - 1])
-                break
+        def truth(ts, point):
             log.sim_truth_kinematic(
-                step.t_sim_s, step.T_head_stud,
-                {"mode": "velocity", "v_cmd_ms": float(step.v_cmd_ms)})
-            prev_step = step
-        else:
-            while fi < n_frames:
-                decision = frame(frame_ts[fi], prev_step)
-                fi += 1
-                if decision.action in ("abort_retry", "escalate"):
-                    abort_center = _head_center(prev_step.T_head_stud)
-                    t_clock = float(frame_ts[fi - 1])
-                    break
+                ts, point.T_head_stud,
+                {"mode": "velocity", "v_cmd_ms": float(point.v_cmd_ms)})
+
+        res = closed_loop.walk(path.points, t0_s=t_clock, rate_hz=rate_hz,
+                               on_truth=truth, on_frame=frame)
+        decision = res.decision
+        abort_center = (_head_center(res.end_point.T_head_stud)
+                        if decision is not None else None)
+        t_clock = res.t_end_s
 
         if decision is not None and decision.action == "escalate":
             escalation_reason = decision.abort_reason
@@ -259,11 +240,10 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
             start_mm, aim_mm = plan.start_mm, plan.aim_mm
             continue
 
-        t_clock = kin.t_end_s
-        if not kin.handoff_reached:
+        if path.miss_reason is not None:
             # kinematic miss (r_gt_annulus / no_crossing): consumes the
             # attempt, fresh approach from the committed start
-            attempt_ends.append(AttemptEnd(miss_reason=kin.miss_reason))
+            attempt_ends.append(AttemptEnd(miss_reason=path.miss_reason))
             attempt += 1
             machine.attempt_n = attempt
             if attempt > attempts_max:
@@ -271,7 +251,14 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
             start_mm, aim_mm = START_MM, (0.0, 0.0, 0.0)
             continue
 
-        handoff = kin.handoff
+        # Handoff geometry is a path fact; its TIME is the walker's
+        # pause-aware crossing time (D-037), so the state assembles here.
+        crossing = path.points[-1]
+        handoff = HandoffState(
+            T_head_stud=crossing.T_head_stud,
+            v_ms=tuple(sp["speed_insertion_ms"] * v for v in path.v_dir),
+            omega_rads=(0.0, 0.0, 0.0), pose_cov=ZERO_COV,
+            attempt=attempt, t_sim_s=t_clock)
         if commit_line is None:     # no frame allowed commit by onset
             attempt_ends.append(AttemptEnd(
                 handoff_reached=True, refused=True,

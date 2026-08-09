@@ -61,6 +61,35 @@ class KinematicResult:
     steps: tuple
 
 
+@dataclass(frozen=True)
+class PathPoint:
+    """One spatial sample (D-037): geometry without a timestamp. seg_dt_s is
+    the commanded traverse time of the segment ARRIVING at this point (0.0
+    for the start point) — the closed-loop walker inserts pauses between
+    segments; the open-loop time mapping is their plain cumulative sum."""
+
+    T_head_stud: frames.Pose
+    range_mm: float
+    stage: str
+    v_cmd_ms: float
+    seg_dt_s: float
+
+
+@dataclass(frozen=True)
+class SpatialPath:
+    """The attempt's committed spatial trajectory (D-037). The crossing
+    point, when present, is the LAST entry of `points` (its seg_dt_s is the
+    f-scaled fraction of the virtual next grid segment). Annulus verdict and
+    handoff geometry are path facts; the handoff TIME belongs to the walker
+    (pause-aware), so HandoffState is assembled by the caller."""
+
+    points: tuple              # tuple[PathPoint, ...]
+    crossed: bool
+    r_mm: float | None
+    miss_reason: str | None    # None | "r_gt_annulus" | "no_crossing"
+    v_dir: tuple               # commanded unit direction (handoff velocity)
+
+
 def _axis_quat(angle_rad: float, axis: int) -> tuple:
     h = 0.5 * angle_rad
     q = [math.cos(h), 0.0, 0.0, 0.0]
@@ -157,6 +186,55 @@ class KinematicStage:
         return KinematicResult(
             handoff_reached=False, handoff=None, r_mm=None,
             miss_reason="no_crossing", t_end_s=t, steps=tuple(steps))
+
+    def spatial_path(self) -> SpatialPath:
+        """D-037 closed-loop entry: the same geometry loop as run(), with
+        time left to the walker. run() is retained unchanged for the T5
+        open-loop geometry gates; keep the two loops in lockstep."""
+        delta = tuple(a - s for a, s in zip(self._aim, self._start))
+        length = math.sqrt(sum(v * v for v in delta))
+        d = tuple(v / length for v in delta)
+        n = int(length // self._ds)
+        err_y, err_z, err_ry, err_rz = (
+            m.sample_path(self._ds / 1000.0, n + 1).error
+            for m in self._err_models)
+
+        points = []
+        prev = None  # (center, q, v_cmd)
+        for k in range(n + 1):
+            s = k * self._ds
+            center = (self._start[0] + d[0] * s,
+                      self._start[1] + d[1] * s + float(err_y[k]),
+                      self._start[2] + d[2] * s + float(err_z[k]))
+            q_err = _rot(_axis_quat(math.radians(float(err_ry[k])), 1)).compose(
+                _rot(_axis_quat(math.radians(float(err_rz[k])), 2))).q
+            q = _rot(q_err).compose(_rot(Q_NOMINAL)).q
+            rng_mm = math.sqrt(sum(v * v for v in center))
+            v_cmd, stage_name = self._speed_stage(rng_mm)
+            seg_dt = 0.0 if k == 0 else self._ds / 1000.0 / v_cmd
+
+            if prev is not None and center[0] <= HANDOFF_X_MM < prev[0][0]:
+                (c0, q0, _), (c1, q1) = prev, (center, q)
+                f = (c0[0] - HANDOFF_X_MM) / (c0[0] - c1[0])
+                xc = tuple(a + f * (b - a) for a, b in zip(c0, c1))
+                qc = _nlerp(q0, q1, f)
+                r = math.hypot(xc[1], xc[2])
+                points.append(PathPoint(
+                    T_head_stud=self._pose(xc, qc),
+                    range_mm=math.sqrt(sum(v * v for v in xc)),
+                    stage="insertion", v_cmd_ms=self._speeds[2],
+                    seg_dt_s=f * seg_dt))
+                miss = "r_gt_annulus" if r > ANNULUS_R_MM else None
+                return SpatialPath(points=tuple(points), crossed=True,
+                                   r_mm=r, miss_reason=miss, v_dir=d)
+
+            points.append(PathPoint(
+                T_head_stud=self._pose(center, q), range_mm=rng_mm,
+                stage=stage_name, v_cmd_ms=v_cmd, seg_dt_s=seg_dt))
+            prev = (center, q, v_cmd)
+
+        return SpatialPath(points=tuple(points), crossed=False, r_mm=None,
+                           miss_reason="no_crossing", v_dir=d)
 
     def _cross(self, prev, cur, steps) -> KinematicResult:
         (c0, q0, t0), (c1, q1, t1) = prev, cur
