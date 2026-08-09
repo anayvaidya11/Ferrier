@@ -1,0 +1,23 @@
+{
+ "source": "A-004 (ARCHITECTURE \u00a75; PHASE1_PLAN \u00a73); PHASE1_PARAMETERS #61",
+ "instance": {
+  "name": "c7i.8xlarge-spot-us-east-1c",
+  "type": "c7i.8xlarge",
+  "market": "spot",
+  "az": "us-east-1c",
+  "vcpus": 32,
+  "usd_per_hour": 0.6297,
+  "os": "ubuntu-24.04",
+  "python": "3.12",
+  "mujoco": "3.11.0",
+  "arch": "x86_64",
+  "engine": "mujoco"
+ },
+ "n_trials": 1000,
+ "wall_s": 53.86788236800001,
+ "usd_per_hour": 0.6297,
+ "usd_per_1k_trials": 0.009422390424202669,
+ "success_rate": 1.0,
+ "workers": 32,
+ "timestep_s": 0.0002
+}
