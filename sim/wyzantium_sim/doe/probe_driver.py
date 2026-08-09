@@ -61,13 +61,30 @@ def batch_success_rate(paths) -> float:
     return n_success / len(paths)
 
 
+def probe_plan(plan_name, sweep_root, n) -> tuple:
+    """The batch the convergence probe runs over.
+
+    "nominal" saturates success at 1.0 (undegraded cell) — it satisfies the
+    written #33 procedure but barely stresses contact. "gate" probes over
+    the D-029 moderate band, where the kill-gate number is computed and
+    where timestep sensitivity would actually matter (§2.2: the sim must
+    try to break the system). Probe roots are probe-specific so probe seeds
+    never collide with the committed gate run's.
+    """
+    if plan_name == "nominal":
+        return nominal_plan(sweep_root, n, "probe33")
+    if plan_name == "gate":
+        return tiers.gate_plan(sweep_root, n)
+    raise SystemExit(f"unknown probe plan {plan_name!r}")
+
+
 def conv33(out_dir, *, sweep_root, probe_n=500, timestep0_s=TRIAL_TIMESTEP_S,
-           workers=1) -> probes.ConvergenceResult:
+           workers=1, plan_name="nominal") -> probes.ConvergenceResult:
     out_dir = Path(out_dir)
 
     def run_batch(dt, n):
         batch_dir = out_dir / f"dt_{dt:.1e}"
-        plan = nominal_plan(sweep_root, n, "probe33")
+        plan = probe_plan(plan_name, sweep_root, n)
         result = runner.run_sweep(plan, batch_dir, workers=workers,
                                   solver=SolverSettings(timestep_s=dt))
         return batch_success_rate(result.paths)
@@ -76,6 +93,7 @@ def conv33(out_dir, *, sweep_root, probe_n=500, timestep0_s=TRIAL_TIMESTEP_S,
                                       probe_n=probe_n)
     artifact = {
         "source": "#33 (H-03); D-032 (f) absolute-pp reading; probe_driver",
+        "plan": plan_name,
         "sweep_root": sweep_root,
         "probe_n": probe_n,
         "chosen_timestep_s": result.timestep_s,
@@ -118,6 +136,7 @@ def main(argv=None) -> int:
 
     p33 = sub.add_parser("conv33")
     p33.add_argument("--out", type=Path, required=True)
+    p33.add_argument("--plan", choices=("nominal", "gate"), default="nominal")
     p33.add_argument("--sweep-root", type=int, default=20260808)
     p33.add_argument("--probe-n", type=int, default=500)
     p33.add_argument("--timestep0", type=float, default=TRIAL_TIMESTEP_S)
@@ -137,7 +156,7 @@ def main(argv=None) -> int:
     if args.cmd == "conv33":
         result = conv33(args.out, sweep_root=args.sweep_root,
                         probe_n=args.probe_n, timestep0_s=args.timestep0,
-                        workers=args.workers)
+                        workers=args.workers, plan_name=args.plan)
         print(f"chosen_timestep_s={result.timestep_s} halted={result.halted}")
         return 0
     if args.cmd == "a004":

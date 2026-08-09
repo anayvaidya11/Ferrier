@@ -19,6 +19,11 @@ class TestNominalPlan:
         b = probe_driver.nominal_plan(20260808, 4, "a004")
         assert {p.seed for p in a}.isdisjoint({p.seed for p in b})
 
+    def test_gate_probe_plan_has_n_distinct_seeds(self):
+        plan = probe_driver.probe_plan("gate", 33, 8)
+        assert len(plan) == 8
+        assert len({p.seed for p in plan}) == 8
+
 
 class TestSolverPassthrough:
     def test_header_carries_injected_timestep(self, tmp_path):
