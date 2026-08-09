@@ -170,7 +170,13 @@ class TestOutcomes:
         assert validator.validate_trial_file(path) == []
         lines = read(path)
         assert lines[-1]["outcome"] == "IS8-2"
-        assert lines[-1]["handoff_reached"] is False
+        # D-034: the T5 open-loop trajectory crosses the handoff boundary
+        # before the row-2 dark wall fires (holds cannot slow the approach
+        # — the labeled T5 limitation), so handoff_reached records the
+        # crossing. What blindness must still never do is commit: the
+        # crossing gate refuses, and no contact step ever runs.
+        assert lines[-1]["handoff_reached"] is True
+        assert not any("contact_wrench" in l for l in lines)
         escalated = [l for l in lines if l["type"] == "target_state"
                      and l["stage"] == "escalate"]
         assert escalated and "escalation" in escalated[-1]

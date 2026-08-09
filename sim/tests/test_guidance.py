@@ -160,15 +160,47 @@ class TestRow1OuterOcclusion:
 
 
 class TestRow2OuterDestroyed:
-    def test_no_outer_detection_escalates_with_imagery(self):
-        # policy default: closing without the outer tag is NOT allowed
+    """D-034: row 2 shares row 1's hold wall — a single no-detection frame
+    holds (a #43 blip is not a destroyed tag); sustained darkness past
+    HOLD_TIMEOUT_S escalates. Policy default still forbids closing without
+    the outer tag."""
+
+    def _dark(self):
+        return dict(stage="outer_servo", pose_source="none", conf=0.0,
+                    pose=None, tags=None)
+
+    def test_single_dark_frame_holds_not_escalates(self):
         m = make_machine()
-        d = m.observe(line(stage="outer_servo", pose_source="none",
-                           conf=0.0, pose=None, tags=None),
-                      range_mm=2500.0, t_s=1.0)
+        d = m.observe(line(**self._dark()), range_mm=2500.0, t_s=1.0)
+        assert d.action == "hold"
+
+    def test_sustained_darkness_escalates_with_imagery(self):
+        m = make_machine()
+        t = 1.0
+        d = m.observe(line(**self._dark()), range_mm=2500.0, t_s=t)
+        while d.action == "hold":
+            t += 1.0 / 30.0
+            d = m.observe(line(**self._dark()), range_mm=2500.0, t_s=t)
         assert d.action == "escalate"
         assert d.abort_reason == "low_confidence"
         assert d.escalation["recommend"] == "human_decision"
+        assert t - 1.0 <= machine.HOLD_TIMEOUT_S + 0.2
+
+    def test_detection_resets_dark_window(self):
+        m = make_machine()
+        t = 1.0
+        for _ in range(60):  # 2 s dark — inside the wall throughout
+            d = m.observe(line(**self._dark()), range_mm=2500.0, t_s=t)
+            assert d.action == "hold"
+            t += 1.0 / 30.0
+        d = m.observe(line(stage="outer_servo", pose_source="outer_tag",
+                           conf=0.95), range_mm=2500.0, t_s=t)
+        assert d.action == "continue"  # detection resets the window
+        t += 1.0 / 30.0
+        for _ in range(120):  # 4 s dark after reset — still inside the wall
+            d = m.observe(line(**self._dark()), range_mm=2500.0, t_s=t)
+            assert d.action == "hold"
+            t += 1.0 / 30.0
 
 
 class TestRow3InnerOccluded:

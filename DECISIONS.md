@@ -106,6 +106,35 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-034 — IS §8 row 2 realized with persistence: sustained dark window, not single frame (closes H-18's dominant cause; 2026-08-09)
+Row 2 ("no outer detection at expected range") was realized per-frame: one
+no-detection line escalated `low_confidence` immediately. The #43 dropout model
+produces ~0.17 s blips (Bernoulli 0.05 burst starts, geometric mean-5 at 30 Hz), so
+the D-029 gate band scored ~0% for a sensor-blip artifact, not a docking result —
+H-18's Tier-1 evidence: dropout_p = 0.05 *alone* → 0/50 success, IS8-1-dominated
+(`sim/results/tier1_prior_v1_summary.json`). Rows 1/3/4/5 all received persistence
+mechanisms for exactly this per-frame-jitter reason (T8 composition findings); row 2
+was the only §8 row without one. **Realization from here: a no-detection frame
+starts/continues a dark window; row 2 escalates only when the window exceeds
+HOLD_TIMEOUT_S (the same 5.0 s wall as row 1's hold — one coherent semantics: outer
+channel dark *or* degraded for 5 s ⇒ escalate; the constant remains code-level
+arbitrary, labeled, uncommitted). Any detection resets the window; single blips are
+held frames, not aborts. Routing clause: a fully-dark frame — no tags, pose_source
+"none" — is row 2's domain at *any* range and never feeds rows 3/4's ring streak
+(a blip is not an occluded ring); rows 3/4 act only on frames carrying detection
+evidence, which preserves IS8-2 for whole-approach blindness (the committed
+test's signature) instead of a blind dead-reckoning walk into a spurious IS8-3.
+POLICY_CLOSE_WITHOUT_OUTER semantics unchanged.** Decided
+by the human (recorded answer, 2026-08-09 session, "fix then re-probe"); all
+pre-decision probe/Tier-1 artifacts stay committed as the before evidence.
+**Consequence:** every record produced under the per-frame reading regenerates under
+D-034 code; the pre-fix Tier-1/probe summaries are historical evidence for H-18, not
+poolable data. IS8-2 (zero detections whole-approach) remains reachable — genuine
+blindness still classifies.
+**What would make it wrong:** a committed doctrine that any sensor dropout mandates
+mission abort (would be an IS §8 revision, not a code default), or MR/field data
+showing dropout episodes correlate with total perception loss ≫ 5 s.
+
 ### D-033 — IS8-18: insertion incomplete at encounter budget (extends §8; T9 review, 2026-08-08)
 The T9 code review confirmed two trace shapes today's sim produces that no §8 row
 names: a contact-stage timeout with contact but no full stroke (shallow stall below

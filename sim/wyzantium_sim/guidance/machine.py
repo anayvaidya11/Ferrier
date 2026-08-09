@@ -12,6 +12,7 @@ decision", IS §8 preamble), the abort_reason enum (WIRE_FORMAT).
 Arbitrary code-level choices (spec gaps recorded 2026-08-04, chassis_error
 precedent):
 - HOLD_TIMEOUT_S: row 1's "escalate on timeout" has no committed number.
+  D-034: row 2 shares this wall — dark or degraded for HOLD_TIMEOUT_S.
 - AMBIGUITY_PERSIST_FRAMES: row 5's "persistent" has no committed count.
 - POLICY_CLOSE_WITHOUT_OUTER = False: row 2's "if commanded policy allows"
   has no committed policy; conservative default.
@@ -151,7 +152,12 @@ class GuidanceMachine:
         # every approach on detection jitter (T8 composition finding,
         # 2026-08-04; code-level choice, flagged for amendment). The
         # streak-completing frame decides row 4 vs row 3 by its own shape.
-        if range_mm <= INNER_RANGE_MM:
+        # D-034 routing: rows 3/4 judge the *ring* in an otherwise-seeing
+        # approach, so they act only on frames carrying detection evidence.
+        # A fully-dark frame (no tags, pose_source none) is row 2's domain
+        # at any range — a blip must not feed the ring streak.
+        if range_mm <= INNER_RANGE_MM and (
+                tags or line.get("pose_source", "none") != "none"):
             inner = [t for t in tags if t.get("id") != 0]
             if len(inner) < 2:
                 self._ring_streak += 1
@@ -173,10 +179,21 @@ class GuidanceMachine:
                 return Decision(action="reject_frame", stage=self.stage)
             self._ring_streak = 0
 
-        # IS §8 row 2: no outer detection at expected range
+        # IS §8 row 2: no outer detection at expected range. D-034: a
+        # no-detection frame is a held frame, not an abort — row 2 shares
+        # row 1's hold wall (outer channel dark OR degraded for
+        # HOLD_TIMEOUT_S ⇒ escalate). The per-frame reading zeroed the
+        # D-029 band on #43 sensor blips (H-18: dropout 0.05 alone →
+        # 0/50); rows 1/3/4/5 already hold/streak for exactly this
+        # per-frame-jitter reason. Whole-approach blindness still
+        # classifies (IS8-2).
         if line.get("pose_source") == "none" and not tags:
             if not POLICY_CLOSE_WITHOUT_OUTER:
-                return self._escalate("low_confidence")
+                if self._hold_since is None:
+                    self._hold_since = t_s
+                if t_s - self._hold_since > HOLD_TIMEOUT_S:
+                    return self._escalate("low_confidence")
+                return Decision(action="hold", stage=self.stage)
 
         # IS §8 row 1: degraded confidence — hold, reacquire, timeout
         if conf < self.conf_min:
