@@ -13,6 +13,8 @@ Arbitrary code-level choices (spec gaps recorded 2026-08-04, chassis_error
 precedent):
 - HOLD_TIMEOUT_S: row 1's "escalate on timeout" has no committed number.
   D-034: row 2 shares this wall — dark or degraded for HOLD_TIMEOUT_S.
+  D-036: rows 3/4 share it too — ring absence is sustained time, not a
+  frame count (RING_PERSIST_FRAMES retired).
 - AMBIGUITY_PERSIST_FRAMES: row 5's "persistent" has no committed count.
 - POLICY_CLOSE_WITHOUT_OUTER = False: row 2's "if commanded policy allows"
   has no committed policy; conservative default.
@@ -35,7 +37,6 @@ from dataclasses import dataclass, field
 
 HOLD_TIMEOUT_S = 5.0
 AMBIGUITY_PERSIST_FRAMES = 5
-RING_PERSIST_FRAMES = 5
 POLICY_CLOSE_WITHOUT_OUTER = False
 INNER_RANGE_MM = 300.0    # IS §8 row 3: "inside 300 mm"
 HANDOFF_RANGE_MM = 100.0
@@ -99,7 +100,7 @@ class GuidanceMachine:
         self.attempt_n = 1
         self.stage = "acquire"
         self._ambiguity_streak = 0
-        self._ring_streak = 0
+        self._ring_absent_since = None
         self._hold_since = None
 
     def _escalate(self, reason: str, underlying: str = None) -> Decision:
@@ -145,13 +146,14 @@ class GuidanceMachine:
             return Decision(action="reject_frame", stage=self.stage)
         self._ambiguity_streak = 0
 
-        # IS §8 rows 3/4: inner ring below the commit minimum. Like rows
-        # 1/5, the response requires persistence (RING_PERSIST_FRAMES):
-        # per-frame tag detection is stochastic, and one marginal 30 Hz
-        # frame is not an occluded ring — a per-frame abort would end
-        # every approach on detection jitter (T8 composition finding,
-        # 2026-08-04; code-level choice, flagged for amendment). The
-        # streak-completing frame decides row 4 vs row 3 by its own shape.
+        # IS §8 rows 3/4: inner ring below the commit minimum. D-036:
+        # persistence is a TIME window on the shared wall, not a frame
+        # count — per-frame detection is stochastic (nominal frames near
+        # handoff show <2 inner tags up to 73% of the time from
+        # foreshortening alone), so a frames-scale streak reads jitter as
+        # absence; sustained absence for HOLD_TIMEOUT_S is the condition.
+        # The window-completing frame decides row 4 vs row 3 by its own
+        # shape.
         # D-034 routing: rows 3/4 judge the *ring* in an otherwise-seeing
         # approach, so they act only on frames carrying detection evidence.
         # A fully-dark frame (no tags, pose_source none) is row 2's domain
@@ -160,9 +162,10 @@ class GuidanceMachine:
                 tags or line.get("pose_source", "none") != "none"):
             inner = [t for t in tags if t.get("id") != 0]
             if len(inner) < 2:
-                self._ring_streak += 1
-                if self._ring_streak >= RING_PERSIST_FRAMES:
-                    self._ring_streak = 0
+                if self._ring_absent_since is None:
+                    self._ring_absent_since = t_s
+                if t_s - self._ring_absent_since > HOLD_TIMEOUT_S:
+                    self._ring_absent_since = None
                     if (not inner and range_mm <= HANDOFF_RANGE_MM
                             and line.get("pose_source") in ("outer_tag",
                                                             "multi_tag_fused")
@@ -177,7 +180,7 @@ class GuidanceMachine:
                     # occluded ring — reject, don't abort the insertion
                     # (T8 composition finding, 2026-08-04).
                 return Decision(action="reject_frame", stage=self.stage)
-            self._ring_streak = 0
+            self._ring_absent_since = None
 
         # IS §8 row 2: no outer detection at expected range. D-034: a
         # no-detection frame is a held frame, not an abort — row 2 shares

@@ -106,6 +106,28 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-036 — Rows 3/4 ring persistence is a time window on the shared wall (closes H-18's third cause; 2026-08-09)
+Post-D-035 gate re-probe still returned 0.0: every attempt died `inner_ring_absent`
+in the 300→200 mm band and no frame ever reached inner_servo. The instrumented
+per-frame data (nominal vs gate, 50 records each) showed RING_PERSIST_FRAMES = 5
+(0.17 s at 30 Hz) was mis-scaled on its own terms: **nominal** frames near handoff
+carry < 2 inner tags up to 73% of the time (foreshortening alone — streaks fire at
+zero degradation and nominal survives by stage timing), while at the gate cell the
+ring is intermittently present (P(≥2 tags) ≈ 0.19–0.23 per frame ⇒ a genuine
+confirmation about once per second) and the frame-scale streak reads that jitter as
+absence. Same blip-vs-condition class as D-034/D-035, so the same instrument:
+**ring absence is sustained time on the shared HOLD_TIMEOUT_S wall — < 2 inner tags
+continuously for 5 s aborts (row 3) or, ring-dead at handoff range with outer pose
+good, escalates without consuming an attempt (row 4, D-013 unchanged); stochastic
+gaps reject frames and reset on any ≥ 2-tag frame. RING_PERSIST_FRAMES retired.**
+Decided by the human (recorded answer, 2026-08-09 session, third H-18 brief, framed
+as final: no further gate surgery — whatever the gate scores after D-036 is
+reported as-is; fused-conf refusal at commit is characterized by the D-017 sweep,
+not patched).
+**What would make it wrong:** evidence that sustained-seconds absence windows mask
+a real occluded-ring hazard on approach paths the sim's open-loop T5 cannot
+represent (Phase 3 real-data check).
+
 ### D-035 — conf_min is commit-scoped: the row-1 hold wall applies at inner range only (closes H-18's second cause; 2026-08-09)
 Post-D-034 gate re-probe still returned 0.0 over 500 trials: detected-frame
 confidence at the D-029 cell medians 0.16 (p90 0.49, n=9,351 frames) against the

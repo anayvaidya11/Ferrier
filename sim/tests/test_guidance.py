@@ -226,28 +226,44 @@ class TestRow3InnerOccluded:
         assert d.action == "reject_frame"
         assert m.attempt_n == 1
 
-    def test_persistent_below_two_inner_aborts_and_retries(self):
+    def test_sustained_ring_absence_aborts_and_retries(self):
+        # D-036: absence is a time window on the shared wall, not a
+        # frame count.
         m = make_machine()
-        d = None
-        for _ in range(machine.RING_PERSIST_FRAMES):
-            d = m.observe(self._one_inner(), range_mm=250.0, t_s=5.0)
+        t = 5.0
+        d = m.observe(self._one_inner(), range_mm=250.0, t_s=t)
+        while d.action == "reject_frame":
+            t += 1.0 / 30.0
+            d = m.observe(self._one_inner(), range_mm=250.0, t_s=t)
         assert d.action == "abort_retry"
         assert d.abort_reason == "inner_ring_absent"
         assert m.attempt_n == 2
+        assert t - 5.0 <= machine.HOLD_TIMEOUT_S + 0.2
 
-    def test_good_ring_frame_resets_the_streak(self):
+    def test_good_ring_frame_resets_the_window(self):
         m = make_machine()
-        for _ in range(machine.RING_PERSIST_FRAMES - 1):
-            m.observe(self._one_inner(), range_mm=250.0, t_s=5.0)
-        m.observe(line(), range_mm=250.0, t_s=5.1)   # two inner tags
-        d = m.observe(self._one_inner(), range_mm=250.0, t_s=5.2)
-        assert d.action == "reject_frame"
+        t = 5.0
+        for _ in range(120):   # 4 s of ring gaps — inside the wall
+            d = m.observe(self._one_inner(), range_mm=250.0, t_s=t)
+            assert d.action == "reject_frame"
+            t += 1.0 / 30.0
+        m.observe(line(), range_mm=250.0, t_s=t)   # two inner tags reset
+        t += 1.0 / 30.0
+        for _ in range(120):   # 4 s more after reset — still inside
+            d = m.observe(self._one_inner(), range_mm=250.0, t_s=t)
+            assert d.action == "reject_frame"
+            t += 1.0 / 30.0
+        assert m.attempt_n == 1
 
     def test_budget_exhaustion_escalates(self):
         m = make_machine()
-        d = None
-        for _ in range(machine.RING_PERSIST_FRAMES * (ATTEMPTS_MAX + 1)):
-            d = m.observe(self._one_inner(), range_mm=250.0, t_s=5.0)
+        t = 5.0
+        d = m.observe(self._one_inner(), range_mm=250.0, t_s=t)
+        for _ in range(int(30 * machine.HOLD_TIMEOUT_S * (ATTEMPTS_MAX + 2))):
+            if d.action == "escalate":
+                break
+            t += 1.0 / 30.0
+            d = m.observe(self._one_inner(), range_mm=250.0, t_s=t)
         assert d.action == "escalate"
         assert d.abort_reason == "attempt_budget_exhausted"
 
@@ -255,29 +271,40 @@ class TestRow3InnerOccluded:
         # D-004 stage 3 is force-guided (pose_source contact_force):
         # below the handoff boundary, terminal foreshortening starving
         # the ring count is not an occluded ring — frames are rejected,
-        # the insertion is not aborted (T8 composition finding,
-        # 2026-08-04). Row 4 (ring dead + outer pose OK) still escalates.
+        # the insertion is not aborted, even past the wall (T8
+        # composition finding, 2026-08-04). Row 4 (ring dead + outer
+        # pose OK) still escalates.
         m = make_machine()
-        for _ in range(3 * machine.RING_PERSIST_FRAMES):
-            d = m.observe(self._one_inner(), range_mm=60.0, t_s=8.0)
+        t = 8.0
+        for _ in range(int(3 * 30 * machine.HOLD_TIMEOUT_S)):
+            d = m.observe(self._one_inner(), range_mm=60.0, t_s=t)
             assert d.action == "reject_frame"
+            t += 1.0 / 30.0
         assert m.attempt_n == 1
 
 
 class TestRow4InnerDestroyed:
     def test_zero_inner_at_handoff_range_never_attempts(self):
         m = make_machine()
-        d = None
-        for _ in range(machine.RING_PERSIST_FRAMES):
+        t = 8.0
+        d = m.observe(line(stage="inner_servo", pose_source="outer_tag",
+                           conf=0.92,
+                           tags=[{"id": 0, "reproj_err": 0.3,
+                                  "ambiguity_flag": False,
+                                  "ambiguity_ratio": 1.0}]),
+                      range_mm=60.0, t_s=t)
+        while d.action == "reject_frame":
+            t += 1.0 / 30.0
             d = m.observe(line(stage="inner_servo", pose_source="outer_tag",
                                conf=0.92,
                                tags=[{"id": 0, "reproj_err": 0.3,
                                       "ambiguity_flag": False,
                                       "ambiguity_ratio": 1.0}]),
-                          range_mm=60.0, t_s=8.0)
+                          range_mm=60.0, t_s=t)
         assert d.action == "escalate"
         assert d.abort_reason == "inner_ring_absent"
         assert m.attempt_n == 1, "D-013: no insertion attempt is consumed"
+        assert t - 8.0 <= machine.HOLD_TIMEOUT_S + 0.2
 
 
 class TestRow5AmbiguityFlip:
