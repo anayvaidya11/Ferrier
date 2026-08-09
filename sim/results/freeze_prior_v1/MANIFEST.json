@@ -1,0 +1,19 @@
+{
+ "source": "pre-swap prior_v1 freeze (PHASE1_PLAN week-4 step; D-021/D-032/D-038; ROADMAP curve-swap protocol)",
+ "code_git_sha": "b493e7a4e725e42c46c37981f607cfcb806b4441",
+ "engine": "mujoco 3.11.0 (Newton pending GPU quota, recorded)",
+ "instance": "c7i.8xlarge spot us-east-1c, ubuntu-24.04, python 3.12",
+ "curve_set": "prior_v1",
+ "plans": {
+  "tier1": "tiers.tier1_plan(20260808)",
+  "tier2": "tiers.tier2_plan(20260808)",
+  "gate": "tiers.gate_plan(20260808, 5000) [D-038]"
+ },
+ "counts": {
+  "tier1": 4400,
+  "tier2": 4000,
+  "gate": 5000
+ },
+ "dataset_digest": "5fa6b4b36f7bf1aaed7921a01919e236e29c66412e91b8d1e4d1df9dd10ea509  /home/ubuntu/runs/freeze_prior_v1/gate.sha256\n272635578683fa0230fc0665160b9d724d416c9c8a52894628ac2032b59a2156  /home/ubuntu/runs/freeze_prior_v1/tier1.sha256\nee344a4ac4e876f59e46b2a62fe0497f3d7aeb02983c106c8ec33f735da312cf  /home/ubuntu/runs/freeze_prior_v1/tier2.sha256\n",
+ "records_storage": "not retained \u2014 records regenerate deterministically from this manifest (code sha + committed plans + seed rule); the per-record sha256 lists committed beside this manifest verify any regeneration. Regeneration cost at the committed A-004 rate: ~/bin/zsh.13."
+}

@@ -6,7 +6,7 @@
   "market": "spot",
   "az": "us-east-1c",
   "vcpus": 32,
-  "usd_per_hour": 0.6297,
+  "usd_per_hour": 0.6261,
   "os": "ubuntu-24.04",
   "python": "3.12",
   "mujoco": "3.11.0",
@@ -14,9 +14,9 @@
   "engine": "mujoco"
  },
  "n_trials": 1000,
- "wall_s": 53.86788236800001,
- "usd_per_hour": 0.6297,
- "usd_per_1k_trials": 0.009422390424202669,
+ "wall_s": 54.636326901000075,
+ "usd_per_hour": 0.6261,
+ "usd_per_1k_trials": 0.009502167853532263,
  "success_rate": 1.0,
  "workers": 32,
  "timestep_s": 0.0002

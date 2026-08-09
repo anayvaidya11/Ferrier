@@ -1,0 +1,45 @@
+{
+ "source": "pre-swap prior_v1 freeze; D-029 gate cell per gate_moderate.json; D-038 N=5000; D-005 splits separate",
+ "tier1": {
+  "n": 4400,
+  "success": 0.8922727272727272,
+  "ci95": [
+   0.8827671731435192,
+   0.9010938994254851
+  ],
+  "first_attempt_success": 0.8829545454545454,
+  "census": {
+   "success": 3926,
+   "IS8-1": 457,
+   "IS8-3": 17
+  }
+ },
+ "tier2": {
+  "n": 4000,
+  "success": 0.0065,
+  "ci95": [
+   0.0044396760656341926,
+   0.009507329230479419
+  ],
+  "first_attempt_success": 0.004,
+  "census": {
+   "IS8-2": 2050,
+   "IS8-1": 1917,
+   "IS8-3": 7,
+   "success": 26
+  }
+ },
+ "gate": {
+  "n": 5000,
+  "success": 0.0,
+  "ci95": [
+   0.0,
+   0.000767730137580694
+  ],
+  "first_attempt_success": 0.0,
+  "census": {
+   "IS8-1": 4997,
+   "IS8-3": 3
+  }
+ }
+}

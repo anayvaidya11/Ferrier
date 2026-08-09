@@ -1,0 +1,35 @@
+{
+ "curve_set": "prior_v1",
+ "n_trials": 4400,
+ "figures": {
+  "d014_attempts_per_encounter": "d014_attempts_per_encounter.png",
+  "d014_chassis_error_scale": "d014_chassis_error_scale.png",
+  "d014_conf_min_attempt": "d014_conf_min_attempt.png",
+  "d014_dropout_p": "d014_dropout_p.png",
+  "d014_flip_kappa": "d014_flip_kappa.png",
+  "d014_head_mass_kg": "d014_head_mass_kg.png",
+  "d014_illuminance_lux": "d014_illuminance_lux.png",
+  "d014_inner_occlusion": "d014_inner_occlusion.png",
+  "d014_lens_contamination": "d014_lens_contamination.png",
+  "d014_mu_contact": "d014_mu_contact.png",
+  "d014_mud_f_c": "d014_mud_f_c.png",
+  "d014_outer_occlusion": "d014_outer_occlusion.png",
+  "d014_perception_latency_ms": "d014_perception_latency_ms.png",
+  "d014_perception_rate_hz": "d014_perception_rate_hz.png",
+  "d014_rain": "d014_rain.png",
+  "d014_restitution_e": "d014_restitution_e.png",
+  "d014_speed_inner_ms": "d014_speed_inner_ms.png",
+  "d014_speed_insertion_ms": "d014_speed_insertion_ms.png",
+  "d014_speed_outer_ms": "d014_speed_outer_ms.png",
+  "d014_stiffness_k_n_mm": "d014_stiffness_k_n_mm.png",
+  "d014_tag_knockout_mask": "d014_tag_knockout_mask.png",
+  "d014_time_budget_min": "d014_time_budget_min.png",
+  "d017_tradeoff": "d017_tradeoff.png",
+  "failure_distribution": "failure_distribution.png"
+ },
+ "d005_splits": {
+  "n": 4400,
+  "first_attempt": 0.8829545454545454,
+  "overall": 0.8922727272727272
+ }
+}
