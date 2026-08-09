@@ -111,13 +111,14 @@ def _init_worker(engine_factory):
     _WORKER_ENGINE = engine_factory()
 
 
-def _run_planned(seed, sweep_point, out_dir):
+def _run_planned(seed, sweep_point, out_dir, solver=None):
     return trial.run_trial(seed, sweep_point, _WORKER_ENGINE,
-                           sweep_point["curve_set"], out_dir=Path(out_dir))
+                           sweep_point["curve_set"], out_dir=Path(out_dir),
+                           solver=solver)
 
 
 def run_sweep(plan, out_dir, *, workers=1, engine_factory=MuJoCoEngine,
-              spend=None) -> SweepResult:
+              spend=None, solver=None) -> SweepResult:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     engine = engine_factory()
@@ -139,7 +140,8 @@ def run_sweep(plan, out_dir, *, workers=1, engine_factory=MuJoCoEngine,
             if spend is not None:
                 spend.charge_before()
             trial.run_trial(p.seed, p.sweep_point, engine,
-                            p.sweep_point["curve_set"], out_dir=out_dir)
+                            p.sweep_point["curve_set"], out_dir=out_dir,
+                            solver=solver)
             if spend is not None:
                 spend.record(p.tag)
     else:
@@ -151,7 +153,7 @@ def run_sweep(plan, out_dir, *, workers=1, engine_factory=MuJoCoEngine,
                 if spend is not None:
                     spend.charge_before()
                 futures[pool.submit(_run_planned, p.seed, p.sweep_point,
-                                    str(out_dir))] = p
+                                    str(out_dir), solver)] = p
             for fut in as_completed(futures):
                 fut.result()  # surface worker exceptions
                 if spend is not None:
