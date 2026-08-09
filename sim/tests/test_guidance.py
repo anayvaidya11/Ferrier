@@ -138,22 +138,28 @@ class TestRow1OuterOcclusion:
                            conf=0.90), range_mm=1500.0, t_s=1.0)
         assert d.action == "continue"
 
-    def test_below_threshold_holds_and_reacquires(self):
+    def test_outer_low_conf_detection_continues(self):
+        # D-035: at outer range a detected frame is tracking evidence —
+        # the commit-grade wall does not pre-empt a reversible approach.
         m = make_machine()
         d = m.observe(line(stage="outer_servo", pose_source="outer_tag",
                            conf=0.40,
                            degradation={"occlusion_est": 0.6}),
                       range_mm=1500.0, t_s=1.0)
+        assert d.action == "continue"
+
+    def test_inner_below_threshold_holds_and_reacquires(self):
+        m = make_machine()
+        d = m.observe(line(conf=0.40), range_mm=250.0, t_s=1.0)
         assert d.action == "hold"
 
-    def test_hold_timeout_escalates(self):
+    def test_inner_hold_timeout_escalates(self):
         m = make_machine()
-        low = dict(stage="outer_servo", pose_source="outer_tag", conf=0.40)
         t = 1.0
-        d = m.observe(line(**low), range_mm=1500.0, t_s=t)
+        d = m.observe(line(conf=0.40), range_mm=250.0, t_s=t)
         while d.action == "hold":
             t += 0.1
-            d = m.observe(line(**low), range_mm=1500.0, t_s=t)
+            d = m.observe(line(conf=0.40), range_mm=250.0, t_s=t)
         assert d.action == "escalate"
         assert d.abort_reason == "low_confidence"
         assert t - 1.0 <= machine.HOLD_TIMEOUT_S + 0.2

@@ -195,8 +195,14 @@ class GuidanceMachine:
                     return self._escalate("low_confidence")
                 return Decision(action="hold", stage=self.stage)
 
-        # IS §8 row 1: degraded confidence — hold, reacquire, timeout
-        if conf < self.conf_min:
+        # IS §8 row 1: degraded confidence — hold, reacquire, timeout.
+        # D-035: the conf wall is commit-scoped — it holds only at inner
+        # range, where fused commit-grade confidence is the operative
+        # question (D-013/#30 define conf_min at the commit predicate).
+        # At outer range a detected frame is tracking evidence and the
+        # approach continues (reversible, §1.5 asymmetry); absence is
+        # governed by the D-034 dark wall above.
+        if range_mm <= INNER_RANGE_MM and conf < self.conf_min:
             if self._hold_since is None:
                 self._hold_since = t_s
             if t_s - self._hold_since > HOLD_TIMEOUT_S:

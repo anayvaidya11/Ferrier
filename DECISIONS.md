@@ -106,6 +106,31 @@ attitude within ±20°. These are interface *requirements* on integrators, deriv
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
 
+### D-035 — conf_min is commit-scoped: the row-1 hold wall applies at inner range only (closes H-18's second cause; 2026-08-09)
+Post-D-034 gate re-probe still returned 0.0 over 500 trials: detected-frame
+confidence at the D-029 cell medians 0.16 (p90 0.49, n=9,351 frames) against the
+0.85 wall, because row 1 was realized as "hold whenever conf < conf_min at ANY
+stage" — one muddy outer tag cannot sustain commit-grade evidence mass under
+compound degradation, so approaches die before the commit gate ever operates
+(census: 335× IS8-1, 165× IS8-3). D-013/#30 define the threshold at the **commit
+predicate** (inner_servo ∧ multi_tag_fused ∧ conf ≥ threshold); §1.5's asymmetry
+says approach is the reversible, cheap act and insertion is the guarded one.
+**Realization from here: the row-1 conf wall holds only at inner range
+(≤ INNER_RANGE_MM), where fused commit-grade confidence is the operative
+question. At outer range a detected frame is tracking evidence and the approach
+continues; absence of detections is governed by the D-034 dark wall; ambiguity
+rejection (row 5) unchanged; the commit predicate itself unchanged.** Decided by
+the human (recorded answer, 2026-08-09 session, second H-18 brief). The asset
+remains protected where the product's honesty discipline lives: at commit —
+refusal there is measured, not pre-empted at approach.
+**Consequence:** gate-cell trials now reach inner range and the D-017
+refusal/damage tradeoff is measured at its intended site. Pre-D-035 gate probes
+stay committed as H-18 evidence, not poolable data.
+**What would make it wrong:** doctrine requiring commit-grade confidence to even
+maneuver near a casualty (would be an IS revision), or Phase 3 real-data evidence
+that low-conf outer tracking correlates with approach-phase collisions the sim
+cannot see.
+
 ### D-034 — IS §8 row 2 realized with persistence: sustained dark window, not single frame (closes H-18's dominant cause; 2026-08-09)
 Row 2 ("no outer detection at expected range") was realized per-frame: one
 no-detection line escalated `low_confidence` immediately. The #43 dropout model
