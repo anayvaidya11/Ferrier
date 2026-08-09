@@ -138,7 +138,14 @@ and T8 to exist first — so the local build queue (T4c MuJoCo half → T5 → T
 proceeds in the interim on the M4. A-004 content unchanged; this is a sequencing note,
 not an amendment. 2026-08-08 update: cloud credits are abandoned (human decision —
 the application process is not worth a $20–60 expected spend); provisioning waits
-only on T8 (done) and pays retail under the P-02 ceiling. Still a sequencing note.*
+only on T8 (done) and pays retail under the P-02 ceiling. Still a sequencing note.
+Same-day reversal, 2026-08-08 late: the abandoned path was a paperwork application;
+AWS's console offered $20/activity credits for five one-click activities, all five
+driven in-session at near-zero cost (budget alarm, EC2 launch/terminate, Lambda,
+RDS create/delete, Bedrock invoke); Billing shows $180 credit remaining vs $0 used.
+Provisioning now draws on credits; the P-02 $100 ceiling and the runner's spend
+meter are unchanged, and an AWS Budgets alarm (`wyzantium-p02-ceiling`, alerts at
+50/80/100% of $100/mo) now backs the meter externally. Still a sequencing note.*
 
 | Week | Work | Must land |
 |---|---|---|
