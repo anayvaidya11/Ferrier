@@ -4,22 +4,25 @@
      Update it whenever a T-task, phase, or gate changes state.
      Sources of truth: ROADMAP.md (phases), PHASE1_PLAN.md §4 (T0–T13 build order), git log. -->
 
-_Last updated: 2026-08-08 (after T10)_
+_Last updated: 2026-08-09 (first cloud runs; D-034/035/036)_
 
 WyZantium is working toward a February submission in six phases, and right now
 we're in Phase 1: a simulated docking experiment that must hit its kill-gate
-number by September 30. The design groundwork (Phase 0 — all the specs and
-contracts) is signed and closed. Of Phase 1's 14 build tasks (T0–T13), the
-first 11 are done: the simulator runs complete start-to-finish docking
-trials, writes each one to a replay file that comes out byte-for-byte
-identical from the same seed, labels every trial with exactly one honest
-outcome under a written tie-breaking order, and now has the machinery to run
-the big experiment itself — the full sweep plans are committed as data, a
-runner works through them in parallel, survives being killed and picks up
-exactly where it left off, meters spending against the ratified $100 cloud
-ceiling, and ships the probes that pick the physics step size and measure
-cost per thousand trials. What's left is actually running the sweeps, then
-packaging replayable demo artifacts (T11) and turning the results into the
-charts and report the gate decision needs (T12–T13). Phases 2 through 5 —
-real physics proof, real perception, integration, and customers — haven't
-started yet.
+number by September 30. The design groundwork (Phase 0) is signed and closed,
+and the experiment machine (build tasks T0–T10) is built and proven. This week
+the experiment actually started running on rented cloud computers: the physics
+step size was confirmed, the cost came in at about a penny per thousand trials
+(the whole experiment fits in roughly a dollar against $180 of credits), and
+the first 13,000 trials ran. Those first runs caught three real bugs — the
+robot's decision logic was giving up on a whole mission over fraction-of-a-
+second sensor blips — each fixed as a written, human-approved decision
+(D-034/035/036). With the bugs gone, an honest early picture emerged: in clean
+conditions docking succeeds almost always, but under the moderate mud and
+darkness the kill gate is scored on, the robot usually *refuses* to attempt
+(it can't get confident enough in what its cameras show), which currently
+points the gate score well below the 30% stop line. Two things could move
+that number honestly: the real mud-on-camera measurements happening in late
+August, and the already-planned tradeoff study of how cautious the robot
+should be. What's left: the full formal sweeps, replayable demo artifacts
+(T11), and the charts and report the gate decision needs (T12–T13). Phases
+2 through 5 haven't started yet.
