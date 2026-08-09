@@ -4,7 +4,7 @@
      Update it whenever a T-task, phase, or gate changes state.
      Sources of truth: ROADMAP.md (phases), PHASE1_PLAN.md §4 (T0–T13 build order), git log. -->
 
-_Last updated: 2026-08-09 (first cloud runs; D-034/035/036)_
+_Last updated: 2026-08-09 late (freeze-prior-v1; T11-T12 built; D-037/038)_
 
 WyZantium is working toward a February submission in six phases, and right now
 we're in Phase 1: a simulated docking experiment that must hit its kill-gate
@@ -20,9 +20,16 @@ second sensor blips — each fixed as a written, human-approved decision
 conditions docking succeeds almost always, but under the moderate mud and
 darkness the kill gate is scored on, the robot usually *refuses* to attempt
 (it can't get confident enough in what its cameras show), which currently
-points the gate score well below the 30% stop line. Two things could move
-that number honestly: the real mud-on-camera measurements happening in late
-August, and the already-planned tradeoff study of how cautious the robot
-should be. What's left: the full formal sweeps, replayable demo artifacts
-(T11), and the charts and report the gate decision needs (T12–T13). Phases
-2 through 5 haven't started yet.
+points the gate score well below the 30% stop line. Since then the loop was
+closed for real (holds now physically stop the vehicle, a human-approved
+fix), the replay and analysis tools were built (T11–T12), and the full
+formal experiment ran and was frozen: 13,400 trials, verifiable by
+regeneration, about 25 cents of compute total. The frozen pre-measurement
+number: under moderate degradation the robot refuses every attempt (0% of
+5,000 gate trials, all safe refusals — it never risks the asset), while
+clean-condition success sits near 89%. That number is built on stand-in
+perception curves; the one thing that can move it honestly is the late-
+August measurement window (about 3 days of human time — the approval packet
+is written and waiting). After that: the curve swap, the final gate number
+reported before-and-after, and the T13 report. Phases 2 through 5 haven't
+started yet.
