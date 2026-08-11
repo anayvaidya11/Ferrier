@@ -13,6 +13,8 @@ added; struck through when done.
 | P-06 | **Re-scoped by D-031; Stage B COMPLETE 2026-08-04.** The OA theory pair is page-verified — Whitney's own MIT OCW 2.875 lecture (51 slides read; wedging θ > c/μ, jamming parallelogram, RCC, and theory-vs-data validation figures slides 35–38) + CJME 2025 review (CC BY; Whitney-model equations and jamming diagram, pp. 8–12). Caveats in C-12, INTERFACE_SPEC §2.3, and H04 (Addendum A5) are revised per their written terms. **Residual (email route REMOVED at the human's direction, 2026-08-04 — no favor-asks):** if a T5-promotion argument ever needs experimental grounding beyond the OCW validation figures, the path is (1) page-read **Simunovic 1979** (MIT DSpace 1721.1/16229, open PDF verified downloadable — Claude's task, zero cost) and only then (2) a **self-serve ASME PDF purchase** of the 1982 paper (~US$38, a checkout page; a document purchase per NO_HARDWARE rev 2) | only if a T5-promotion argument needs it AND Simunovic proves insufficient (Phase 1/2) | Struck entirely only if the 1982 full text itself lands |
 | ~~P-07~~ | ~~Obtain Kallwies 2020~~ **CLOSED per D-031; Stage B COMPLETE 2026-08-04.** Ask dropped (nine dead routes; public unresolved ~40× reproduction caution; abstract figures aren't stock-detector corner σ). Replacement page-verified: **Adámek 2023 (Sensors, CC BY, all 20 pages read) added as perception_prior Paper 5 — FORM anchor for #40** (variance-vs-area/angle functional forms; ArUco basis, so magnitudes stay swept/MR-measured). No human action remains | — | #40's sweep unchanged; any future magnitude anchoring arrives via MR `reproj_rms_px` under the curve-swap protocol |
 
+| P-08 | **Ratification sitting: Phase-1 closeout decisions** — draft texts in the packet below; the R01 surgical review (studies/R01_PHASE1_REVIEW, in progress 2026-08-11) appends any Class B findings to this same sitting so everything ratifies once | before the pre-swap re-freeze (target: before the measurement window) | Packet below; DECISIONS.md D-034/035/036 are the archetype |
+
 *Note: the hole-closure prompt's Part E-5 asked for a "rename repo to recovery-stack"
 action here. That premise conflicts with committed A-001 (§2.5 says the repository IS
 `anayvaidya11/Ferrier`, by explicit prior decision), so per the documents-win rule the
@@ -59,7 +61,53 @@ the list, and schedule the days — the procedures in `MEASUREMENT_REQUESTS.md`
 
 ---
 
-## P-05 review packet (~45 minutes)
+## P-08 ratification packet (added 2026-08-11 — grows as R01 findings land; one sitting ratifies all)
+
+### (a) D-039 draft — MuJoCo is the Phase-1 engine of record; A-004 GPU leg waived as moot
+
+**What it records:** ARCH §4's day-one Newton conformance run never happened —
+Newton was never provisioned (GPU quota; the credits landed after the CPU path
+was already proven). The entire frozen experiment (13,400 trials) ran on
+MuJoCo 3.11.0, which passed the conformance suite and the bit-identical
+replay contract. PHASE1_PLAN §3 requires "both measurements committed" for
+A-004; only the CPU leg exists ($0.0095/1k trials, `sim/results/a004/`).
+
+**The waiver argument:** the full DOE cost ~$0.25 of compute. Even a GPU rate
+10× better than CPU could save at most ~$0.22 across all of Phase 1 — while
+running the GPU leg itself (quota request, provisioning, spot time) costs more
+than it could ever recover. The comparison A-004 exists to decide is moot at
+this workload scale. Recording the waiver keeps the obligation visible instead
+of silently unmet; the Newton adapter stays in-tree as a labeled stub.
+
+**What would make it wrong:** Phase 2+ contact workloads at a scale where the
+$/trial comparison stops being moot — re-open with a fresh cost test then.
+
+**To ratify:** say so in a session (recorded here with the date); DECISIONS.md
+gains D-039 and PHASE1_PLAN §3/ARCH §4 get supersession markers pointing at it.
+
+### (b) #62 jam-threshold force grid — recalibrate or keep (finding from `sim/results/probe62_check.json`)
+
+**The finding (2026-08-10):** the committed IS8-17 jam grid (F_ax {50,100,200} N,
+F_lat {10,25} N, t {0.5,1,2} s) stands *operationally* — IS8-17 fired 0× in the
+freeze — but the discrimination is carried almost entirely by the 1.0 s
+persistence window, not the force cells: a *successful* nominal insertion
+exceeds F_ax_jam at its p90 (272 N vs 100 N) and F_lat_jam at its p99
+(6.4 kN vs 25 N) on contact transients. The force cells as committed do not
+separate jam from normal contact; the time window does.
+
+**Option 1 — keep the grid, record the semantics:** IS8-17 is a
+*sustained*-wrench criterion; the force cells are entry conditions only. Zero
+behavioral change, no re-run; REPORT documents that discrimination lives in
+the persistence window. Honest, cheap, and consistent with how the freeze
+actually scored.
+
+**Option 2 — recalibrate force cells to measured scales** (e.g., anchor
+F_ax_jam above the successful-insertion p99): behavioral change → Class B →
+joins the batched re-run/re-freeze. Sharper physical meaning, costs a
+recalibration decision now on one probe record's evidence.
+
+**To ratify:** pick one (or ask for a wider probe first — more records, both
+outcomes, cheap and local).
 
 What to read before signing, in order. The signature asserts one sentence: *"The
 interface spec is precise enough that Phase 1 builds directly against it with no
