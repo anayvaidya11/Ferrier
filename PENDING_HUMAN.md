@@ -109,6 +109,47 @@ recalibration decision now on one probe record's evidence.
 **To ratify:** pick one (or ask for a wider probe first — more records, both
 outcomes, cheap and local).
 
+### (c) R01 review findings — Class B set (added 2026-08-11 after the 8-lane surgical review; details in `studies/R01_PHASE1_REVIEW/FINDINGS.md`)
+
+225/225 contract clauses verdicted; 24 findings survived adversarial
+prosecution, 0 rejected. Eight are behavioral and need your ratification
+before the single batched re-run that replaces `freeze_prior_v1`:
+
+1. **F-012 (high) — every frozen trial ran with the target orientation
+   inverted**: nominal engagement was realized as Ry(180°) instead of
+   Rz(180°), so "plate up" mapped to head-*down* — the outer tag sits at
+   z=−185 mm instead of +185, and camera view angles run 4–48° worse than
+   the committed nominal (62° vs 15° at handoff, at the literature model's
+   validity edge). Every frozen detection/confidence/refusal number
+   inherits this. Two independent agents reproduced the numbers exactly.
+2. **F-004 (high)** — hold/absence timers persist across D-005 retry
+   attempts: a fresh attempt's first gap frame can instantly abort with the
+   previous attempt's clock (violates D-034/D-036's own blip-vs-condition
+   rule at the attempt seam).
+3. **F-007 + F-008 (high)** — inner tags use the 110 mm constellation span
+   instead of their own 10 mm size for both decode extent and flip
+   discriminability: 10 mm tags "decode" at 3 m (IS §3.3 says ~3 px there)
+   and lone tags become flip-immune (H08/D-011 say the opposite).
+4. **F-016 (high)** — the latency sweep axis is behaviorally inert (no
+   consumer reads t_emit; no staleness bound) — the frozen latency marginal
+   is fake-flat, the exact hazard D-032(e) named.
+5. **F-009 (med)** — σ_px's committed sweep {0.3, 0.5, 1.0} px is
+   unrealizable (pinned at 0.5; not a sweep axis; the amendment trial.py's
+   docstring promises was never recorded). Found independently by 3 lanes.
+6. **F-005 (med)** — ambiguity-rejected frames still authorize commit at
+   the trial seam (gate never reads ambiguity_flag).
+7. **F-017 (med)** — trial_header lacks the compute-instance identity ARCH
+   §5 commits (additive schema revision; pairs with the F-018 finding that
+   regeneration only verifies on the freeze instance class).
+
+Plus at the same sitting: H-17 host-attitude realization (your earlier
+"batch with review fixes" answer), the F-013/F-014 realize-or-exclude
+calls, the E-class doc repairs, and the #62/D-039 items above.
+**Consequence of ratifying:** one batched fix set → local verification →
+one cloud re-run (~$0.15–0.30, P-02-metered, your explicit go at launch) →
+`freeze_prior_v2` with the gate restated pre-swap. `freeze_prior_v1`
+stays committed as evidence.
+
 What to read before signing, in order. The signature asserts one sentence: *"The
 interface spec is precise enough that Phase 1 builds directly against it with no
 further design decisions"* (the MASTER_CONTEXT Phase 0 gate condition).

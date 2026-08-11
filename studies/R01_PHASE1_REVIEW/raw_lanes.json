@@ -1,0 +1,2229 @@
+[
+ {
+  "lane": "A",
+  "review": {
+   "verdicts": [
+    {
+     "row_id": "IS8-01",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:201",
+     "test_ref": "tests/test_guidance.py::TestRow1OuterOcclusion::test_inner_hold_timeout_escalates",
+     "evidence": "Hold/reacquire below conf_min, escalate low_confidence on HOLD_TIMEOUT_S wall; D-035 ratified the inner-range scoping (outer-range detected low-conf frame continues, tested)."
+    },
+    {
+     "row_id": "IS8-02",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:193",
+     "test_ref": "tests/test_guidance.py::TestRow2OuterDestroyed::test_sustained_darkness_escalates_with_imagery",
+     "evidence": "D-034 dark window realized (blip holds, 5s darkness escalates, detection resets); classifier IS8-2 requires zero ID-0 whole-approach (outcomes.py:176); e2e test_trial saturated-dropout case.",
+     "note": "Stale _hold_since across attempts (F-A01) can turn a fresh attempt's single blip into terminal escalation. POLICY_CLOSE_WITHOUT_OUTER=False is the labeled conservative default for the 'if commanded policy allows' arm."
+    },
+    {
+     "row_id": "IS8-03",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:161",
+     "test_ref": "tests/test_guidance.py::TestRow3InnerOccluded::test_sustained_ring_absence_aborts_and_retries",
+     "evidence": "<2 inner inside 300mm aborts only after the D-036 5s window; reset on >=2-inner frame tested; abort_reason inner_ring_absent; escalate after budget tested; sub-handoff jitter never aborts (tested).",
+     "note": "Within one approach conforms; _ring_absent_since carries across D-005 attempts (F-A01, filed on D-036 row) so a retry's first gap frame can abort without 5s of absence in that approach."
+    },
+    {
+     "row_id": "IS8-04",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:169",
+     "test_ref": "tests/test_guidance.py::TestRow4InnerDestroyed::test_zero_inner_at_handoff_range_never_attempts",
+     "evidence": "Zero inner + outer pose OK + conf>=min at <=100mm escalates inner_ring_absent without consuming an attempt (test asserts attempt_n==1, D-013); classifier IS8-4 on escalation reason (outcomes.py:179)."
+    },
+    {
+     "row_id": "IS8-05",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/trial.py:206",
+     "test_ref": "tests/test_guidance.py::TestRow5AmbiguityFlip",
+     "evidence": "Machine side conforms (reject flagged frame, inner-scoped 5-frame streak, reset; frame-count persistence ratified 'unchanged' by D-035). But trial.py latches commit_line from gate.commit_allowed ignoring the machine's reject_frame, and gate.py has no ambiguity conjunct \u2014 finding F-A02."
+    },
+    {
+     "row_id": "IS8-06",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:158",
+     "test_ref": "tests/test_outcomes.py::TestOneTracePerClass::test_canonical_trace_maps_to_its_class[IS8-6]",
+     "evidence": "Classifier row realized/tested; 'no Phase 1 producer' verified: grep finds no setter of stud_wrench_inconsistent outside classify/tests. Non-production documented in committed FAILURE_TAXONOMY."
+    },
+    {
+     "row_id": "IS8-07",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:164",
+     "test_ref": "tests/test_outcomes.py::TestOneTracePerClass::test_canonical_trace_maps_to_its_class[IS8-7]",
+     "evidence": "Classifier row realized/tested; no_contact_at_expected_depth has no producer (grep-verified), labeled in committed taxonomy."
+    },
+    {
+     "row_id": "IS8-08",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:155",
+     "test_ref": "tests/test_outcomes.py::TestOneTracePerClass::test_canonical_trace_maps_to_its_class[IS8-8]",
+     "evidence": "Classifier row realized/tested; constellation_violated has no producer (grep-verified), labeled in committed taxonomy."
+    },
+    {
+     "row_id": "IS8-09",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:161",
+     "test_ref": "tests/test_outcomes.py::TestOneTracePerClass::test_canonical_trace_maps_to_its_class[IS8-9]",
+     "evidence": "Classifier row realized/tested; insertion_force_spike_blunt has no producer (grep-verified), labeled in committed taxonomy."
+    },
+    {
+     "row_id": "IS8-10",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:167",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-17-over-IS8-10]",
+     "evidence": "Requires runner full_stroke observable (D-020 positional: depth AND radial), not mere contact, per D-033 tightening; jam-at-depth outranks (pair tested); IS8-10-over-IS8-18 pair tested."
+    },
+    {
+     "row_id": "IS8-11",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:140",
+     "test_ref": "tests/test_outcomes.py::TestOneTracePerClass::test_canonical_trace_maps_to_its_class[IS8-11]",
+     "evidence": "Pre-success position (else unreachable) tested via pair IS8-11-over-success; latch_confirm_intermittent has no producer (grep-verified), labeled."
+    },
+    {
+     "row_id": "IS8-12",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:143",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-11-over-IS8-12]",
+     "evidence": "Position after IS8-11 (no-lock forbids tow) and before success tested; release_failed has no producer (grep-verified), labeled."
+    },
+    {
+     "row_id": "IS8-13",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:152",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-13-over-IS8-8]",
+     "evidence": "Global-before-local contact-anomaly ordering tested; plate_skew_exceeded has no producer (grep-verified), labeled."
+    },
+    {
+     "row_id": "IS8-14",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:182",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-14-over-IS8-5]",
+     "evidence": "Position 15 before IS8-5 tested; wrong_id_persistent has no producer (grep-verified), labeled. Frame-level wrong-ID rejection basis is ISS-03 (lane B)."
+    },
+    {
+     "row_id": "IS8-15",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:9",
+     "test_ref": "tests/test_outcomes.py::TestIS815Excluded::test_table_covers_every_wire_outcome_except_comms",
+     "evidence": "Deliberately absent from the table (nominal per IS row 15/REQ-005/D-030); stays in wire enum (test_wire_enum_still_carries_is8_15); comms-lost trial classifies by its attempt (tested)."
+    },
+    {
+     "row_id": "IS8-16",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:137",
+     "test_ref": "tests/test_outcomes.py::TestFalseCapture::test_striking_leg_latch_is_false_capture",
+     "evidence": "First row, outranks even a latch (pair IS8-16-over-success tested); false_capture = striking leg's own latch only, recovered latch scores IS8-16/False (both tested). Lip-band production is lane C (runner.lip_strike)."
+    },
+    {
+     "row_id": "IS8-17",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:149",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-17-over-IS8-10]",
+     "evidence": "Jam classification at position 5, never folded into generic insertion failure (pairs 16/17, success/17, 17/5, 17/1, 17/10, 17/18 tested); jam_detected in _KNOWN_ABORTS; criterion realization is lane C.",
+     "note": "trial.py:153 pins #62 thresholds at the mid-grid cell ('until #62 joins the sweep axes', labeled interim) while PHASE1_PARAMETERS #62 says swept; no D-032(e)-style recorded exclusion found \u2014 cross-ref lane F row P-62."
+    },
+    {
+     "row_id": "IS8-18",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:171",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-10-over-IS8-18]",
+     "evidence": "D-033 realized: AttemptEnd.timed_out from contact runner (trial.py:299), position 12 after IS8-10 / before perception rows (pairs tested); e2e tests/test_trial.py::test_budget_truncated_insertion_is_is8_18."
+    },
+    {
+     "row_id": "FT-P01",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:137",
+     "test_ref": "tests/test_outcomes.py::TestDocTranscription::test_doc_order_equals_table_order",
+     "evidence": "IS8-16 at position 1; transcription test pins TABLE to FAILURE_TAXONOMY row-for-row; overlap pairs 16/success, 16/17, 16/1, 16/18 tested."
+    },
+    {
+     "row_id": "FT-P02",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:140",
+     "test_ref": "tests/test_outcomes.py::TestDocTranscription::test_doc_order_equals_table_order",
+     "evidence": "IS8-11 at position 2, pre-success (pair tested), before IS8-12 (pair tested); no-producer label verified by grep."
+    },
+    {
+     "row_id": "FT-P03",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:143",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-12-over-success]",
+     "evidence": "IS8-12 at position 3, pre-success (pair tested); no-producer label verified by grep."
+    },
+    {
+     "row_id": "FT-P04",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:146",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[success-over-IS8-17]",
+     "evidence": "Position 4: any latch in budget wins over remaining failure rows so a recovering retry is a success (pairs success/17, success/3, success/18 tested); t<=T structural: contact max_time_s clamped to remaining budget (trial.py:292-296)."
+    },
+    {
+     "row_id": "FT-P05",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:149",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-17-over-IS8-10]",
+     "evidence": "IS8-17 at position 5; jam-at-depth-is-a-jam pair vs IS8-10 tested; order pinned by transcription test."
+    },
+    {
+     "row_id": "FT-P06",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:152",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-13-over-IS8-8]",
+     "evidence": "IS8-13 at position 6, global-before-local ordering tested; no producer (grep-verified, doc-labeled)."
+    },
+    {
+     "row_id": "FT-P07",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:155",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-8-over-IS8-6]",
+     "evidence": "IS8-8 at position 7, before local wrench reads (pair tested); no producer (grep-verified, doc-labeled)."
+    },
+    {
+     "row_id": "FT-P08",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:158",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-6-over-IS8-9]",
+     "evidence": "IS8-6 at position 8 (pair tested); no producer (grep-verified, doc-labeled)."
+    },
+    {
+     "row_id": "FT-P09",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:161",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-9-over-IS8-7]",
+     "evidence": "IS8-9 at position 9, most local contact anomaly (pair tested); no producer (grep-verified, doc-labeled)."
+    },
+    {
+     "row_id": "FT-P10",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:164",
+     "test_ref": "tests/test_outcomes.py::TestDocTranscription::test_doc_order_equals_table_order",
+     "evidence": "IS8-7 at position 10, absence-of-evidence after presence rows; no producer (grep-verified, doc-labeled)."
+    },
+    {
+     "row_id": "FT-P11",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:167",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-10-over-IS8-18]",
+     "evidence": "IS8-10 at position 11; full_stroke required (D-020 positional predicate, not mere contact \u2014 D-033 tightening); pairs vs IS8-18 and IS8-1 tested."
+    },
+    {
+     "row_id": "FT-P12",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:171",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-18-over-IS8-1]",
+     "evidence": "IS8-18 at position 12, after IS8-10, before perception rows (contact evidence outranks stream-shape inference \u2014 pair tested)."
+    },
+    {
+     "row_id": "FT-P13",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:176",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-2-over-IS8-1]",
+     "evidence": "IS8-2 at position 13: total outer loss (outer_tag_seen has no silent default on Trace) outranks partial degradation (pair tested); trial.py:197 sets outer_seen on any ID-0 detection."
+    },
+    {
+     "row_id": "FT-P14",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:179",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-4-over-IS8-3]",
+     "evidence": "IS8-4 at position 14 on terminal inner_ring_absent escalation, over the exhaustion shape (pair tested)."
+    },
+    {
+     "row_id": "FT-P15",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:182",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-14-over-IS8-5]",
+     "evidence": "IS8-14 at position 15 (pair tested); no producer (grep-verified, doc-labeled)."
+    },
+    {
+     "row_id": "FT-P16",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:185",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-5-over-IS8-3]",
+     "evidence": "IS8-5 at position 16: terminal escalation OR proximate last-abort ambiguity, incl. final-attempt conversion via Decision.underlying_abort (machine.py:112-117, trial.py:230-233, TestUnderlyingAbort). Direct ambiguity escalation has no trial producer; table total by design."
+    },
+    {
+     "row_id": "FT-P17",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:190",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-5-over-IS8-3]",
+     "evidence": "IS8-3 at position 17 via _last_abort == inner_ring_absent; canonical two-abort exhaustion trace tested; success-over-IS8-3 recovery pair tested."
+    },
+    {
+     "row_id": "FT-P18",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:193",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-1-over-clean_miss]",
+     "evidence": "IS8-1 at position 18: low_confidence escalation or any gate refusal (_low_confidence_shape); D-030 refusal-never-clean_miss pinned by the designed-exclusion pair test (loser row asserted non-matching)."
+    },
+    {
+     "row_id": "FT-P19",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:196",
+     "test_ref": "tests/test_outcomes.py::TestTableShape::test_clean_miss_is_the_residual_row",
+     "evidence": "clean_miss last; all four D-030 clauses checked or held by position (outcomes.py:117-126); anything else raises UnclassifiedFailure (TestUnclassifiedRaises incl. shape-row-matches cases and 'command' abort)."
+    },
+    {
+     "row_id": "FT-15X",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:9",
+     "test_ref": "tests/test_outcomes.py::TestIS815Excluded::test_table_covers_every_wire_outcome_except_comms",
+     "evidence": "Test-enforced: table outcome set == validator.OUTCOMES - {IS8-15}; IS8-15 kept in wire enum (tested); doc states the exclusion inside the bounded precedence section (test_doc_states_the_is8_15_exclusion)."
+    },
+    {
+     "row_id": "ISS-10",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:45",
+     "test_ref": "tests/test_guidance.py::TestRow2OuterDestroyed::test_sustained_darkness_escalates_with_imagery",
+     "evidence": "Escalate = refuse + imagery_ref + recommend human_decision (_ESCALATION, schema-required; synthetic ref labeled per D-007); no non-visual metric pose exists anywhere (injector pose_source enum only; gate refuses absent pose, gate.py:66).",
+     "note": "IS's own \u00a72.3 is funnel compliance; the 'confidence-gated abort \u00a72.3' language lives in the IS \u00a78 preamble and MASTER_CONTEXT \u2014 dangling anchor, lane G pointer-integrity territory."
+    },
+    {
+     "row_id": "D-004",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:216",
+     "test_ref": "tests/test_trial.py::test_nominal_trial_succeeds_first_attempt",
+     "evidence": "Three stages wired: outer/inner servo split at 200mm (matches P-25), contact-force-guided stage 3 (sub-handoff frames reject rather than abort, tested); stage vocab is wire enum (test_target_state_stages_are_wire_enum); no dead-reckoning pose source exists."
+    },
+    {
+     "row_id": "D-005",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:78",
+     "test_ref": "tests/test_guidance.py::TestRetryGeometry::test_backout_and_offset_applied",
+     "evidence": "300mm backout (+x), aim corrected against force-weighted measured contact offset (contact_offset_mm tested), attempt+1; trial applies measured offset only on contact retries, zero on perception aborts (trial.py:239,311-314); first_attempt_success reported separately (trial.py:321)."
+    },
+    {
+     "row_id": "D-013",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/gate.py:66",
+     "test_ref": "tests/test_guidance.py::TestCommitPredicate::test_pose_absent_cannot_commit",
+     "evidence": "Absent pose can never commit ('committing is acting'); row 4 escalates without consuming an attempt (TestRow4 asserts attempt_n==1); escalation carries imagery + human recommendation, never a pose; no silhouette/non-visual pose producer in the codebase."
+    },
+    {
+     "row_id": "D-017",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/gate.py:57",
+     "test_ref": "tests/test_guidance.py::TestCommitPredicate::test_conf_exactly_at_threshold_commits",
+     "evidence": "conf_min is a parameter everywhere (gate arg; machine ctor; fed from sweep_point conf_min_attempt at trial.py:149); equality commits (< comparison); 0.85 appears only as labeled defaults. Tradeoff-curve deliverable is analysis-side (lane F2)."
+    },
+    {
+     "row_id": "D-018",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/guidance/gate.py:70",
+     "test_ref": "tests/test_guidance.py::TestHeadingSector::test_sector_boundary",
+     "evidence": "\u00b120\u00b0 cone about stud +X from T_head_stud alone, anti-parallel nominal 0\u00b0; boundary pinned at 19.9 commit / 20.1 refuse; exactly 20.0 passes ('within' inclusive reading).",
+     "note": "Sector enforced at commit on every attempt incl. D-005 retry-offset approaches (gate re-checked per frame); approach-path heading itself is lane D. A flipped pose has ~identical heading (verified), so the sector check is no ambiguity backstop \u2014 see F-A02."
+    },
+    {
+     "row_id": "D-029",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/scenarios/gate_moderate.json:5",
+     "test_ref": "tests/test_scenarios.py::test_gate_moderate_matches_d029_committed_band",
+     "evidence": "Band transcribed verbatim (outer {30,40}%, inner {30,40,50}%, {50,100} lux, rain 10-20%, dropout 0.05+bursts, lens 10-25%, no knockout); independently transcribed test; harness reads the JSON only."
+    },
+    {
+     "row_id": "D-030",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:117",
+     "test_ref": "tests/test_outcomes.py::TestPrecedencePairs::test_earlier_row_wins[IS8-1-over-clean_miss]",
+     "evidence": "All four clauses: (a) via table position under success, (b) no contact/refusal/abort, (c) both arms leave handoff_reached False, (d) residual position; refusal path lands IS8-1 never clean_miss (designed-exclusion pair); unmatched raises with the trace as amendment evidence."
+    },
+    {
+     "row_id": "D-033",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:171",
+     "test_ref": "tests/test_trial.py::test_budget_truncated_insertion_is_is8_18",
+     "evidence": "IS8-18 extended together across wire enum/taxonomy/table position 12; AttemptEnd.timed_out is the signature (trial.py:299); contact window clamped to remaining budget realizes the budget-sliver arm (trial.py:292); row-10 full_stroke tightening in place; both D-033 shapes classify."
+    },
+    {
+     "row_id": "D-034",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:104",
+     "test_ref": "tests/test_guidance.py::TestRow2OuterDestroyed",
+     "evidence": "Single-approach semantics conform and are tested. But _hold_since survives D-005 attempt boundaries: verified \u2014 after an attempt-1 abort with an open window, attempt 2's single dark blip escalates immediately, violating 'single blips are held frames, not aborts'. Finding F-A01."
+    },
+    {
+     "row_id": "D-035",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:208",
+     "test_ref": "tests/test_guidance.py::TestRow1OuterOcclusion::test_outer_low_conf_detection_continues",
+     "evidence": "Conf wall scoped to range <= INNER_RANGE_MM exactly as ratified; outer-range detected frame continues regardless of conf (tested); commit predicate unchanged (gate.py); ambiguity rejection unchanged; dark frames governed by the D-034 wall."
+    },
+    {
+     "row_id": "D-036",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:165",
+     "test_ref": "tests/test_guidance.py::TestRow3InnerOccluded::test_good_ring_frame_resets_the_window",
+     "evidence": "Window conforms within one approach (tested). But reset fires only for >=2-inner frames INSIDE 300mm and _ring_absent_since survives attempts: verified \u2014 attempt 2's first gap frame aborts despite 5s of continuous ring visibility at 320-350mm, violating 'continuously for 5 s'. Finding F-A01."
+    },
+    {
+     "row_id": "T-T6",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/tests/test_guidance.py:1",
+     "test_ref": "tests/test_guidance.py::TestCommitPredicate::test_each_conjunct_is_necessary",
+     "evidence": "All gate clauses realized: commit predicate exact (conjunct necessity, threshold equality, strict >=2-inner, pose-absent), rows 1-5 stream patterns -> responses (5 test classes), retry geometry, budget -> escalate, heading \u00b120\u00b0 boundary. 163 tests pass at HEAD."
+    },
+    {
+     "row_id": "T-T9",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/tests/test_outcomes.py:55",
+     "test_ref": "tests/test_outcomes.py::TestOneTracePerClass::test_canonical_covers_exactly_the_table",
+     "evidence": "One canonical trace per class incl. IS8-18 (D-033), minimality vs every earlier row, 26 precedence pairs proven genuinely overlapping, unmatched raises, IS8-15 per the recorded gate note (unreachable + enum retained), doc transcription pinned row-for-row."
+    }
+   ],
+   "findings": [
+    {
+     "title": "F-A01: Guidance wall timers persist across D-005 retry attempts \u2014 blip-as-condition misfires on fresh attempts",
+     "clause_anchor": "DECISIONS.md D-034 / D-036",
+     "clause_quote": "D-034: \"Any detection resets the window; single blips are held frames, not aborts.\" D-036: \"ring absence is sustained time on the shared HOLD_TIMEOUT_S wall \u2014 < 2 inner tags continuously for 5 s aborts (row 3) ... stochastic gaps reject frames and reset on any \u2265 2-tag frame.\"",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:102-104",
+     "observed": "_hold_since/_ring_absent_since/_ambiguity_streak init only in __init__, never reset at attempt boundaries; trial.py:181 resets only machine.stage. Ring reset fires only for >=2-inner frames at range<=300mm (machine.py:161). Verified at HEAD: (A) attempt 2's FIRST sub-2-inner frame inside 300mm instantly aborts inner_ring_absent despite 5.2s of continuous 2-tag ring visibility at 320-350mm; (B) attempt 2's SINGLE dark blip instantly escalates low_confidence.",
+     "failure_scenario": "D-029 gate cell (dropout 0.05+bursts, inner occlusion 30-50%), attempts=3. Attempt 1 ends with an open window aged w<5s; attempt 2 re-approaches 0.3-3.4s; P(<2 inner)~0.8 per frame, so its first in-300mm frame is likely a gap; w+delta>5s -> instant IS8-3 abort (or blip -> terminal IS8-1/IS8-2) with nowhere near 5s absence in that approach. Expected: fresh 5s window per condition. Corrupts IS8-1/IS8-3 census and depresses multi-attempt success in every retry-bearing cell.",
+     "proposed_class": "B",
+     "severity": "high",
+     "probe_needed": true
+    },
+    {
+     "title": "F-A02: Ambiguity-flagged, row-5-rejected frames can serve as commit evidence at the trial seam",
+     "clause_anchor": "INTERFACE_SPEC \u00a78 row 5 (+ WIRE_FORMAT consumer checklist 5, worked flip example)",
+     "clause_quote": "IS \u00a78 row 5 response: \"Reject frame; require multi-tag or oblique confirmation; persistent \u2192 abort stage\". WIRE_FORMAT flip example: \"Consumer rejects the frame (checklist 5 + INTERFACE_SPEC \u00a78 row 5)\".",
+     "code_ref": "sim/trial.py:206-210",
+     "observed": "trial.py latches commit_line from gate.commit_allowed() alone; the machine's reject_frame is ignored for commit. gate.commit_allowed (gate.py:44-74) never checks tags[].ambiguity_flag. Verified at HEAD: flagged frame (ratio 0.92) with conf 0.87 returns (True,'commit'). Feasible: flag iff ratio<1; conf=mass*ratio so ratio 0.92 with fused mass 0.97 gives conf 0.90>=0.85; p_flip 0.08 in that band at kappa=2; a flipped pose passes the D-018 heading check unchanged (0.94 deg both branches).",
+     "failure_scenario": "Cell with flip_kappa=2, coplanar layout: a frame at 150-300mm with ratio~0.92 and 3+ tags is machine-rejected per row 5 yet sets commit_line; the attempt inserts instead of refusing at onset. At the D-017 sweep's low conf_min arms (0.50-0.70) the flagged-commit band widens to ratio in (0.5,1), p_flip up to 0.5. Expected: rejected frames never drive actuation. Actual: refusal rate deflated, commit granted on flip-suspect evidence \u2014 biases the refusal-vs-damage curve deliverable.",
+     "proposed_class": "B",
+     "severity": "med",
+     "probe_needed": true
+    },
+    {
+     "title": "F-A03: D-034 routing clause (dark frame at ANY range never feeds rows 3/4) implemented but pinned only at outer range",
+     "clause_anchor": "DECISIONS.md D-034 (routing clause)",
+     "clause_quote": "\"a fully-dark frame \u2014 no tags, pose_source 'none' \u2014 is row 2's domain at *any* range and never feeds rows 3/4's ring streak (a blip is not an occluded ring)\"",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:161-162",
+     "observed": "The guard (tags or pose_source != 'none') correctly routes dark frames past the ring block at inner range, but every TestRow2OuterDestroyed case observes at range_mm=2500; no test exercises a dark frame at range<=300mm, the seam this clause exists for.",
+     "failure_scenario": "A future edit weakening the rows-3/4 guard (e.g. dropping the pose_source arm) would silently re-open H-18's third cause \u2014 dark blips feeding the ring window at inner range \u2014 with the suite still green. A test asserting a dark frame at 250mm yields hold (not reject/ring-abort) pins the committed routing.",
+     "proposed_class": "T",
+     "severity": "low",
+     "probe_needed": false
+    }
+   ],
+   "notes": "Lane A pass at HEAD cdf7fbf. Read gate.py/machine.py/outcomes.py + trial.py composition, both test files (163 pass), FAILURE_TAXONOMY, IS \u00a78/\u00a79, all 11 lane-A decisions. H-18 disease test applied: rows 6-14 have no producers (grep-verified, doc-labeled); rows 16-18 read per-attempt contact facts, not stochastic frames; row 5 keeps a frame-count streak but D-035 ratifies it unchanged. Two verified defects, both at composition seams: F-A01 (wall timers persist across D-005 attempts; deterministic machine-level repro run against HEAD) and F-A02 (row-5-rejected frames commit). Both need L2 probes with nominal controls in sim/results/review_r01/ \u2014 not produced (lane read-only). Prosecution attempted: no D-xxx ratifies either; no alternate test coverage found. No repo files written."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "F-A01: Guidance wall timers persist across D-005 retry attempts \u2014 blip-as-condition misfires on fresh attempts",
+     "ruling": "ADVANCE",
+     "probe_required": true,
+     "probe_sketch": "sim/results/review_r01/F-A01/: (1) deterministic machine-level repro of both seams with fresh-machine controls (reproduces at HEAD); (2) isolation: run_trial at gate_moderate, fixed seeds, N=50, HEAD vs probe-local monkeypatch zeroing _hold_since/_ring_absent_since/_ambiguity_streak at attempt boundaries; count aborts <5s into attempts>=2 and IS8-1/IS8-3 census delta. Local MuJoCo, no spend.",
+     "reasoning": "Reproduced both seams at HEAD: after an ambiguity abort, attempt 2's first <2-inner frame at 299mm instantly aborts inner_ring_absent despite 5.2s continuous 2-tag visibility at 335mm (ring_since stale), and a single dark blip instantly escalates low_confidence; fresh-machine controls reject/hold. Violates D-034 'any detection resets' and D-036 'continuously for 5s'. No ratifying D-xxx; trial.py resyncs only stage/attempt_n; in-domain; no cross-attempt test exists. Magnitude needs the probe."
+    },
+    {
+     "finding_title": "F-A02: Ambiguity-flagged, row-5-rejected frames can serve as commit evidence at the trial seam",
+     "ruling": "ADVANCE",
+     "probe_required": true,
+     "probe_sketch": "sim/results/review_r01/F-A02/: fixed seed, coplanar, flip_kappa=2; run_trial with instrumented wrapper logging gate-passes where the line has ambiguity_flag=True and machine returned reject_frame; failing condition = such a frame latches commit_line and the attempt inserts; control = same seed with flag-respecting gate wrapper -> refusal at onset. N<=50, local MuJoCo, no spend.",
+     "reasoning": "Verified at HEAD: gate.commit_allowed never reads ambiguity_flag \u2014 flagged frame (ratio 0.92, conf 0.87) returns (True,'commit') while machine returns reject_frame on the same line; trial.py:206-210 latches commit ignoring d.action. Math exact: conf=0.8924, p_flip=0.08 at kappa=2, heading 0.9400\u00b0 on BOTH branches so D-018 can't catch a flip. Row 5 unsuperseded (D-035: 'row 5 unchanged'); in-domain; no flagged-commit test anywhere. Bytes change \u2192 class B correct."
+    },
+    {
+     "finding_title": "F-A03: D-034 routing clause (dark frame at ANY range never feeds rows 3/4) implemented but pinned only at outer range",
+     "ruling": "ADVANCE",
+     "probe_required": false,
+     "reasoning": "Concur, class T correct. Verified dark frames at 250mm and 60mm both yield 'hold' at HEAD, so a pinning test passes \u2014 T, not B/E. Kill (d) searched: all TestRow2OuterDestroyed cases observe at 2500mm; full-suite grep finds no dark frame at <=300mm against the machine (other pose_source-none hits are injector/validator/logger tests). This seam is exactly where D-034 closed H-18's third cause; dropping the guard's pose_source arm would regress silently with the suite green."
+    }
+   ]
+  }
+ },
+ {
+  "lane": "B",
+  "review": {
+   "findings": [
+    {
+     "title": "Lone/sparse inner-tag frames use full 110 mm constellation span for flip discriminability; flip-prone tags become immune",
+     "clause_anchor": "DECISIONS.md D-011 qualification (2026-08-01, from studies/H08); studies/H08 \u00a72 table + \u00a74; WIRE_FORMAT worked example (lone tag, ratio 1.08)",
+     "clause_quote": "the single-tag pose is position-reliable but **orientation is flip-prone for single small tags** \u2014 a lone 10 mm tag cannot self-disambiguate the two-solution ambiguity at any view angle at inner-servo ranges (discriminability \u22481.4 px, below the noise floor)",
+     "code_ref": "sim/wyzantium_sim/perception/sightings.py:69 (with inject.py:155-166)",
+     "observed": "sightings_for() hard-codes span_m=0.11 for every inner tag regardless of visible/detected count; inject uses it for flip discriminability and ambiguity ratio. Verified: lone tag 3 at 0.246 m, view 52\u00b0: D=139.4 px, p_flip=0.0, ratio=93 (flag False, conf unscaled) vs tag-size span D=1.15 px, p_flip=0.116, ratio=0.77. All detected tags also share one rep-geometry ratio.",
+     "failure_scenario": "Committed #46 axis: tag_knockout_mask leaving one inner tag, or inner_occlusion ~0.8 leaving sparse detections. Per H08 \u00a74/D-011 and WIRE_FORMAT's worked example (single id-7 tag \u2192 ratio 1.08, flag true), flips up to 0.5\u00b7\u03ba and near-1 ratios expected; harness emits zero flips, flag False, unscaled conf. IS8-5 counts and the D-017 refusal/conf curve under-count ambiguity on those marginals; H08 \u00a75's 42 mm adjacent-pair case overstated ~7\u00d7.",
+     "proposed_class": "B",
+     "severity": "high",
+     "probe_needed": true
+    },
+    {
+     "title": "Inner-tag decode pixel extent uses constellation span \u2014 10 mm tags decode at 3 m against IS \u00a73.3 arithmetic",
+     "clause_anchor": "INTERFACE_SPEC \u00a73.3 (readability derivation tied to per-tag size; \u00a73.2 20 px floor)",
+     "clause_quote": "a 10 mm tag subtends 39 px at 300 mm and 116 px at 100 mm \u2014 above the 20 px floor with \u22652\u00d7 margin across the inner-servo range",
+     "code_ref": "sim/wyzantium_sim/perception/inject.py:107 (px_size = f\u00b7span_m/dist with span_m=0.11 from sightings.py:69)",
+     "observed": "Decode probability computed from span_m = 110 mm ring span for inner tags, not the 10 mm tag size: 33 px at 2.9 m (real ~2.9 px). Verified live: at the 3 m start range a nominal frame detects all 9 tags, pose_source=multi_tag_fused. The 20 px floor binds at ~4.8 m instead of ~0.44 m; present in every trial's outer-servo frames.",
+     "failure_scenario": "Knockout bit 0 (outer destroyed, committed #46 cell): inner ring supplies full fused pose at acquisition range, so the IS8-2 basis 'No ID-0 detection at expected range' coexists with a healthy pose stream \u2014 D-034 dark-window/refusal behavior and the detection-vs-range shape feeding the D-014 headline curve diverge from committed decode arithmetic; evidence-mass conf at range inflated by 8 undetectable tags.",
+     "proposed_class": "B",
+     "severity": "high",
+     "probe_needed": true
+    },
+    {
+     "title": "\u03c3_px (#40) committed sweep axis unrealizable: pinned to default, absent from sweep_point, no recorded exclusion",
+     "clause_anchor": "PHASE1_PARAMETERS #40 (also curves.py/mr_ingest.py seam statements naming sigma_px a sweep axis; D-031 'the #40 sweep ... untouched')",
+     "clause_quote": "Generated from **swept corner-noise class value \u03c3_px \u2208 {0.3, 0.5, 1.0} px** (default 0.5, arbitrary \u2014 consistent with studies/H08's class assumption) propagated through the #19/#20 camera models",
+     "code_ref": "sim/wyzantium_sim/scenarios.py:16-29 (SWEEP_AXES lacks sigma_px); sim/wyzantium_sim/trial.py:144",
+     "observed": "sigma_px not in SWEEP_AXES; build_sweep_point raises on unknown axes, so no plan can sweep it. trial.py pins cfg['sigma_px']=PARAMS[40].default; its docstring flags the gap 'for a recorded amendment' \u2014 none exists (DECISIONS/HOLES/PENDING_HUMAN searched; D-032(e) records only host pitch/roll). tier1.json has no sigma_px grid; sweep_point cannot record the value.",
+     "failure_scenario": "The frozen 13,400 trials all ran \u03c3_px=0.5 with no per-record provenance; the #40 Tier-1 marginal (pose-noise sensitivity feeding D-014/D-017 deliverables) does not exist and cannot be generated without a harness change \u2014 an unrecorded H-17-style exclusion, unlike H-17 which got a HOLES entry and D-032(e) ratification.",
+     "proposed_class": "B",
+     "severity": "med",
+     "probe_needed": false
+    },
+    {
+     "title": "D-023 parenthetical 'f_c = 1.0 degenerates to the literature mask model' is false under the committed product form",
+     "clause_anchor": "DECISIONS.md D-023 (parenthetical), vs the same clause's normative formula",
+     "clause_quote": "P(detect | mud fraction f) = P_mask(f) \u00b7 C(f), where P_mask is the clean-mask literature curve and C(f) = max(0, 1 \u2212 f/f_c) with f_c swept {0.6, 0.8, 1.0} (f_c = 1.0 degenerates to the literature mask model)",
+     "code_ref": "sim/wyzantium_sim/perception/mud.py:12-15",
+     "observed": "Code implements the normative product exactly (test-pinned). At f_c=1.0, C(f)=1\u2212f, so P=(1\u2212f)\u00b7P_mask=(1\u2212f)\u00b2 under prior_v1's P_mask=1\u2212f \u2014 the mask model squared, not the mask model. The parenthetical holds for no P_mask unless C\u22611 (f_c=\u221e). Doc-side inconsistency; code faithful.",
+     "failure_scenario": "Any analysis or REPORT reading that treats the f_c=1.0 sweep cell as the 'clean-mask/no-mud baseline' (the parenthetical invites exactly that) understates baseline detection by a factor (1\u2212f) \u2014 at f=0.5 the cell gives 0.25 where the mask model gives 0.5 \u2014 biasing mud-attribution comparisons across the f_c marginal.",
+     "proposed_class": "E",
+     "severity": "low",
+     "probe_needed": false
+    }
+   ],
+   "verdicts": [
+    {
+     "row_id": "D-007",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/perception/inject.py:66",
+     "test_ref": "tests/test_inject.py::test_nominal_outer_line_is_valid_and_sourced",
+     "evidence": "Perception is a stochastic injected model over truth + geometric sightings; no renderer or imagery in perception/*; per-frame sampling from named substreams; injector built once per trial so retries consume fresh perception noise (chassis restart is the separate labeled limitation, trial.py:53-55)."
+    },
+    {
+     "row_id": "D-008-R",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/perception/curves.py:38",
+     "test_ref": "tests/test_mr_ingest.py::test_build_does_not_register",
+     "evidence": "prior_v1 committed; registry forbids in-place edits, protects baseline; behavior changes only via registry (test_curve_swap_changes_output_only_via_registry); mr_ingest pre-registers fits, raises MRDataError rather than invent; MR-002 relative-trend-only honored (mr_ingest.py:233-272)."
+    },
+    {
+     "row_id": "D-011",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/wyzantium_sim/perception/sightings.py:69",
+     "test_ref": "tests/test_sightings.py::TestNominalConstellation::test_inner_tag_geometry_hand_check",
+     "evidence": "Constellation and collar rule conform (coplanar default = conservative case), but the flip-prone-single-tag qualification is realized backwards: lone inner tag carries span 0.11 \u2192 D=139 px, p_flip=0, ratio=93 vs H08's 1.4 px 'no solution at any angle'. Test pins the deviating span. Finding 1.",
+     "note": "gate.py's independent \u22652-inner-tag count (lane A) shields the commit rule; damage lands in flip/ambiguity/conf statistics on sparse-constellation frames."
+    },
+    {
+     "row_id": "D-012",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/perception/inject.py:37",
+     "test_ref": "tests/test_sightings.py::TestNominalConstellation::test_outer_tag_geometry_hand_check",
+     "evidence": "Focals from PARAMS 19/20 (1371/880 px = committed 70\u00b0/95\u00b0 HFOV models); camera positions PARAMS 17/18 mm\u2192m; roles A=outer/B=inner per D-012, labeled; Cam B off-axis position yields oblique sight lines, realizing the ambiguity-breaking claim; params labeled assumed (transcription is lane F)."
+    },
+    {
+     "row_id": "D-023",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/perception/mud.py:12",
+     "test_ref": "tests/test_perception_models.py::test_mud_formula_is_d023",
+     "evidence": "Exact committed form P_mask(f)\u00b7max(0,1\u2212f/f_c); P_mask=1\u2212f stand-in labeled EXT with corpus gap documented; monotone-conservative pinned; f_c swept via SWEEP_AXES. Occlusion axes feeding f is per IS \u00a79 ('Mud occlusion, outer/inner').",
+     "note": "D-023's parenthetical (f_c=1.0 degenerates to the mask model) is false under the product form \u2014 finding 4, doc-side erratum; code faithful."
+    },
+    {
+     "row_id": "D-025",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/perception/sightings.py:31",
+     "test_ref": "tests/test_sightings.py::TestNominalConstellation::test_inner_tag_geometry_hand_check",
+     "evidence": "Cam B extrinsic (PARAMS[18], yaw 30\u00b0 inside [15,45]) consumed via position; mr_ingest realizes MR-003's oblique arm (cam_position axial|oblique validated, mr_ingest.py:142); transcription itself is lane F's P-18.",
+     "note": "Yaw has no injected-model consumer \u2014 view angle is tag-normal-vs-LOS (right quantity under D-007) and no FOV cone is modeled, a labeled code-level choice (sightings.py:12); obliquity's effect enters through geometry."
+    },
+    {
+     "row_id": "D-031",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/perception/noise.py:12",
+     "test_ref": "tests/test_mr_ingest.py::test_sigma_px_is_detection_weighted_median_of_reproj_rms",
+     "evidence": "noise.py claims form-anchor only ('perception_prior Paper 5 anchors the functional form only'), magnitudes stay swept/MR-measured; reproj_rms_px replacement path implemented and weight-tested; no Kallwies dependency in perception/*.",
+     "note": "D-031 reasserts '#40's sweep ... untouched', but the \u03c3_px sweep is unrealizable in the harness (finding 3), so the reassertion is currently vacuous."
+    },
+    {
+     "row_id": "ISS-03",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:182",
+     "test_ref": "tests/test_outcomes.py (IS8-14 constructed trace)",
+     "evidence": "Variant block 0 realized as ids 0-8 (9-15 reserved, never emitted); injector cannot produce out-of-block IDs; IS8-14 classifier signature exists, test-pinned; producer absence committed in FAILURE_TAXONOMY ('no Phase 1 producer') \u2014 ratified non-realization, not H-17 style.",
+     "note": "fp_rate_per_image (1.4e-5, #39) rides in CurveSet but is never consumed: ~0.4 expected false decodes per 15-min trial not injected. Covered by the same no-producer ratification; flagged for lane G's consistency sweep."
+    },
+    {
+     "row_id": "ISS-12",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/perception/curves.py:30",
+     "test_ref": "tests/test_perception_models.py::test_prior_v1_is_registered",
+     "evidence": "detection_onset_px = 20.0 equals the IS \u00a73.2 floor, test-pinned; zero-below-floor pinned (test_detection_zero_below_decode_floor); floor carried unmodified into mr_v1 (mr_ingest.py:350).",
+     "note": "Constant is right but the pixel extent it gates uses the 110 mm constellation span for inner tags, so the floor binds at ~4.8 m instead of ~0.44 m \u2014 IS \u00a73.3 arithmetic violated at composition (finding 2)."
+    },
+    {
+     "row_id": "T-T4b",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/perception/inject.py:84",
+     "test_ref": "tests/test_perception_models.py (formula gates) + tests/test_inject.py (wirefmt/omission gates)",
+     "evidence": "All four stated gates green (65 tests pass): each model pinned to its committed formula; every emitted line passes the producer-strict validator; non-detections omit pose/pose_cov/tags; t_emit and cadence pinned; mud_f_c/flip_kappa are sweep axes, not CurveSet fields.",
+     "note": "Formulas conform module-locally; the flip model's D input (span) is mis-fed at the sightings\u2192inject seam (findings 1-2), and the third seam axis, sigma_px, is not actually sweepable (finding 3)."
+    }
+   ],
+   "notes": "Lane B complete, read-only. Substreams: order-independent (root, crc32(name)) derivation verified; injector built once per trial so perception streams do not restart across retry attempts; mm\u2192m seam handled at trial composition (pose_mm_to_m), sightings.py converts internally. mr_ingest matches all three MEASUREMENT_REQUESTS schemas incl. reproj_rms_px addition; MR-002 relative trend only. Cross-lane: findings 1-2 touch lane A wall/conf consumption and lane D's T8 sightings; finding 3 touches lane F (P-40) and F2 (missing Tier-1 marginal). Killed candidates: occlusion-feeds-mud (IS \u00a79 defines the axes as mud occlusion); dropout Bernoulli-starts reading (ASSUMED label); rain/contamination linear forms (EXT, no committed form); evidence-mass _conf (labeled arbitrary; no doc commits a conf formula)."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "Lone/sparse inner-tag frames use full 110 mm constellation span for flip discriminability; flip-prone tags become immune",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur: H08 s4 commits D from the *visible* span (lone tag = 10 mm per s2; pair = 42 mm per s5); D-011 says a lone 10 mm tag cannot self-disambiguate. Code hard-codes 0.11. Reproduced: lone tag 3 at 0.308 m/61 deg gives D=98.1 px, 0/1397 frames flagged, vs committed D=0.81 px, p_flip=0.23, flag true. No ratifying D-xxx; WIRE_FORMAT lone-tag example (ratio 1.08, flag true) contradicts code; in-domain (tier2 knockout 0-511); no alternate-name test. All kills fail.",
+     "probe_required": true,
+     "probe_sketch": "Local, seed 20260804, coplanar prior_v1, kappa=1. Failing cell: knockout_mask=503 (lone tag 3), truth (0.25,0,0.185)/Q_NOMINAL, N=3000 frames; record flips, flag rate, ratio; H08 tag-span expects p_flip~0.23, flag true when detected; observed 0. Control: mask=0 fused frames, same pose (both readings agree, ~0 flips). Emit per-frame D under both span conventions."
+    },
+    {
+     "finding_title": "Inner-tag decode pixel extent uses constellation span \u2014 10 mm tags decode at 3 m against IS \u00a73.3 arithmetic",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur: IS s3.3 readability is per-tag (10 mm = 39 px at 300 mm; s3.2 20 px floor). inject.py:107 uses span 0.11 for inner px_size. Reproduced: knockout_mask=1 at 2.9 m detects all 8 inner tags (34.4 px vs 3.13 px per-tag), multi_tag_fused. The labeled-arbitrary code convention loses where IS s3.3 covers the arithmetic; documents win. No ratifying decision; knockout bit 0 is a committed Tier-1 cell; no test asserts range-detectability. All kills fail.",
+     "probe_required": true,
+     "probe_sketch": "Local, seed 20260804, prior_v1, nominal degradation. Failing cell: knockout_mask=1, truth (2.9,0,0.185)/Q_NOMINAL, N=1000 frames; record per-tag px_size both conventions, detections, pose_source, conf; committed expectation zero inner decodes (3.1 px << 20 floor); observed 8-tag fused stream. Control: same mask at 0.30 m, both conventions above floor, detection expected."
+    },
+    {
+     "finding_title": "\u03c3_px (#40) committed sweep axis unrealizable: pinned to default, absent from sweep_point, no recorded exclusion",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur: #40 commits sweep {0.3,0.5,1.0}; IS s9.1 defers to PHASE1_PARAMETERS for the full set, so its omission is no kill. Verified: SWEEP_AXES lacks sigma_px; build_sweep_point raises on unknowns; trial.py:144 pins PARAMS[40].default; the flagged amendment does not exist (D-032(e) excludes only pitch/roll + curve_set). D-031 reaffirms the #40 sweep untouched; mr_ingest.py:371 calls sigma_px a sweep axis. B correct: fix changes sweep_point bytes, needs re-run.",
+     "probe_required": true,
+     "probe_sketch": "Deterministic, no spend. Failing condition: scenarios.build_sweep_point(**nominal, sigma_px=0.3) raises SweepPointError('unknown axes'); tier1.json and frozen trial_header.sweep_point carry no sigma_px key. Control: build_sweep_point(**nominal) succeeds; one local fixed-seed nominal trial shows injector cfg sigma_px==0.5==PARAMS[40].default with no per-record provenance."
+    },
+    {
+     "finding_title": "D-023 parenthetical 'f_c = 1.0 degenerates to the literature mask model' is false under the committed product form",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur on clause and arithmetic: the clause's own normative P = P_mask*max(0,1-f/f_c) at f_c=1.0 gives C=1-f, so P=(1-f)*P_mask \u2014 (1-f)^2 under prior_v1 \u2014 never the mask model for any P_mask unless C is 1 (f_c infinite). Code (mud.py:12-15) and test_mud_formula_is_d023 pin the normative product, so doc-side only; E is right (frozen bytes untouched; dated in-place erratum). Not superseded; no later D-xxx touches D-023; f_c=1.0 is a committed cell; no attribution claim. L1 concurrence given.",
+     "probe_required": false
+    }
+   ]
+  }
+ },
+ {
+  "lane": "C",
+  "review": {
+   "verdicts": [
+    {
+     "row_id": "D-020",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/contact/runner.py:124",
+     "test_ref": "tests/test_contact_runner.py::TestCenteredHandoffLatches::test_latches_within_budget",
+     "evidence": "Predicate transcribed exactly via params #54 (3 mm radial, 0.1 m/s, 100 ms) with hold-reset semantics; radial measured against the throat axis displaced by funnel_t_mm; hold accumulates only while position AND speed hold, resets otherwise.",
+     "note": "Labeled arbitrary: 'engagement depth' has no committed number (ENGAGEMENT_DEPTH_X_MM=-200, runner.py:51, recorded in docstring); speed test uses |v|, stricter than D-020's literal 'closing speed' component."
+    },
+    {
+     "row_id": "D-026",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/contact/engine.py:31",
+     "test_ref": "tests/test_contact_engine.py::TestT1ModelSpec::test_sweep_axes_are_explicit_ctor_args",
+     "evidence": "k and M_eff are explicit T1ModelSpec ctor args; tier1.json grids match D-026 verbatim ({1,3,10,30,70} N/mm, {8,15,30} kg); required-stiffness band realized in analysis/feasibility.py:30, pinned by test_analysis.py::TestFeasibility.",
+     "note": "Low-k band edge is exposed to the uncommitted HARD_STOP_TRANS_M placeholder \u2014 see finding (k=1,3 cells bottom the \u00b135 mm stop during ordinary transients; k>=10 never touch it)."
+    },
+    {
+     "row_id": "D-027",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/contact/mujoco_engine.py:144",
+     "test_ref": "tests/test_engine_conformance.py::TestItem5ClosedFormSanity::test_spring_deflection_matches_k",
+     "evidence": "Builder realizes ratified T1: rigid stud free body + rigid hollow faceted funnel on 3 slides + 3 hinges with stiffness/damping/limited ranges = one 6-DOF spring-damper + hard stops; IS8-17 observable realized in runner.py:137; deflection-vs-k pinned closed-form.",
+     "note": "Uncommitted constants (damping 0.7, K_rot 500, stop travel, inertias, facets) labeled arbitrary only in the module docstring (lines 22-29, 55-66); no HOLES/PHASE1_PARAMETERS entry. R4 tow-load path is Phase 2, correctly absent."
+    },
+    {
+     "row_id": "D-028",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/analysis/feasibility.py:43",
+     "test_ref": "tests/test_analysis.py::TestFeasibility::test_band_and_intersection",
+     "evidence": "Two-sided window; infeasible only on empty intersection (None only when lo>hi); emits window/band/intersection/mask as data with ARCH \u00a76.7 pointer in the source string; (mu_trac, m_rv) tuple order; mu_trac vs mu_contact never share a symbol; pinned cross-check k_max~16.82 asserted."
+    },
+    {
+     "row_id": "ISS-06",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/contact/runner.py:117",
+     "test_ref": "tests/test_contact_runner.py::TestLipStrike::test_lip_band_contact_flagged_before_crossing",
+     "evidence": "Band [110,125] single-sourced (geometry.py:21, params #12, spec.lip_band_mm builds the lip ring); runner flags per-contact radius in-band about the DISPLACED funnel axis only before the displaced capture plane \u2014 matches IS \u00a76 and IS8-16; soft-base displaced-axis case pinned."
+    },
+    {
+     "row_id": "ISS-11",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/contact/mujoco_engine.py:68",
+     "test_ref": "tests/test_contact_engine.py::TestT1ModelSpec::test_committed_geometry",
+     "evidence": "IS \u00a72.1 stud geometry matches T1 constants by double-entry: neck 25 capsule, spherical head 40, exposed 90 \u2192 head center +70 mm; round-trips in test_mujoco_engine.py. \u00a72.1 load ratings are Phase-2 items with no Phase 1 contact realization required; stud_mass 300 kg labeled arbitrary."
+    },
+    {
+     "row_id": "A4-1",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "tests/test_engine_conformance.py:119",
+     "test_ref": "tests/test_engine_conformance.py::TestItem1LateralOffsetRecovery::test_wrench_recovers_offset_sign",
+     "evidence": "Sign asserted on wall_wrench f_y at offsets \u00b130/\u00b160 mm; magnitude-ordering asserted on per-contact-point radii (rho_60 > rho_30 + 15 mm).",
+     "note": "Ordering rides per-point geometry, not net-wrench magnitude \u2014 defensible: on a constant-half-angle cone net-wrench magnitude cannot order the offset, and PHASE1_PLAN \u00a73's rationale names per-point data as the mechanism. Prosecuted a T finding; killed as ill-posed as-written."
+    },
+    {
+     "row_id": "A4-2",
+     "verdict": "CONFORMS",
+     "code_ref": "tests/test_engine_conformance.py:134",
+     "test_ref": "tests/test_engine_conformance.py::TestItem2SymmetricWedge::test_high_axial_near_zero_lateral",
+     "evidence": "Constructed wedge (throat 38 < head 40, labeled \u2014 committed geometry passes by design); asserts f_ax \u2248 stud weight, f_lat < 5% f_ax, stud settled \u2014 the IS8-17 split exactly."
+    },
+    {
+     "row_id": "A4-3",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "tests/test_engine_conformance.py:156",
+     "test_ref": "tests/test_engine_conformance.py::TestItem3LipBandStrike::test_contact_radius_within_band",
+     "evidence": "Drop at band midpoint 117.5 mm; every contact point asserted within [110,125] mm with approach-side normal.",
+     "note": "Band edges carry \u00b13 mm numerical slack (facet discretization/mount motion) \u2014 a test tolerance, not a band redefinition."
+    },
+    {
+     "row_id": "A4-5",
+     "verdict": "CONFORMS",
+     "code_ref": "tests/test_engine_conformance.py:203",
+     "test_ref": "tests/test_engine_conformance.py::TestItem5ClosedFormSanity::test_restitution_rebound_tracks_e",
+     "evidence": "All three closed-form checks asserted: deflection = m\u00b7g/k (rel 0.15); sliding Coulomb median \u2248 mu at 0.2/0.5; rebound ratio tracks e at 0.3/0.8 with ordering \u2014 matches the documented solref restitution mapping."
+    },
+    {
+     "row_id": "T-T4c",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "tests/test_engine_conformance.py:43",
+     "test_ref": "tests/test_engine_conformance.py::TestItem4Determinism::test_same_seed_twice_bit_identical",
+     "evidence": "Suite engine-parameterized, passes on MuJoCo at HEAD (34 passed, 8 Newton skips, run 2026-08-11); all five \u00a73 items present, double-entry transcribed; Newton stub honest (raises with provisioned-instance message, labeled everywhere referenced).",
+     "note": "Gate half 'Newton-vs-MuJoCo decision committed with suite output' unmet as written: Newton never provisioned, no suite-output artifact. Openly recorded (freeze MANIFEST engine line + D-039 draft waiver, PENDING_HUMAN P-08(a)) \u2014 a recorded pending decision, not a silent deviation."
+    },
+    {
+     "row_id": "T-T7",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/contact/runner.py:81",
+     "test_ref": "tests/test_contact_runner.py::TestSymmetricWedgeJam::test_wedge_fires_is8_17",
+     "evidence": "All four T7 gate items asserted and green: centered handoff latches; offset wrench sign (\u00b1y); symmetric wedge fires IS8-17 with abort_reason jam_detected; lip radii in [110,125]; plus the T9 full_stroke fix pinned (off-axis depth crossing is not a stroke)."
+    }
+   ],
+   "findings": [
+    {
+     "title": "HARD_STOP_TRANS_M placeholder is load-bearing at the low-k D-026 sweep cells (base bottoms the \u00b135 mm stop)",
+     "clause_anchor": "DECISIONS.md D-026; D-027 R4",
+     "clause_quote": "compliance stiffness k sweeps the derived envelope as a log grid {1, 3, 10, 30, 70} N/mm ... The Phase 1 deliverable is a required-stiffness band \u2014 \"capture succeeds above the gate threshold only for k within [X, Y] at M_eff = Z\"",
+     "code_ref": "sim/wyzantium_sim/contact/mujoco_engine.py:65",
+     "observed": "HARD_STOP_TRANS_M=0.035 m labeled 'arbitrary placeholder scale' only in the module docstring and inline comment \u2014 no HOLES.md/PHASE1_PARAMETERS record. Read-only probe at trial-like drive (-0.1 m/s2, 20 mm offset, M_eff 15): k=1 \u2192 max|base| 38.2 mm, 529 stop-saturated steps; k=3 \u2192 37.3 mm, 495 steps; k=10/30/70 never touch the stop (27.3/12.3/7.4 mm).",
+     "failure_scenario": "Tier-1 stiffness marginal: at k in {1,3} N/mm the base rides the uncommitted \u00b135 mm stop during ordinary insertion transients while k>=10 cells never engage it, so the low edge of the D-026 required-stiffness band (and #63 intersections built on it, A6-7) partially measures the placeholder, not the swept k. Retuning the constant (\u00b120 vs \u00b160 mm) could move the reported band edge with no recorded decision.",
+     "proposed_class": "S",
+     "severity": "med",
+     "probe_needed": true
+    }
+   ],
+   "notes": "All 12 lane-C rows verified at HEAD cdf7fbf; contact/conformance suites green (34 passed, 8 Newton skips). No DEVIATES/NOT-REALIZED. Cross-lane notes: (1) #62 thresholds committed as swept (P-62) but trials only use the mid-grid cell, labeled interim at trial.py:153 \u2014 lane F's P-62/ISS-08 territory. (2) probe62_check.json's force-cell discrimination finding is already queued as PENDING_HUMAN P-08(b); runner's per-step evaluation matches the committed criterion, and its continuous-hold reading of 'within t_jam' is recorded as arbitrary in the runner docstring. (3) The 'spec gaps recorded 2026-08-04' convention lives only in module docstrings \u2014 findable by code reviewers, invisible from the doc tree; the one load-bearing case is the filed S finding."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "HARD_STOP_TRANS_M placeholder is load-bearing at the low-k D-026 sweep cells (base bottoms the \u00b135 mm stop)",
+     "ruling": "ADVANCE",
+     "reasoning": "All five kills fail. (a) No D-xxx ratifies the \u00b135mm sim stop; D-027 R4 defers real sizing to Phase 2. (b) D-026/027 current. (c) k\u2208{1,3}, 20mm offset, M_eff=15 all in committed domains. (d) Conformance tests deliberately stay off-stop (k=70 at :136/:157; 'linear regime, off-stop') \u2014 zero coverage. (e) Reproduced: k=1/3 saturate (37.3/36.7mm), k\u226510 never. My stop-isolation check: outcome class stable at nominal, latch time \u00b16% \u2014 class S, sev med concurred.",
+     "probe_required": true,
+     "probe_sketch": "review_r01 probe: deterministic seeds, k\u2208{1,3} (M_eff=15), stop \u2208 {20,35,60}mm varied in isolation (in-memory patch), ~50 offsets/angles across D-015 envelope via committed substream; control k=70 (never engages, must be invariant). Fail: outcome-class flip or latch-time shift vs stop setting. Local M4 MuJoCo, no spend. Pre-probe: at 20mm offset classes stable, latch t 2.107\u21922.238s (k=1)."
+    }
+   ]
+  }
+ },
+ {
+  "lane": "D",
+  "review": {
+   "findings": [
+    {
+     "title": "Nominal engagement orientation realized as 180\u00b0 about +Y \u2014 head-up vs plate-up inverted in every trial",
+     "clause_anchor": "INTERFACE_SPEC \u00a74 (frame table + engagement note); \u00a77 (host attitude level)",
+     "clause_quote": "head_frame: +X along funnel axis toward the approach side (out of the mouth); +Z head-up ... stud_frame: +Z toward outer tag (\"plate up\") ... At nominal full engagement, head +X and stud +X are anti-parallel (the head faces the plate).",
+     "code_ref": "sim/wyzantium_sim/kinematic/stage.py:37",
+     "observed": "Q_NOMINAL=(0,0,1,0)=Ry(180\u00b0): X\u2192\u2212X, Z\u2192\u2212Z, so plate-up maps to head-DOWN. Two upright vehicles facing each other require Rz(180\u00b0)=(0,0,0,1). Comment cites 'IS \u00a74: anti-parallel' but \u00a74's frame defs plus \u00a77 level attitude pin Z_stud\u2225Z_head. test_kinematic_stage.py:71 pins the deviating value; not listed among the stage docstring's labeled-arbitrary choices.",
+     "failure_scenario": "Every nominal trial: outer tag renders at z=\u2212185 mm in head_frame instead of +185. Venv probe via sightings_for: cam A view angle at x=300 mm is 37.7\u00b0 (vs 6.1\u00b0 upright); at handoff 62.4\u00b0/0.367 m (vs 14.8\u00b0/0.176 m) \u2014 at the LIT ~60\u00b0 validity edge. Detection prob and pose_cov are view-angle/px dependent, so the outer-tag stream (IS8-1/2 walls, acquisition) runs on inverted geometry in all 13,400 frozen trials. Inner ring maps onto itself but tag IDs permute, skewing tag_knockout_mask semantics.",
+     "proposed_class": "B",
+     "severity": "high",
+     "probe_needed": true
+    },
+    {
+     "title": "IS \u00a75 'sweeps each contributor \u00d7{0.5,1,2}': mount-tolerance contributor unrealized with no recorded exclusion",
+     "clause_anchor": "INTERFACE_SPEC \u00a75 (Decomposition); PHASE1_PARAMETERS #23",
+     "clause_quote": "the allocations above are **declared sweep centers (Door 4)** \u2014 Phase 1 sweeps each at \u00d7{0.5, 1, 2} via the D-019 error model, and the sensitivity curve (D-014) reports what happens as each contributor grows past its allocation.",
+     "code_ref": "sim/wyzantium_sim/scenarios.py:16",
+     "observed": "SWEEP_AXES carries chassis_error_scale only; stage.py:132-137 feeds only the chassis allocation into D-019 models. The mount contributor (\u00b13 mm/\u00b11\u00b0) never perturbs anything \u2014 sightings.py always uses the nominal tag table and the contact funnel is always nominal. Perception contributor arguably covered under a different name (\u03c3_px, #40). Unlike host pitch/roll (H-17, D-032(e)), no decision records the mount exclusion.",
+     "failure_scenario": "A reader of ARCH \u00a76.1 outputs looks for the mount-contributor marginal promised by \u00a75; tier1.json has no such axis and no recorded exclusion explains the silence \u2014 the \u00a75 'sweeps each' claim is false for one of three contributors. Effect on numbers likely small (\u00b13 mm vs 220 mm mouth) but the contract-vs-harness gap is unrecorded.",
+     "proposed_class": "E",
+     "severity": "low",
+     "probe_needed": false
+    },
+    {
+     "title": "D-019 '(correlation length 2 m, swept)' \u2014 correlation-length sweep realized nowhere",
+     "clause_anchor": "DECISIONS.md D-019",
+     "clause_quote": "Error = slowly-varying Gauss-Markov bias (correlation length 2 m, swept) + white jitter + Poisson-arrival slip events (exponentially distributed magnitude). Magnitudes sweep at \u00d7{0.5, 1, 2} of the \u00a75 allocations.",
+     "code_ref": "sim/wyzantium_sim/kinematic/chassis_error.py:45",
+     "observed": "correlation_length_m exists only as a constructor default (2.0); KinematicStage never passes it; it appears in no PHASE1_PARAMETERS entry, no SWEEP_AXES entry, and no tier1.json grid. The magnitude sweep is realized and tested; the correlation-length sweep the decision declares is not.",
+     "failure_scenario": "All frozen trials use exactly 2 m correlation. Sensitivity of outcomes to error time-scale (slow bias vs fast wander at equal envelope \u2014 the mud-slip phenomenology D-019 names) is never produced although D-019 declares it swept. Needs realization or a recorded re-scope of the 'swept' word.",
+     "proposed_class": "E",
+     "severity": "low",
+     "probe_needed": false
+    },
+    {
+     "title": "T4a Poisson gate asserts mean arrival rate only \u2014 dispersion check is dead code",
+     "clause_anchor": "PHASE1_PLAN \u00a74 T4a",
+     "clause_quote": "D-019 chassis error \u2014 gate: statistical gates: GM correlation \u22482 m, Poisson arrivals, exponential slip, \u00d7{0.5,1,2} scaling",
+     "code_ref": "sim/tests/test_chassis_error.py:72",
+     "observed": "test_slip_arrivals_are_poisson_in_distance checks count \u2248 rate\u00b7distance within 5%; the 'Dispersion consistent with Poisson' comment is followed by km_bins = np.array_split(..., 1) which is never used, and a vestigial 'assert count > 0'. Any renewal process with the right mean rate passes; the index of dispersion is unpinned.",
+     "failure_scenario": "A regression replacing per-step Bernoulli arrivals with clustered or periodic arrivals at the same mean rate would pass the suite while violating D-019's committed Poisson form; the gate the plan names is only half-asserted.",
+     "proposed_class": "T",
+     "severity": "low",
+     "probe_needed": false
+    }
+   ],
+   "verdicts": [
+    {
+     "row_id": "D-006",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/kinematic/stage.py:34",
+     "test_ref": "tests/test_kinematic_stage.py::TestAnnulusMiss::test_synthetic_r_gt_160_is_kinematic_miss",
+     "evidence": "Cheap kinematic stage to x=+50; contact runs only post-handoff (trial.py:293) and only for r<=160 crossings; r>160 -> miss_reason r_gt_annulus, no HandoffState, T9 classifies clean_miss (D-030). Capture plane + handoff vector specified per IS \u00a76."
+    },
+    {
+     "row_id": "D-015",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:66",
+     "test_ref": "tests/test_geometry.py::test_constants_equal_params_entries",
+     "evidence": "\u00b135 mm/\u00b110\u00b0 transcribed as Params 21/22; realized through the derived funnel geometry (mouth \u00d8220 = 2\u00d7(35+20+55), geometry.py:15, cross-checked vs params).",
+     "note": "Envelope is a derivation input, not directly consumed by the kinematic loop \u2014 realization is via the D-016 derived dimensions, per D-015's consequence clause."
+    },
+    {
+     "row_id": "D-016",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/geometry.py:12",
+     "test_ref": "tests/test_geometry.py::test_constants_equal_params_entries",
+     "evidence": "All D-016 dimensions (stud 25/40/90, funnel 220/42/180, plate 200x200, tags 150@+185 / 8x10@r55) equal the doc values; docstring marks changes as recorded decision revisions."
+    },
+    {
+     "row_id": "D-019",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/kinematic/chassis_error.py:64",
+     "test_ref": "tests/test_chassis_error.py::test_scale_sweep_is_exact_proportionality",
+     "evidence": "GM bias (2 m) + white jitter + Poisson slips w/ exponential magnitude, 1-D over distance, one model per axis; x{0.5,1,2} is exact proportionality; slips persist then wash out via GM re-correction. Statistical gates tested.",
+     "note": "Sub-clause '(correlation length 2 m, swept)' unrealized anywhere (finding 3, class E). Bias/jitter/slip split labeled arbitrary \u2014 permitted, committed nowhere."
+    },
+    {
+     "row_id": "D-024",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "DECISIONS.md D-024 (doc row)",
+     "evidence": "Integrator requirements (\u00d8270x400 cylinder, stud height 400-800 mm, attitude \u00b120\u00b0) match IS \u00a77 verbatim; untestable-by-nature in the harness (requirements levied on integrators, not sim behavior).",
+     "note": "The \u00b120\u00b0 attitude's harness realization gap is H-17's row (D-032(e) exclusion recorded), not a D-024 defect."
+    },
+    {
+     "row_id": "D-037",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/kinematic/closed_loop.py:31",
+     "test_ref": "tests/test_closed_loop.py::TestHold::test_hold_freezes_position_and_shifts_arrivals",
+     "evidence": "Hold freezes traversal while frames keep arriving; spatial path + D-019 error unchanged (arc-length indexed); walls fire on walker sim time (trial.py:199); handoff time is pause-aware walker end (trial.py:223,261); budget counts hold time (trial.py:178,292); aborts end at held position."
+    },
+    {
+     "row_id": "ISS-01",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/wyzantium_sim/kinematic/stage.py:37",
+     "test_ref": "tests/test_kinematic_stage.py::TestNominalHandoff::test_nominal_orientation_is_anti_parallel",
+     "evidence": "Quaternion order and T_A_B algebra conform (frames.py, test_frames green); but nominal engagement is Ry(180\u00b0), mapping plate-up to head-down vs \u00a74's +Z defs read with \u00a77 level attitude. Probe: outer-tag view angle 62.4\u00b0 vs 14.8\u00b0 at handoff. Finding 1 (class B).",
+     "note": "The pinning test double-enters the same wrong value, citing only 'anti-parallel'."
+    },
+    {
+     "row_id": "ISS-02",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/geometry.py:47",
+     "test_ref": "tests/test_geometry.py::test_inner_ring_centers_follow_the_spec_rule",
+     "evidence": "Exact \u00a73.5 rule: ID0 at (0,0,+185); IDs 1-8 at (h,-55 sin a,+55 cos a), a=45\u00b0(k-1), clockwise-from-+Z sign verified by hand; q=(.5,.5,.5,.5) gives +Z_tag\u2225+X_stud, +Y_tag\u2225+Z_stud; h_c moves ring only; ID block 0-15 w/ row-14 rejection basis."
+    },
+    {
+     "row_id": "ISS-04",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/wyzantium_sim/scenarios.py:16",
+     "test_ref": "tests/test_chassis_error.py::test_scale_sweep_is_exact_proportionality",
+     "evidence": "Chassis contributor's x{0.5,1,2} fully realized (axis + tier1.json cells + proportionality test); perception covered under a different name (\u03c3_px #40); mount \u00b13 mm/\u00b11\u00b0 realized nowhere, excluded by no recorded decision though \u00a75 claims 'sweeps each'. Finding 2 (class E)."
+    },
+    {
+     "row_id": "ISS-05",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/kinematic/handoff.py:17",
+     "test_ref": "tests/test_contact_engine.py::TestHandoffState::test_fields_are_exactly_the_is6_list",
+     "evidence": "x=+50 trigger exact (head-center crossing, 1e-6); 160 mm annulus enforced; HandoffState is exactly the six IS \u00a76 fields, frozen. r evaluated at the crossing not the capture plane \u2014 labeled arbitrary, consistent with \u00a76's own 5 mm drift reserve in the 160 derivation."
+    },
+    {
+     "row_id": "ISS-07",
+     "verdict": "CONFORMS",
+     "code_ref": "INTERFACE_SPEC.md \u00a77 (doc row, untestable-by-nature)",
+     "evidence": "IS \u00a77 == D-024: free cylinder \u00d8270x400 mm, stud height 400-800 mm, attitude \u00b120\u00b0 matching the \u00a79 sweep, lunette/15 kN member; all marked ASSUMED-unvalidated consistently. Attitude realization gap is H-17's row."
+    },
+    {
+     "row_id": "H-17",
+     "verdict": "NOT-REALIZED",
+     "code_ref": "sim/wyzantium_sim/scenarios.py:19",
+     "evidence": "Confirmed: host_pitch/roll_deg are SWEEP_AXES entries on every header, but grep finds zero consumers (absent from trial.py _INJECTOR_KEYS, KinematicStage, contact); trial_logger.py:12 docstring admits it. D-032(e) exclusion + HOLES H-17 OPEN is the recorded mitigation \u2014 no duplicate F-NNN raised."
+    },
+    {
+     "row_id": "T-T3",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/frames.py:33",
+     "test_ref": "tests/test_frames.py::test_compose_matches_sequential_application",
+     "evidence": "All three gate legs pinned and green: transform property tests (test_frames), tag table == IS \u00a73.5 (test_geometry, independent transcription), substream independence + order-independence (test_rng). 59/59 lane tests pass at HEAD."
+    },
+    {
+     "row_id": "T-T4a",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/kinematic/chassis_error.py:64",
+     "test_ref": "tests/test_chassis_error.py::test_gauss_markov_correlation_length",
+     "evidence": "GM autocorr \u2248 e^-1 at 2 m lag, exponential slip SD/mean \u2248 1, x{0.5,1,2} exact-proportionality + committed values, slip persistence, envelope tracking, axis independence \u2014 all pass.",
+     "note": "Poisson leg asserts mean rate only; dispersion assertion is dead code (finding 4, class T)."
+    },
+    {
+     "row_id": "T-T5",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/kinematic/stage.py:152",
+     "test_ref": "tests/test_kinematic_stage.py::TestNominalHandoff::test_hands_off_exactly_at_x50",
+     "evidence": "Nominal run hands off with head center at x=+50 within 1e-6; synthetic off-aim -> r_gt_annulus miss, no HandoffState; field-list == IS \u00a76 asserted in test_contact_engine.py; speeds sweep reaches the stage; handoff feeds MuJoCo at the exact pose."
+    }
+   ],
+   "solidification": [
+    {
+     "item": "F-003 \u2014 kinematic/stage.py:19 'pose_cov placeholder until T6' comment",
+     "assessment": "Settled by code trace: HandoffState.pose_cov has zero consumers (mujoco_engine.py:223-234 reads pose/vel/omega/time only; gate.py consumes wire-line conf, never pose_cov). trial.py:275-277 overwrites ZERO_COV with the commit frame's real upper21 cov before contact; wire pose_cov comes from the injector (inject.py:169), so omitted-not-zeroed is not implicated. Zeros persist only via run(), used by T5 tests. Stale comment, no behavioral feed \u2014 class M.",
+     "proposed_disposition": "DONE"
+    }
+   ],
+   "notes": "Lane D complete: 15/15 rows verdicted, suite green (59 passed, 0.49s). Headline: finding 1 (Q_NOMINAL Ry180 vs Rz180) is class-B and touches every frozen trial's outer-tag perception geometry \u2014 numeric probe run read-only in-session via sightings_for (62.4\u00b0 vs 14.8\u00b0 view angle at handoff); a proper L2 probe artifact in sim/results/review_r01/ with nominal control is still required before triage, and lane B (sightings/inject seam) is the natural prosecutor. No repo files were created or modified."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "Nominal engagement orientation realized as 180\u00b0 about +Y \u2014 head-up vs plate-up inverted in every trial",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur on clause reading: IS \u00a74 (+Z head-up, +Z plate-up, anti-parallel +X) with \u00a77 level attitude pins nominal at Rz(180)=(0,0,0,1); realized Ry(180) puts tag0 at z=\u2212185 in head_frame. My venv probe reproduced all reviewer numbers exactly (37.7/62.4 vs 6.1/14.8 deg; dists match), varying q alone. trial.py wires spatial_path to sightings_for, so record bytes change. No D-xxx ratifies Q_NOMINAL; tests only pin the deviating value; not in the labeled-arbitrary list. No kill.",
+     "probe_required": true,
+     "probe_sketch": "No code edits (freeze): runtime monkeypatch, deterministic sweep_root, N=50 nominal-cell trials per arm, local MuJoCo. Arm A frozen Q_NOMINAL (0,0,1,0) failing; arm B patched (0,0,0,1) level-attitude control. Log per-frame tag0 view-angle/dist, detection counts, outcome mix, record-byte diff. Expect A: tag0 z\u2248\u2212185 mm, view \u226537 deg inside 300 mm. Artifacts to sim/results/review_r01/F-NNN/."
+    },
+    {
+     "finding_title": "IS \u00a75 'sweeps each contributor \u00d7{0.5,1,2}': mount-tolerance contributor unrealized with no recorded exclusion",
+     "ruling": "ADVANCE",
+     "reasoning": "Verified: SWEEP_AXES and tier1.json carry chassis_error_scale only; stage.py:131-137 uses only the chassis allocation from #23; tag table/funnel never perturbed. #23 declares all three contributors as \u00d7{0.5,1,2} sweep centers. Perception is covered as \u03c3_px (#40) \u2014 the reviewer already conceded that. grep 'mount' in DECISIONS/HOLES: no exclusion; D-032(e)'s exclusion list (H-17) omits it, so the recording discipline exists and this gap is unrecorded. Class E low correct: no frozen bytes change.",
+     "probe_required": false
+    },
+    {
+     "finding_title": "D-019 '(correlation length 2 m, swept)' \u2014 correlation-length sweep realized nowhere",
+     "ruling": "ADVANCE",
+     "reasoning": "Verified: D-019 says '(correlation length 2 m, swept)'; correlation_length_m is only a constructor default, never passed by KinematicStage; absent from SWEEP_AXES, tier1.json, PHASE1_PARAMETERS, \u00a79.1. chassis_error.py docstring even calls changing it 'a decision revision', contradicting D-019. test_gauss_markov_correlation_length pins 2 m, sweeps nothing \u2014 kill (d) fails. No later decision re-scopes; D-032(e) exclusion list omits it. Class E low correct: realization or recorded re-scope.",
+     "probe_required": false
+    },
+    {
+     "finding_title": "T4a Poisson gate asserts mean arrival rate only \u2014 dispersion check is dead code",
+     "ruling": "ADVANCE",
+     "reasoning": "Direct read of test_chassis_error.py:72-82 confirms: mean-count check is real; the dispersion comment precedes an unused np.array_split(...,1) and vestigial 'assert count > 0', so the index of dispersion is never asserted and any renewal process with the right mean passes. Whole-suite grep for dispersion/Fano/interarrival coverage under other names found none, so kill (d) fails. The Bernoulli-thinning implementation (Fano about 1\u2212p) should pass a proper gate, so T is the right class.",
+     "probe_required": false
+    }
+   ]
+  }
+ },
+ {
+  "lane": "E",
+  "review": {
+   "verdicts": [
+    {
+     "row_id": "WF-C1",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wirefmt/validator.py:205",
+     "test_ref": "tests/test_validator_target_state.py::test_unknown_version_rejected",
+     "evidence": "v==1 enforced at the validator (205) and re-checked at the gate (gate.py:49-50); negative fixture missing_version.ndjson rejected for 'v must be' via tests/test_fixtures.py parametrized corpus."
+    },
+    {
+     "row_id": "WF-C2",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wirefmt/validator.py:78",
+     "test_ref": "tests/test_validator_target_state.py::test_missing_required_field_named_in_error",
+     "evidence": "All six required target_state fields checked (validator.py:78-80); gate re-checks REQUIRED_FIELDS before commit (gate.py:28,51-52); parametrized test covers each field's absence."
+    },
+    {
+     "row_id": "WF-C3",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/gate.py:36",
+     "test_ref": "tests/test_guidance.py::TestHeadingSector::test_nominal_antiparallel_is_zero",
+     "evidence": "pose is consumed AS T_head_stud (heading vs stud +X, IS \u00a74 anti-parallel nominal); consumers needing world frame transform explicitly (trial_logger.py:83-84, recoverability pinned by test_trial_logger.py::TestWorldConvention)."
+    },
+    {
+     "row_id": "WF-C4",
+     "verdict": "NOT-REALIZED",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:122",
+     "test_ref": "",
+     "evidence": "No consumer reads t_emit or applies a staleness bound; closed_loop.walk delivers frames at capture time (closed_loop.py:59-60). Probe: seeds 101/202/303 at latency 10 vs 100 ms \u2014 diffs confined to t_emit/header bytes; outcomes and t_total identical.",
+     "note": "Latency (#38) is a swept Tier-1 axis in freeze_prior_v1 yet is behaviorally inert \u2014 see finding 1; the exact fake-flat-curve hazard D-032(e) excluded host pitch/roll for (H-17)."
+    },
+    {
+     "row_id": "WF-C5",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/guidance/gate.py:44",
+     "test_ref": "tests/test_guidance.py::TestCommitPredicate::test_each_conjunct_is_necessary",
+     "evidence": "#30 predicate exact (multi_tag_fused \u2227 inner_servo \u2227 conf \u2265 min) plus \u22652 inner tags and D-018 sector before any actuation; trial.py:206-211 commits only on gate.commit_allowed; conf-hold path in machine.py:208-213."
+    },
+    {
+     "row_id": "WF-C6",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wirefmt/validator.py:187",
+     "test_ref": "tests/test_validator_target_state.py::test_relayed_null_rejected_by_validator_too",
+     "evidence": "Nulls rejected recursively at validator and writer; gate treats absent pose as no-commit (gate.py:65-69); injector omits structurally (inject.py:128-131).",
+     "note": "machine.observe defaults required fields via .get (conf\u21920.0 machine.py:130, pose_source\u2192'none' machine.py:162) \u2014 safe only because the producer-strict logger validates every line upstream; item 6's named fields (pose/fault/degradation) are never defaulted."
+    },
+    {
+     "row_id": "WF-C7",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wirefmt/records.py:56",
+     "test_ref": "tests/test_records.py::test_unknown_fields_are_preserved_and_stable",
+     "evidence": "Unknown fields never validation errors (validator.py:5) and preserved after known keys in first-seen order at the writer; test pins preservation plus round-trip stability; test_validator_target_state.py::test_unknown_top_level_field_is_not_an_error covers ignore."
+    },
+    {
+     "row_id": "WF-S1",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wirefmt/validator.py:86",
+     "test_ref": "tests/test_validator_target_state.py::test_pose_without_pose_cov_rejected",
+     "evidence": "pose-without-pose_cov rejected (86-88), zeroed placeholder pose caught via unit-quaternion rule (45), nulls rejected at validator and writer; also structural \u2014 inject.py:128-131 omits pose/pose_cov/tags on non-detection; fixtures zeroed_pose/pose_without_cov/null_field."
+    },
+    {
+     "row_id": "WF-S2",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wirefmt/records.py:51",
+     "test_ref": "tests/test_records.py::test_round_trip_is_byte_identical",
+     "evidence": "Fixed WIRE_FORMAT key order, compact separators, json shortest round-trip floats, LF-only atomic writer (records.py:60-71); golden fixture re-serializes byte-identically (test_fixtures.py::test_golden_trial_round_trips_byte_identically); float repr pinned."
+    },
+    {
+     "row_id": "WF-S3",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/logging/trial_logger.py:90",
+     "test_ref": "tests/test_trial.py::TestTheGate::test_59_cadence_pre_handoff",
+     "evidence": "One sim_truth per kinematic grid arrival pre-handoff (trial.py:213-216 via closed_loop on_truth) and one per physics step() post-handoff (counted by CountingEngine in ::test_59_cadence_post_handoff); both cadence tests pass at anchor."
+    },
+    {
+     "row_id": "WF-S4",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:222",
+     "test_ref": "tests/test_outcomes.py::TestFalseCapture::test_striking_leg_latch_is_false_capture",
+     "evidence": "false_capture computed only on the IS8-16 row (striking leg's own latch), emitted only when not None (trial_logger.py:108-109), validator forbids it off IS8-16 (validator.py:174-176); golden fixture exercises the true case; recovery-leg counterexample tested."
+    },
+    {
+     "row_id": "WF-S5",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/wirefmt/records.py:19",
+     "test_ref": "",
+     "evidence": "#33 solver block written (trial.py:163) and curve_set double-entry checked (trial.py:131-133), but compute-instance identity appears nowhere: not in schema, canonical order, validator, or trial.py header \u2014 ARCH \u00a75 says it lands in every trial_header.",
+     "note": "See finding 2. Dataset-level 'instance' in freeze MANIFEST.json partially mitigates but is not the per-trial header the clause commits."
+    },
+    {
+     "row_id": "A4-4",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/contact/mujoco_engine.py:1",
+     "test_ref": "tests/test_engine_conformance.py::TestItem4Determinism::test_same_seed_twice_bit_identical",
+     "evidence": "Conformance item 4 passes on MuJoCo (contact exercised, trajectories bit-identical); full-record determinism pinned end-to-end by test_trial.py::TestTheGate::test_same_seed_twice_byte_identical and the reused-engine variant.",
+     "note": "Newton leg skips on the M4 by design (engine-parameterized suite; P-08/D-039 draft names MuJoCo engine of record). Determinism is same-platform \u2014 cross-platform scope is finding 3."
+    },
+    {
+     "row_id": "X-6",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "PHASE1_PLAN.md:186",
+     "test_ref": "tests/test_fixtures.py::test_golden_trial_round_trips_byte_identically",
+     "evidence": "All three load-bearing tests pass at anchor (run 2026-08-11): golden round-trip; test_trial.py::TestTheGate::test_same_seed_twice_byte_identical; test_analysis.py::TestFeasibility::test_63_pinned_cross_check (k_max\u224816.82).",
+     "note": "The 'before any committed DOE run' ordering is procedural: no runner/CLI preflight executes the three tests (doe/runner.py, doe/__main__.py) and the freeze MANIFEST carries no suite-green attestation. Untestable-by-nature beyond present-tense passage."
+    },
+    {
+     "row_id": "T-T1",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wirefmt/validator.py:199",
+     "test_ref": "tests/test_fixtures.py::test_negative_fixture_rejected_for_stated_reason",
+     "evidence": "Golden validates clean; 17-file negative corpus each rejected for its manifest-stated reason, with a manifest-coverage test; write\u2192parse\u2192write byte-identical; 114 wirefmt/logger tests pass at anchor. Corpus spans version, type, required fields, enums, PSD, omitted-not-zeroed, file shape."
+    },
+    {
+     "row_id": "T-T8",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/trial.py:127",
+     "test_ref": "tests/test_trial.py::TestTheGate::test_full_record_validates_line_by_line",
+     "evidence": "All three T8 gate assertions pass at anchor: line-by-line validation, #59 cadence both sides of handoff, same-seed byte-identity (fresh and reused engine). mm\u2192m seam verified single-conversion: trial.py:191 converts once before the injector; logger owns sim_truth /1000 (TestUnitSeams)."
+    },
+    {
+     "row_id": "T-T11",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/replay/verify.py:40",
+     "test_ref": "tests/test_replay.py::TestVerify::test_replay_is_bit_identical",
+     "evidence": "Replay from header (seed/SHA/engine/sweep_point/solver) is bit-identical; tamper case diverges; artifact labeled SIMULATED, carries trial_id, sidecar traces to the source record (TestArtifact).",
+     "note": "Bit-identity is pinned same-process/same-platform only; cross-platform regeneration of the frozen dataset measurably diverges \u2014 finding 3."
+    }
+   ],
+   "findings": [
+    {
+     "title": "Staleness check unrealized: t_emit never read, swept latency axis (#38) behaviorally inert in frozen data",
+     "clause_anchor": "WIRE_FORMAT \u00a7Consumer checklist item 4",
+     "clause_quote": "Staleness check: receive-time age beyond the consumer's staleness bound \u2192 treat as pose-absent.",
+     "code_ref": "sim/wyzantium_sim/guidance/machine.py:122",
+     "observed": "No consumer reads t_emit or holds a staleness bound: machine.observe gets frames at capture time (closed_loop.py:59-60); gate only checks t_emit presence (gate.py:28); perception_latency_ms feeds timing.emit_time (inject.py:90) and nothing else. Probe: seeds 101/202/303, latency 10 vs 100 ms \u2014 diffs confined to t_emit (+trial_id/sweep_point header bytes); outcomes IS8-1 and t_total identical in all 3 pairs.",
+     "failure_scenario": "Frozen Tier-1 marginal over perception_latency_ms {10,30,100} ms (sim/scenarios/tier1.json, swept in freeze_prior_v1): per the checklist a 100 ms-late pose should be treatable as pose-absent and shift hold/refusal behavior; actually no decision path can depend on latency, so the marginal is flat-by-construction \u2014 the fake-flat-curve hazard D-032(e) excluded host pitch/roll for (H-17), here unrecorded and swept.",
+     "proposed_class": "B",
+     "severity": "high",
+     "probe_needed": false
+    },
+    {
+     "title": "trial_header carries no compute-instance identity despite ARCH \u00a75 and PHASE1_PLAN \u00a72 committing it",
+     "clause_anchor": "ARCHITECTURE \u00a75 (also PHASE1_PLAN \u00a72 wirefmt schema row: 'trial_header (incl. #33 solver block + compute-instance identity)')",
+     "clause_quote": "engine and instance identity land in every `trial_header`",
+     "code_ref": "sim/wirefmt/records.py:19",
+     "observed": "Canonical trial_header order is v,type,trial_id,seed,code_git_sha,engine,sweep_point,params_ref,solver \u2014 no instance field; trial_header.v1.schema.json defines none; validator._validate_trial_header checks none; trial.py:161-163 writes none; grep 'instance' over sim/ returns nothing. Instance identity exists only at dataset level in freeze MANIFEST.json.",
+     "failure_scenario": "Any freeze_prior_v1 record examined standalone (or a future mixed-provenance dataset) cannot name the machine that produced it; combined with the measured cross-platform divergence (finding 3), records generated on different instance classes are byte-different yet header-indistinguishable, defeating the per-trial provenance the clause guarantees.",
+     "proposed_class": "B",
+     "severity": "med",
+     "probe_needed": false
+    },
+    {
+     "title": "Frozen-dataset regeneration diverges off the freeze platform: 5/5 sampled records mismatch committed sha256",
+     "clause_anchor": "WIRE_FORMAT \u00a7Trial record schema; freeze_prior_v1/MANIFEST.json records_storage",
+     "clause_quote": "This is what makes every trial bit-identically re-runnable... [Manifest:] records regenerate deterministically from this manifest (code sha + committed plans + seed rule); the per-record sha256 lists committed beside this manifest verify any regeneration.",
+     "code_ref": "sim/wyzantium_sim/replay/verify.py:40",
+     "observed": "Regenerated the first 5 tiers.tier1_plan(20260808) trials at anchor code (tree byte-identical to b493e7a) on darwin/arm64, python 3.14, mujoco 3.11.0: trial_ids match the committed tier1.sha256 names, but all 5 hashes mismatch even after rewriting header code_git_sha to b493e7a \u2014 divergence is in the body (freeze host: c7i.8xlarge linux, python 3.12, mujoco 3.11.0). Same-platform bit-identity holds (test_replay, test_trial).",
+     "failure_scenario": "freeze_prior_v1 records are not retained; an auditor following the manifest's regeneration instruction on any machine but the freeze instance class gets 100% sha mismatches and cannot distinguish platform float drift from tampering or code drift \u2014 the committed dataset (ARCH \u00a76.4) is unverifiable from the only retained machine, and no doc scopes the bit-identity contract to a platform.",
+     "proposed_class": "E",
+     "severity": "high",
+     "probe_needed": true
+    }
+   ],
+   "solidification": [
+    {
+     "item": "Same-instance-class regeneration check for freeze_prior_v1: regenerate a small sample (e.g. 10 records per tier) on the committed instance class at b493e7a and diff against the committed sha256 lists before the 'not retained' storage posture is relied on for swap before/after attribution",
+     "assessment": "Local M4 regeneration mismatches 5/5 sampled tier-1 hashes after normalizing code_git_sha (finding 3), so the manifest's verification path is untested on the only platform where it can succeed; a small cloud sample at the A-004 rate would either validate the claim or force an erratum scoping it.",
+     "proposed_disposition": "RECORDED"
+    }
+   ],
+   "notes": "All 17 lane-E rows verdicted once; no N/A-SUPERSEDED rows in this lane. Lane tests green at anchor (114 wirefmt/logger/validator + trial/replay/#63; Newton legs skip locally by design). Minor batch-M candidate, not filed: validator.py:164 error text says 'IS8-1..IS8-17' while OUTCOMES correctly includes IS8-18 (D-033) \u2014 message-only. mm\u2192m seam verified single-conversion. Probe artifacts left in session scratchpad (latprobe/, regen/); repo untouched. Current HEAD is 95a811d (R01 doc commits atop cdf7fbf); code diff vs anchor is mr_ingest.py + its test only, so verdicts hold at the anchor."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "Staleness check unrealized: t_emit never read, swept latency axis (#38) behaviorally inert in frozen data",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur. Kill sweep: (a) no D-xxx ratifies inertness; D-032(e) excluded pitch/roll for this exact fake-flat hazard yet latency stayed in tier1.json; (c) {10,30,100} ms committed (IS 9.1, #38, H-06 SWEPT); (d) only field-arithmetic tests exist (test_inject:54, test_perception_models:203); (e) I re-probed in isolation (seeds 101/202, 10 vs 100 ms): diffs confined to t_emit+header, trial_result byte-equal. Frames are consumed at capture time, so no path can read latency.",
+     "probe_required": true,
+     "probe_sketch": "sim/results/review_r01/F-NNN: local MuJoCo, seeds 101/202/303, nominal sweep_point, perception_latency_ms 10 vs 100. Assert per pair: equal line counts, byte-diffs confined to t_emit and header trial_id/sweep_point, identical trial_result. Nominal control: same seeds with perception_rate_hz 10 vs 60 must move outcomes/t_total. Deterministic, no spend."
+    },
+    {
+     "finding_title": "trial_header carries no compute-instance identity despite ARCH \u00a75 and PHASE1_PLAN \u00a72 committing it",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur. ARCH \u00a75 ('engine and instance identity land in every trial_header') and PHASE1_PLAN \u00a72 are unambiguous; the whole chain (WIRE_FORMAT header spec, trial_header.v1.schema.json, validator.py:130, records.py:19, trial.py:161) omits it \u2014 WIRE_FORMAT is itself part of the gap (cross-doc conflict), and no D-xxx ratifies the omission (searched DECISIONS + AMENDMENTS). MANIFEST 'instance' is dataset-level only. Fix adds a header field, record bytes change, so B not M; med severity fair.",
+     "probe_required": true,
+     "probe_sketch": "sim/results/review_r01/F-NNN: regenerate one nominal trial (seed 101, local MuJoCo); assert header keys == {v,type,trial_id,seed,code_git_sha,engine,sweep_point,params_ref,solver} with no instance/host key. Controls: MANIFEST.json carries dataset-level 'instance'; records.dumps_line round-trips an unknown 'instance' key preserved (forward-compat fix path)."
+    },
+    {
+     "finding_title": "Frozen-dataset regeneration diverges off the freeze platform: 5/5 sampled records mismatch committed sha256",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur; reproduced 2/2 first tier1_plan(20260808) trials on darwin/arm64: sim tree diff vs b493e7a is only mr_ingest.py (imported nowhere), mujoco 3.11.0 matches the freeze engine, and mismatch survives rewriting code_git_sha \u2014 body divergence. Kills fail: no doc or D-xxx scopes bit-identity to a platform (lane E charter poses it as open); test_replay/test_trial prove only same-platform identity (the control, not coverage). Records not retained, so E-erratum with committed evidence; high stands.",
+     "probe_required": true,
+     "probe_sketch": "sim/results/review_r01/F-NNN: at HEAD on M4, regenerate first 5 tier1_plan(20260808) + 2 gate_plan trials; table local sha256 vs committed lists (expect 7/7 mismatch, trial_ids matching), with/without code_git_sha rewrite. Control: one trial run twice locally is byte-identical. Record python/mujoco/platform triples both sides."
+    }
+   ]
+  }
+ },
+ {
+  "lane": "F1",
+  "review": {
+   "verdicts": [
+    {
+     "row_id": "P-01",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:25",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p01]",
+     "evidence": "25.0 mm == PHASE1_PARAMETERS.md:18 (25 mm [ASSUMED], D-016); read from doc myself"
+    },
+    {
+     "row_id": "P-02",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:26",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p02]",
+     "evidence": "40.0 mm == doc:19 (40 mm [ASSUMED], D-016)"
+    },
+    {
+     "row_id": "P-03",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:27",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p03]",
+     "evidence": "90.0 mm == doc:20 (90 mm [ASSUMED], D-016)"
+    },
+    {
+     "row_id": "P-04",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:28",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p04]",
+     "evidence": "220.0 mm == doc:21 (220 mm [derived], IS \u00a76)"
+    },
+    {
+     "row_id": "P-05",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:29",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p05]",
+     "evidence": "42.0 mm == doc:22 (42 mm, D-016)",
+     "note": "code label 'ASSUMED' where the doc row carries no [ASSUMED] tag; consistent with D-016's provisional-set framing, value exact \u2014 metadata only"
+    },
+    {
+     "row_id": "P-06",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:30",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p06]",
+     "evidence": "180.0 mm == doc:23 (180 mm, D-016)",
+     "note": "same unlabeled-in-doc vs 'ASSUMED'-in-code label note as P-05; value exact"
+    },
+    {
+     "row_id": "P-07",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:31",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p07]",
+     "evidence": "26.0\u00b0 == doc:24 (\u224826\u00b0 [derived]); recomputed atan((110-21)/180)=26.3\u00b0 \u2014 consistent with \u224826"
+    },
+    {
+     "row_id": "P-08",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:32",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p08]",
+     "evidence": "(200.0, 200.0) mm == doc:25 (200 \u00d7 200 mm, D-016)"
+    },
+    {
+     "row_id": "P-09",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:33",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p09]",
+     "evidence": "size 150 mm, center (0,0,+185) mm stud_frame == doc:26 (IS \u00a73.2, \u00a73.5)"
+    },
+    {
+     "row_id": "P-10",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:36",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p10]",
+     "evidence": "8 tags \u00d7 10 mm, r=55 mm, 45\u00b0 pitch == doc:27 (IS \u00a73.3, \u00a73.5)"
+    },
+    {
+     "row_id": "P-11",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:40",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p11]",
+     "evidence": "{lo:10, hi:40} mm swept == doc:28; ~8 mm observability floor carried in source string (studies/H08 \u00a73)"
+    },
+    {
+     "row_id": "P-12",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:43",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p12]",
+     "evidence": "{lo:110, hi:125} mm == doc:29 (radial [110,125] mm, IS \u00a76)"
+    },
+    {
+     "row_id": "P-13",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:45",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p13]",
+     "evidence": "160.0 mm == doc:30 (160 mm [derived], IS \u00a76)"
+    },
+    {
+     "row_id": "P-14",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:46",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p14]",
+     "evidence": "'head_frame YZ plane at x = 0' == doc:31 (IS \u00a76)"
+    },
+    {
+     "row_id": "P-15",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:48",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p15]",
+     "evidence": "50.0 mm == doc:32 (stud-head center at x = +50 mm, IS \u00a76/D-006)"
+    },
+    {
+     "row_id": "P-16",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:51",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p16]",
+     "evidence": "t=(0,0,+185) mm, identity rotation == doc:38 (IS \u00a74)"
+    },
+    {
+     "row_id": "P-17",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:54",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p17]",
+     "evidence": "t=(-50,0,+140) mm, boresight +X == doc:39 (IS \u00a74, D-012, [ASSUMED])"
+    },
+    {
+     "row_id": "P-18",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:57",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p18]",
+     "evidence": "t=(+100,-250,0) mm, yaw 30\u00b0, band (15,45)\u00b0 == doc:40; D-025 text confirms 30\u00b0 and [15\u00b0,45\u00b0]"
+    },
+    {
+     "row_id": "P-19",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:61",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p19]",
+     "evidence": "1371.0 px == doc:41 (\u22481371); recomputed 1920/(2\u00b7tan35\u00b0)=1371.02"
+    },
+    {
+     "row_id": "P-20",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:63",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p20]",
+     "evidence": "880.0 px == doc:42 (\u2248880); recomputed 1920/(2\u00b7tan47.5\u00b0)=879.68"
+    },
+    {
+     "row_id": "P-21",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:66",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p21]",
+     "evidence": "35.0 mm == doc:48 (\u00b135 mm [ASSUMED], D-015)"
+    },
+    {
+     "row_id": "P-22",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:68",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p22]",
+     "evidence": "10.0\u00b0 == doc:49 (\u00b110\u00b0 [ASSUMED], D-015)"
+    },
+    {
+     "row_id": "P-23",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:70",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p23]",
+     "evidence": "(15,25,3) mm, (3,6,1)\u00b0, scale (0.5,1,2) == doc:50 (IS \u00a75, D-019)"
+    },
+    {
+     "row_id": "P-24",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:75",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p24]",
+     "evidence": "20.0\u00b0 normative == doc:56 (\u00b120\u00b0 cone about stud +X, D-018)"
+    },
+    {
+     "row_id": "P-25",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:76",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p25]",
+     "evidence": "outer (3.0,0.2) m, inner (0.2,0.0) m == doc:57 (3 m\u2192200 mm; 200 mm\u2192contact, D-004)"
+    },
+    {
+     "row_id": "P-26",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:79",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p26]",
+     "evidence": "ranges 0.5\u20132.0/0.1\u20130.3/0.02\u20130.15 m/s, defaults (1.0,0.2,0.05) == doc:58 and IS \u00a79.1 rows"
+    },
+    {
+     "row_id": "P-27",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:83",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p27]",
+     "evidence": "(1,2,3,5) default 3 == doc:59 (IS \u00a79.1, D-005)"
+    },
+    {
+     "row_id": "P-28",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:85",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p28]",
+     "evidence": "300.0 mm == doc:60 and D-005 text ('back out 300 mm')"
+    },
+    {
+     "row_id": "P-29",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:87",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p29]",
+     "evidence": "code enumerates (0.50,0.60,0.70,0.80,0.85,0.90,0.95) default 0.85",
+     "note": "doc #29 writes the range '{0.50\u20130.95}'; cited source D-017 names exactly this 7-point grid \u2014 documents-win resolves to the D-017 enumeration; tier1.json matches"
+    },
+    {
+     "row_id": "P-30",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:90",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p30]",
+     "evidence": "multi_tag_fused (>=2 tags) AND inner_servo AND conf>=threshold == doc:62; predicate enforcement is lane A territory"
+    },
+    {
+     "row_id": "P-31",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:95",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p31]",
+     "evidence": "{lo:0.1,hi:0.8} default 0.4 == doc:68; 'distinct from #64 mu_trac (D-028)' carried \u2014 symbol split honored"
+    },
+    {
+     "row_id": "P-32",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:97",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p32]",
+     "evidence": "{lo:0.1,hi:0.4} default 0.2 == doc:69 (IS \u00a79.1)"
+    },
+    {
+     "row_id": "P-33",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:99",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p33]",
+     "evidence": "procedure string == doc:70 (halve timestep until delta<1% over 500-trial probe; logged in trial_header); recorded procedure, executed under F2's probe rows"
+    },
+    {
+     "row_id": "P-34",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:103",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p34]",
+     "evidence": "T1 rigid funnel + 6-DOF spring-damper + hard stops, RATIFIED 2026-08-02 == doc:71 and D-027"
+    },
+    {
+     "row_id": "P-35",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:108",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p35]",
+     "evidence": "(1,3,10,30,70) N/mm, no default == doc:72 and D-026; IS \u00a79.1 lists no default for k \u2014 code None matches"
+    },
+    {
+     "row_id": "P-36",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:111",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p36]",
+     "evidence": "(8,15,30) kg == doc:73",
+     "note": "doc #36 names no default; code default 15.0 sourced from IS \u00a79.1's M_eff row (default 15), cited in code \u2014 consistent, not a deviation"
+    },
+    {
+     "row_id": "P-37",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:114",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p37]",
+     "evidence": "(10,30,60) Hz default 30 == doc:79 (IS \u00a79.1)"
+    },
+    {
+     "row_id": "P-38",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:116",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p38]",
+     "evidence": "(10,30,100) ms default 30 == doc:80 (IS \u00a79.1)"
+    },
+    {
+     "row_id": "P-39",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:118",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p39]",
+     "evidence": "anchors-per-perception_prior + view-angle-shape-swept string == doc:81 essentials; curve realization is lane B"
+    },
+    {
+     "row_id": "P-40",
+     "verdict": "NOT-REALIZED",
+     "code_ref": "sim/wyzantium_sim/scenarios.py:16",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p40]",
+     "evidence": "Transcription exact ((0.3,0.5,1.0) default 0.5, params.py:124) but the sweep is unreachable: sigma_px absent from SWEEP_AXES, build_sweep_point rejects it, tier1/tier2 JSONs omit it, trial.py:144 pins PARAMS[40].default",
+     "note": "trial.py:32-34 self-flags a 'pre-existing axis-list gap, flagged for a recorded amendment' \u2014 no D-xxx or HOLES entry records it, unlike H-17's D-032(e) treatment; finding filed"
+    },
+    {
+     "row_id": "P-41",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:127",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p41]",
+     "evidence": "form P_mask(f)\u00b7max(0,1\u2212f/f_c), f_c (0.6,0.8,1.0) == doc:83 and D-023",
+     "note": "default 0.8 not in doc #41; sourced from IS \u00a79.1 mud f_c row (default 0.8), cited in code \u2014 consistent"
+    },
+    {
+     "row_id": "P-42",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:131",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p42]",
+     "evidence": "\u03ba (0.5,1.0,2.0) == doc:84 (studies/H08 \u00a74)",
+     "note": "default 1.0 not in doc #42; IS \u00a79.1 flip-\u03ba row names default 1, cited in code \u2014 consistent"
+    },
+    {
+     "row_id": "P-43",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:133",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p43]",
+     "evidence": "Bernoulli p (0,.05,.1,.2,.3) + geometric burst mean 5 == doc:85 and IS \u00a79 dropout row"
+    },
+    {
+     "row_id": "P-44",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:137",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p44]",
+     "evidence": "{lo:0,hi:0.5} == doc:86 (0\u201350% aperture, Cam B); EXT coverage label carried"
+    },
+    {
+     "row_id": "P-45",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:139",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p45]",
+     "evidence": "{lo:0,hi:0.3} == doc:87 (contrast + droplet occlusion 0\u201330%)"
+    },
+    {
+     "row_id": "P-46",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:141",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p46]",
+     "evidence": "per-tag knockout over sampled 2^9 == doc:88; tier1.json singles grid + tier2.json int 0\u2013511 realize it"
+    },
+    {
+     "row_id": "P-47",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:144",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p47]",
+     "evidence": "(1,2,5,10,50,100,1000,10000) lux == doc:89 ({1,2,5,10,50,100,10\u00b3,10\u2074})"
+    },
+    {
+     "row_id": "P-48",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:146",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p48]",
+     "evidence": "outer 0\u20130.7, inner 0\u20130.9, step 0.1, independent == doc:90 and IS \u00a79 occlusion rows"
+    },
+    {
+     "row_id": "P-49",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:151",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p49]",
+     "evidence": "\u00b120\u00b0 uniform == doc:96 (IS \u00a79, D-024); sweep_point carries host_pitch_deg/host_roll_deg",
+     "note": "harness realization is the recorded open hole H-17 (D-032(e) excluded both tiers on the record); owned by lane D row H-17 \u2014 no new finding from this lane"
+    },
+    {
+     "row_id": "P-50",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:153",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p50]",
+     "evidence": "'one-factor marginal grids at nominal elsewhere' == doc:97 and D-021; tier realization is F2's sweep"
+    },
+    {
+     "row_id": "P-51",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:155",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p51]",
+     "evidence": "4000 == doc:98 (LHS N \u2265 4,000, D-021); tier2.json n_min 4000 agrees"
+    },
+    {
+     "row_id": "P-52",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:157",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p52]",
+     "evidence": "'failure-replay set (A-007 artifacts)' == doc:99 (D-021)"
+    },
+    {
+     "row_id": "P-53",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:159",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p53]",
+     "evidence": "10000 == doc:100 (\u226510,000, MASTER_CONTEXT/D-021); D-038 totals 13,400 \u2265 10,000"
+    },
+    {
+     "row_id": "P-54",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:161",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p54]",
+     "evidence": "radial 3 mm, \u22640.1 m/s, 100 ms == doc:101 and D-020; predicate enforcement is lane C territory"
+    },
+    {
+     "row_id": "P-55",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:164",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p55]",
+     "evidence": "(5,15,30) min default 15 == doc:102 and D-022"
+    },
+    {
+     "row_id": "P-56",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:166",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p56]",
+     "evidence": "D-020 within attempt budget AND t<=T; first/multi reported separately == doc:103 (D-022, D-005)"
+    },
+    {
+     "row_id": "P-57",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:170",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p57]",
+     "evidence": "success + IS8-1..IS8-18 + clean_miss (20 classes) == doc:104 incl. the H-15 row-17 and D-033 row-18 revisions"
+    },
+    {
+     "row_id": "P-58",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:175",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p58]",
+     "evidence": "'header/state/result per WIRE_FORMAT' == doc:105; schema enforcement is lane E"
+    },
+    {
+     "row_id": "P-59",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:177",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p59]",
+     "evidence": "'every physics step post-handoff; every kinematic step pre-handoff' == doc:106; #59 cadence enforcement is lane E (T8 gate)"
+    },
+    {
+     "row_id": "P-60",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:180",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p60]",
+     "evidence": "'single RNG root per trial in trial_header; all streams derive' == doc:107; substream discipline is lane B/D (rng.py)"
+    },
+    {
+     "row_id": "P-61",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:183",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p61]",
+     "evidence": "1,000-trial workload, CPU vs GPU spot, $/1k, both committed == doc:108; execution status (CPU-leg waiver) is row A5-1, lane F2"
+    },
+    {
+     "row_id": "P-62",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/params.py:187",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p62]",
+     "evidence": "F_ax (50,100,200) N; F_lat (10,25) N; t (0.5,1,2) s == doc:109",
+     "note": "doc says 'swept'; trial.py:153-156 pins mid-grid (100,25,1) labeled interim 'until #62 joins the sweep axes' \u2014 same axis-list gap family as P-40, but the doc itself defers to a Phase 1 week-one recorded recalibration"
+    },
+    {
+     "row_id": "P-63",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:193",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p63]",
+     "evidence": "k_max/k_min semantics, emits-data-not-verdicts, tuple order, pinned check (0.2,300)\u219217 N/mm == doc:110 and D-028; recomputed 0.2\u00b7300\u00b79.81/35 = 16.82 \u2248 17"
+    },
+    {
+     "row_id": "P-64",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:202",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p64]",
+     "evidence": "(0.2,0.35,0.5) == doc:111; 'distinct from #31 mu_contact' carried per D-028 symbol rule"
+    },
+    {
+     "row_id": "P-65",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/params.py:205",
+     "test_ref": "tests/test_params.py::test_entry_matches_committed_doc[p65]",
+     "evidence": "(300.0,500.0,800.0) kg == doc:112; 'independent of the target's 500 kg' carried"
+    },
+    {
+     "row_id": "T-T2",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/scenarios.py:16",
+     "test_ref": "tests/test_scenarios.py::test_axis_list_matches_literal_transcription",
+     "evidence": "Gate met: 65/65 double-entry transcription independently re-verified by this lane; SWEEP_AXES == literal AXES covering all 9 settable \u00a79 axes + all 15 \u00a79.1 params + curve_set; view angle/range excluded by \u00a79's 'trajectory-induced' wording; 76 tests pass",
+     "note": "\u03c3_px is not a \u00a79/\u00a79.1 table axis, so the T2 gate as written is satisfied; its #40 sweep gap is filed under P-40 finding"
+    }
+   ],
+   "findings": [
+    {
+     "title": "PHASE1_PARAMETERS #40 \u03c3_px declared swept {0.3,0.5,1.0} px but unreachable: not a sweep axis, pinned to 0.5",
+     "clause_anchor": "PHASE1_PARAMETERS.md #40 (src: perception_prior.md; MEASUREMENT_REQUESTS)",
+     "clause_quote": "Generated from **swept corner-noise class value \u03c3_px \u2208 {0.3, 0.5, 1.0} px** (default 0.5, arbitrary \u2014 consistent with studies/H08's class assumption) propagated through the #19/#20 camera models.",
+     "code_ref": "sim/wyzantium_sim/trial.py:144 (also scenarios.py:16-29, sim/scenarios/tier1.json, tier2.json)",
+     "observed": "scenarios.SWEEP_AXES omits sigma_px and build_sweep_point raises on unknown axes, so no plan can vary it; tier1.json grids and tier2.json domains contain no sigma_px; trial.py hardwires cfg['sigma_px'] = PARAMS[40].default (0.5). trial.py:32-34 self-flags an 'axis-list gap, flagged for a recorded amendment' \u2014 but no D-xxx, HOLES entry, or tier1.json 'excluded' record exists (contrast H-17 / D-032(e)).",
+     "failure_scenario": "Tier-1 marginal sweep at freeze_prior_v1: expected-per-doc a \u03c3_px marginal over {0.3,0.5,1.0} feeding pose covariance \u2192 confidence \u2192 the D-017 tradeoff deliverable; actual \u2014 all 13,400 frozen trials ran \u03c3_px=0.5, and passing sigma_px into run_trial raises SweepPointError. Gate cell unaffected (D-029 pins system params at defaults; 0.5 is the default), but the #40 sensitivity axis is missing from the committed dataset with no recorded exclusion.",
+     "proposed_class": "B",
+     "severity": "med",
+     "probe_needed": false
+    },
+    {
+     "title": "D-029 hardcode-guard test scans only top-level modules; subpackages escape the gate-band literal check",
+     "clause_anchor": "DECISIONS.md D-029",
+     "clause_quote": "Transcribed verbatim into `sim/scenarios/gate_moderate.json` before the first DOE run; harness code never hardcodes it.",
+     "code_ref": "sim/tests/test_scenarios.py:106",
+     "observed": "test_gate_band_is_not_hardcoded_anywhere_in_wyzantium_sim iterates a non-recursive glob('*.py') on the package dir, so doe/tiers.py (the actual band consumer, via load_gate_moderate()) and all other subpackage modules are never scanned. Lane grep at cdf7fbf confirms no subpackage currently hardcodes band values \u2014 code conforms; only the pin is missing.",
+     "failure_scenario": "A future edit hardcodes e.g. [0.3, 0.4] in doe/tiers.py or analysis code; the D-029 'never hardcodes' rule is violated while the guard test stays green and the drift lands unnoticed in a committed sweep.",
+     "proposed_class": "T",
+     "severity": "low",
+     "probe_needed": false
+    }
+   ],
+   "notes": "Lane F1 complete at HEAD cdf7fbf. All 65 entries independently re-read from PHASE1_PARAMETERS.md and compared to params.py \u2014 no transcription errors; the double-entry test (test_params.py, 76 tests green) is honest. gate_moderate.json == D-029 verbatim (all 7 band rows + marginalization + defaults clauses). SWEEP_AXES covers every \u00a79 settable axis and every \u00a79.1 parameter against a literal list. One NOT-REALIZED (P-40 \u03c3_px sweep \u2014 structural proof, no probe/spend needed). Minor unfiled observations: code 'ASSUMED' labels on #5/#6/#8 where doc rows are unlabeled (metadata only, values exact)."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "PHASE1_PARAMETERS #40 \u03c3_px declared swept {0.3,0.5,1.0} px but unreachable: not a sweep axis, pinned to 0.5",
+     "ruling": "ADVANCE",
+     "reasoning": "All kills fail. (a) No D-xxx ratifies the pin: D-032(e) excludes only pitch/roll+curve_set; trial.py:32-34 self-flags an amendment never recorded. (b) Not superseded: D-031 leaves #40's sweep untouched; MR-004 fallback 'in effect now'; mr_ingest.py:29-32 reasserts sigma_px is a sweep axis. (c) PHASE1_PARAMETERS is a committed-domain source; IS 9.1/tier1.json omission caps severity at med. (d) No test covers it. (e) No gate attribution. Axis is live (noise.py), unlike H-17 no-ops.",
+     "probe_required": true,
+     "probe_sketch": "F-NNN probe: (1) fail \u2014 build_sweep_point(nominal + sigma_px=1.0) raises SweepPointError 'unknown axes'; (2) isolation (H-18 rule) \u2014 fixed seed, N\u224820/value, monkeypatch trial cfg sigma_px in {0.3,0.5,1.0}, else nominal; show pose_cov/confidence differs per value; (3) control \u2014 sigma_px=0.5 byte-identical to frozen same-seed record. Local MuJoCo, no spend."
+    },
+    {
+     "finding_title": "D-029 hardcode-guard test scans only top-level modules; subpackages escape the gate-band literal check",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur. Guard's name promises 'anywhere_in_wyzantium_sim' but glob('*.py') at test_scenarios.py:106 is non-recursive \u2014 9 subpackages incl. sole band consumer doe/tiers.py:156 unscanned. Kill (d) probed: test_doe_tiers.py TestGatePlan checks band membership against the JSON, which passes even with a hardcoded copy of today's values \u2014 not equivalent; no other recursive guard exists. Code conforms today (package grep clean, tests green): T/low, freeze unaffected.",
+     "probe_required": false
+    }
+   ]
+  }
+ },
+ {
+  "lane": "F2",
+  "review": {
+   "verdicts": [
+    {
+     "row_id": "D-001",
+     "verdict": "CONFORMS",
+     "code_ref": "DECISIONS.md:12",
+     "evidence": "Design-principle row, untestable-by-nature in Phase 1 code; its geometric consequence (funnel+latch head vs stud+plate target) is realized via the D-016 dimension set whose transcription is lane F1's P-01..P-16.",
+     "note": "Doc-only row."
+    },
+    {
+     "row_id": "D-002",
+     "verdict": "CONFORMS",
+     "code_ref": "DECISIONS.md:19",
+     "evidence": "Untestable-by-nature (naming/heritage discipline). grep of sim/wyzantium_sim and sim/scenarios finds no 'pintle' usage for the target-side feature; code consistently uses 'stud'.",
+     "note": "Doc-only row."
+    },
+    {
+     "row_id": "D-003",
+     "verdict": "N/A-SUPERSEDED",
+     "code_ref": "DECISIONS.md:26",
+     "evidence": "Struck through in DECISIONS.md with explicit successor pointer 'superseded by D-003-R, 2026-08-01' and a why-superseded paragraph; D-003-R present at DECISIONS.md:33. Pass-through confirmed."
+    },
+    {
+     "row_id": "D-003-R",
+     "verdict": "CONFORMS",
+     "code_ref": "DECISIONS.md:33",
+     "evidence": "Untestable-by-nature in Phase 1 sim (static Phase-2 structural ratings). Arithmetic re-verified in venv: 15 kN\u00b7sin20\u00b0=5.130 kN; x90 mm=461.7 N\u00b7m ~= 462; SF = pi\u00b7d^3/32\u00b7655MPa / 461.7 = 2.18 ~= 2.2 as stated."
+    },
+    {
+     "row_id": "D-008",
+     "verdict": "N/A-SUPERSEDED",
+     "code_ref": "DECISIONS.md:464",
+     "evidence": "Struck through with successor pointer 'superseded by D-008-R, 2026-08-01' and why-superseded text; D-008-R present at DECISIONS.md:476 (lane B row). Pass-through confirmed."
+    },
+    {
+     "row_id": "D-009",
+     "verdict": "N/A-SUPERSEDED",
+     "code_ref": "DECISIONS.md:491",
+     "evidence": "Struck through with successor pointer 'superseded by D-009-R, 2026-08-01'; D-009-R present at DECISIONS.md:497. Pass-through confirmed."
+    },
+    {
+     "row_id": "D-009-R",
+     "verdict": "CONFORMS",
+     "code_ref": "DECISIONS.md:497",
+     "evidence": "Untestable-by-nature (procurement conduct). Repo contains no product-hardware artifacts; Phase-1 compute is cloud CPU under the P-02 ceiling (software spend, permitted); camera params remain assumed (D-012) throughout the harness."
+    },
+    {
+     "row_id": "D-010",
+     "verdict": "CONFORMS",
+     "code_ref": "research/data/perception_prior.md:57",
+     "evidence": "Untestable-by-nature in the harness: D-007 injects curves, no detector runs. The 36h11/AprilTag literature basis feeding prior_v1 is committed in perception_prior.md (Olson 2011, Wang&Olson 2016 incl. 36h11 FP table row)."
+    },
+    {
+     "row_id": "D-014",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/analysis/curves.py:60",
+     "test_ref": "tests/test_analysis.py::TestSensitivity::test_golden_marginal_values",
+     "evidence": "Sensitivity curves (not a single rate) are the emitted headline: per-axis Wilson-CI curves over 22 tier-1 axes, committed as freeze_prior_v1/figures/d014_*.png + index.json.",
+     "note": "Realized as per-axis marginals over detection-degrading axes; the literal 'success vs assumed detection rate' abscissa is assembled at REPORT (T13) from these + committed curves."
+    },
+    {
+     "row_id": "D-021",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/doe/tiers.py:79",
+     "test_ref": "tests/test_doe_tiers.py::TestTier1Cells::test_cell_count_matches_the_arithmetic",
+     "evidence": "Tier shapes match generators: 88 marginal cells x50 = 4,400; Tier-2 LHS n_min 4,000 (stratification tested); Tier-3 replay set exists (4 classes). 4400+4000+5000 = 13,400 >= 10,000 per MANIFEST; cell arithmetic independently re-summed (108-21+1=88)."
+    },
+    {
+     "row_id": "D-022",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/classify/outcomes.py:146",
+     "test_ref": "tests/test_outcomes.py::TestCanonicalTraces::test_canonical_trace_maps_to_its_class[success]",
+     "evidence": "success = any D-020 latch within attempt budget; t<=T structural (trial.py loop never runs past budget; contact capped at remaining budget). T swept {5,15,30} in tier1.json; first/multi splits separate in curves.attempt_splits, freeze_summary, index.json."
+    },
+    {
+     "row_id": "D-032",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/doe/runner.py:88",
+     "test_ref": "tests/test_doe_kill_resume.py::test_mini_sweep_survives_kill_and_resumes_byte_identically",
+     "evidence": "All six clauses verified: (a) grids data-only; (b) sha1 top-63 seed rule (tiers.py:55); (c) ceiling from spend_p02.json, atomic ledger, 2 hard stops; (d) validator resume oracle; (e) exclusions recorded (tier1.json, H-17); (f) abs pp (probes.py:48)."
+    },
+    {
+     "row_id": "D-038",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/results/freeze_prior_v1/MANIFEST.json:10",
+     "evidence": "Untestable-by-nature (executed-count decision), verified from artifacts: manifest plan 'tiers.gate_plan(20260808, 5000) [D-038]', gate.sha256 = 5,000 lines, freeze gate n=5000. Sizing re-computed: Wilson half-width 1.270pp at p=0.3, 0.605pp at p=0.05, as stated."
+    },
+    {
+     "row_id": "ISS-08",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/wyzantium_sim/scenarios.py:16",
+     "test_ref": "tests/test_scenarios.py::test_axis_list_matches_literal_transcription",
+     "evidence": "Every settable \u00a79 axis + all 15 \u00a79.1 params in SWEEP_AXES and tier1 grids; pitch/roll excluded by recorded decision (D-032(e)/H-17, tier1.json excluded block, test-pinned); view angle/range trajectory-induced per \u00a79's own coverage rows.",
+     "note": "sigma_px sits outside \u00a79/\u00a79.1 so this row conforms, but the #40 swept-axis contract is unrealized with no recorded exclusion \u2014 filed as a finding."
+    },
+    {
+     "row_id": "A6-1",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/results/freeze_prior_v1/figures/index.json:1",
+     "test_ref": "tests/test_analysis.py::TestSensitivity::test_golden_marginal_values",
+     "evidence": "Exists as data: 22 d014_*.png Wilson-CI sensitivity curves + index.json (curve_set prior_v1, n=4400) committed under freeze_prior_v1/figures/.",
+     "note": "D-014 detection-rate framing assembled at REPORT; underlying per-axis data all present."
+    },
+    {
+     "row_id": "A6-2",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/results/freeze_prior_v1/freeze_summary.json:11",
+     "test_ref": "tests/test_analysis.py::TestSplitsAndCensus::test_census",
+     "evidence": "Every failed trial classified to an IS8 row: per-tier censuses keyed IS8-x in freeze_summary.json (tier1 457 IS8-1/17 IS8-3; gate 4997+3) + failure_distribution.png; classifier raises on unmatched (lane A owns semantics)."
+    },
+    {
+     "row_id": "A6-3",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/analysis/curves.py:134",
+     "test_ref": "tests/test_analysis.py::TestSplitsAndCensus::test_first_vs_overall",
+     "evidence": "first_attempt_success reported separately in every tier block of freeze_summary.json (e.g. tier1 0.8830 vs 0.8923) and index.json d005_splits; attempts_per_encounter is a swept tier-1 axis."
+    },
+    {
+     "row_id": "A6-4",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/results/freeze_prior_v1/MANIFEST.json:2",
+     "test_ref": "tests/test_doe_kill_resume.py::test_mini_sweep_survives_kill_and_resumes_byte_identically",
+     "evidence": "MANIFEST commits code sha, engine/instance, plans, seed rule; 13,400-line per-record sha256 lists + dataset.digest; same-seed byte identity test-pinned.",
+     "note": "Raw records not retained (wording owned by G-2); regeneration verifiable only at the freeze SHA and same platform \u2014 my local probe confirms HEAD-side regeneration cannot match the digests (see S-10)."
+    },
+    {
+     "row_id": "A6-5",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/results/tier3_prior_v1/README.md:1",
+     "test_ref": "tests/test_replay.py::test_artifact_labeled_and_traceable",
+     "evidence": "One artifact per class observed in the freeze (success, IS8-1, IS8-2, IS8-3): 4 GIF+JSON pairs; sidecars carry trial_id, code_git_sha (a2a5bab doc-only descendant, README-documented), source record path, label 'simulated'."
+    },
+    {
+     "row_id": "A6-6",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/analysis/curves.py:96",
+     "test_ref": "tests/test_analysis.py::TestRefusalDamage::test_golden_tradeoff_values",
+     "evidence": "D-017 curve exists as data: refusal_damage() over the conf_min_attempt marginal (7 thresholds in tier-1), committed as freeze_prior_v1/figures/d017_tradeoff.png with success/refusal/contact-failure/false-capture series."
+    },
+    {
+     "row_id": "A6-7",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/results/freeze_prior_v1/feasibility_63.json:1",
+     "test_ref": "tests/test_analysis.py::TestFeasibility::test_band_and_intersection",
+     "evidence": "Committed emission: required band [1,70] N/mm at threshold 0.60, all 9 (mu_trac, m_rv) class windows, masks over the D-026 grid, intersections; interpretation deferred to ARCH \u00a76.7 per D-028 (source string states it)."
+    },
+    {
+     "row_id": "A5-1",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/results/a004/c7i.8xlarge-spot-us-east-1c.json:1",
+     "evidence": "ARCH \u00a75/PHASE1_PLAN \u00a73 require both CPU and GPU $/1k measurements committed; only the CPU leg exists ($0.009502/1k). MANIFEST records 'Newton pending GPU quota'. P-08(a) drafts the D-039 waiver but it is unratified at HEAD, so the clause is unmet at freeze.",
+     "note": "Finding filed; disposition already queued as PENDING_HUMAN P-08(a)."
+    },
+    {
+     "row_id": "A5-2",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/doe/runner.py:44",
+     "test_ref": "tests/test_doe_runner.py::TestSpendMeter::test_imminent_overrun_trips_before_the_crossing_trial",
+     "evidence": "Meter enforces the $100 spend_p02.json ceiling (projected + imminent trips, both raising). Ledger cross-foots exactly: 12,800 trials x $0.0094/1k (rate committed at e2a8050) + 13,400 x $0.0095022/1k = $0.24764905 = ledger value to the last digit."
+    },
+    {
+     "row_id": "X-1",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/results/freeze_prior_v1/MANIFEST.json:20",
+     "evidence": "Artifact row, untestable-by-nature: committed counts 4,400+4,000+5,000 = 13,400 >= 10,000; independently confirmed by wc -l on the three sha256 lists (4400/4000/5000 lines)."
+    },
+    {
+     "row_id": "X-2",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/results/freeze_prior_v1/figures/index.json:1",
+     "evidence": "All ARCH \u00a76.1-6.7 outputs exist as committed data at HEAD: d014 curves, censuses, splits, MANIFEST+digests, tier3 replay artifacts, d017 tradeoff, feasibility_63.json (rows A6-1..7).",
+     "note": "REPORT assembly is T13; the stub's false header is F-001 (lane G). Exit criterion satisfied at the data layer only."
+    },
+    {
+     "row_id": "X-3",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/doe/tiers.py:153",
+     "test_ref": "tests/test_scenarios.py::test_gate_band_is_not_hardcoded_anywhere_in_wyzantium_sim",
+     "evidence": "gate_plan reads the band from scenarios.load_gate_moderate() only; a test greps the package for hardcoded band literals; gate tests read the file, no literals; frozen gate ran gate_plan(20260808, 5000) per MANIFEST. gate_moderate.json matches the D-029 table."
+    },
+    {
+     "row_id": "T-T10",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/doe/runner.py:120",
+     "test_ref": "tests/test_doe_kill_resume.py::test_mini_sweep_survives_kill_and_resumes_byte_identically",
+     "evidence": "All four gate clauses test-pinned and passing (75 passed this session): 50-trial SIGKILL/resume byte-identical vs control; tier cell counts double-entry (88 cells); convergence halts <1pp (exact-1pp does not halt); spend meter trips on synthetic overrun before anything runs."
+    },
+    {
+     "row_id": "T-T12",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/wyzantium_sim/analysis/feasibility.py:25",
+     "test_ref": "tests/test_analysis.py::TestFeasibility::test_63_pinned_cross_check",
+     "evidence": "Golden mini-dataset curve values asserted (sensitivity, tradeoff, splits, census); #63 pinned cross-check reproduced with explicit tolerance approx(16.82, abs=0.02): (0.2, 300kg) -> k_max 16.817 -> {30,70} masked false, matching committed feasibility_63.json."
+    }
+   ],
+   "findings": [
+    {
+     "title": "sigma_px (#40) committed as swept {0.3,0.5,1.0} px but pinned at 0.5 in all trials; exclusion unrecorded",
+     "clause_anchor": "PHASE1_PARAMETERS #40; ARCHITECTURE \u00a73 pose-covariance row",
+     "clause_quote": "Generated from **swept corner-noise class value \u03c3_px \u2208 {0.3, 0.5, 1.0} px** (default 0.5, arbitrary...) \u2014 ARCH \u00a73: \"Swept \u03c3_px {0.3, 0.5, 1.0} px stands in \u2014 the sole quantifying source (Kallwies 2020) is paywalled\"",
+     "code_ref": "sim/wyzantium_sim/trial.py:144",
+     "observed": "trial.py sets cfg[\"sigma_px\"] = PARAMS[40].default for every trial; sigma_px is absent from scenarios.SWEEP_AXES (scenarios.py:16), from tier1.json grids AND its 'excluded' block, from tier2 domains and the gate band. trial.py's docstring admits 'pre-existing axis-list gap, flagged for a recorded amendment' but no D-xxx or HOLES entry exists (H-17 covers pitch/roll only), unlike the D-032(e) discipline applied to pitch/roll.",
+     "failure_scenario": "A reviewer reads ARCH \u00a73/#40 and treats freeze_prior_v1 pose-noise sensitivity as swept over {0.3, 0.5, 1.0} px. In fact all 13,400 frozen trials ran at 0.5 px: the \u03c3_px=1.0 case \u2014 the honest worst case for the one covariance input with no literature anchor \u2014 has zero coverage, and since sweep_point does not carry the axis, the records themselves cannot reveal the gap.",
+     "proposed_class": "E",
+     "severity": "med",
+     "probe_needed": false
+    },
+    {
+     "title": "A-004 GPU leg never measured \u2014 'both measurements committed' unmet at freeze; waiver drafted, unratified",
+     "clause_anchor": "ARCHITECTURE \u00a75 (A-004); PHASE1_PLAN \u00a73",
+     "clause_quote": "run it on a cloud CPU instance and a cloud GPU spot instance, and compare **measured dollars per 1,000 trials**... both measurements are committed alongside the trial records",
+     "code_ref": "sim/results/a004/c7i.8xlarge-spot-us-east-1c.json",
+     "observed": "sim/results/a004/ contains exactly one artifact (CPU, $0.009502/1k). Newton/GPU was never provisioned (MANIFEST: 'Newton pending GPU quota, recorded'). PENDING_HUMAN P-08(a) drafts D-039 waiving the GPU leg as moot (~$0.25 total DOE compute), but at HEAD cdf7fbf no ratification exists, so the committed obligation stands unmet.",
+     "failure_scenario": "Phase-1 closeout audit: the exit packet cites A-004 as the compute decision's evidence; a reader finds a two-leg comparison contract satisfied by one leg, with the deciding comparison never run \u2014 the CPU choice is correct on cost logic but is not the measured comparison the plan committed to.",
+     "proposed_class": "E",
+     "severity": "low",
+     "probe_needed": false
+    }
+   ],
+   "solidification": [
+    {
+     "item": "S-01",
+     "assessment": "Computed in venv: Wilson 95% for 0/5000 = [0, 0.000767730137580694] \u2014 matches the freeze gate ci95 to the last digit; tier1 (3926/4400) and tier2 (26/4000) intervals also match wilson_ci(z=1.96) exactly. Non-matches: CP two-sided upper 7.375e-4, CP one-sided 5.990e-4, rule-of-three 6.0e-4. Method is Wilson (curves.py:24), consistent with D-038's Wilson sizing; the freeze artifact's 'ci95' key does not name it \u2014 name the method in REPORT/an errata line.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "S-02",
+     "assessment": "Tier-1 cells are n=50: worst-case Wilson half-width ~13.9pp at p=0.5 \u2014 fine for curve shape, not for cell-level pass/fail reads. tier1_prior_v1_summary.json emits raw per-cell rates (n, success, outcomes) with no CIs and no multiplicity note across ~88 cells; the d014 charts do render Wilson bands. Computation-only: add per-cell CIs and a no-multiplicity-correction disclosure pre-REPORT.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "S-03",
+     "assessment": "probe33_gate/conv33.json covers the gate plan (root 33, n=500, dt 2e-4 vs 1e-4 \u2014 the frozen timestep) but both steps score 0.0: the #33 success-rate delta is degenerate at a refusal-dominated cell (0-0 < 1pp halts vacuously). Convergence of the operative statistic there (refusal/outcome census) is unaudited; computing it needs record regeneration since records are not retained. Record the caveat with the probe artifact; a census-delta version folds into any re-run.",
+     "proposed_disposition": "RECORDED"
+    },
+    {
+     "item": "S-04",
+     "assessment": "Seed rule (tiers.py:55, digest[:8]>>1 = top 63 bits of sha1) matches D-032(b); pure in (root, tag) so resume-stable \u2014 kill/resume byte-identity test proves it end-to-end. Substreams keyed (root, crc32(name)), order-independent (rng.py:16). Real caveat: chassis substream keyed on root only (stage.py:135), so retries replay identical noise \u2014 but that is ratified as a labeled limitation in D-037's closing paragraph and trial.py's docstring. Nothing unrecorded remains.",
+     "proposed_disposition": "RECORDED"
+    },
+    {
+     "item": "S-05",
+     "assessment": "Not yet mechanical: dataset.py's guard keys on curve_set only (dataset.py:55-59) and TrialRow does not even load code_git_sha from the header, so (curve_set, code_git_sha) pooling refusal is impossible today \u2014 pre- vs post-B-fix prior_v1 records would pool silently if ever co-located. Small computation-only extension (TrialRow field + guard + test) should land BEFORE prior_v2/mr_v1 exist, via the Class T pipeline.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "S-06",
+     "assessment": "Computed from the freeze census: gate cell 5,000 = 4,997 IS8-1 + 3 IS8-3 \u2014 both REFUSAL_CLASSES per curves.py \u2014 so the split is success 0.0% / refusal-escalation 100.0% / damage-class 0.0% (zero contact-failure outcomes, zero false captures). The D-029 gate number is entirely polite refusal, not damage; REPORT should print this split beside the headline and cite D-017's refusal-is-a-deliverable framing. Data already committed; emission is computation-only.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "S-07",
+     "assessment": "Tolerance is stated, not implied: test_analysis.py::test_63_pinned_cross_check asserts k_max == approx(16.82, abs=0.02) and masks {30,70} False; committed feasibility_63.json carries k_max 16.81714285714286 for (0.2, 300kg). Cross-check reproduced with named numeric tolerance.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "S-08",
+     "assessment": "Half-met: CellStat computes per-point n/ci_lo/ci_hi and the d014 charts render the Wilson band (charts.py:58); but the committed figures/index.json stores only figure filenames + splits \u2014 no per-point JSON \u2014 and ThresholdStat (D-017) has no CI fields so d017_tradeoff.png renders none. Computation-only: emit per-point curve JSON (n + CIs, both curves) beside the figures pre-REPORT.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "S-09",
+     "assessment": "Cross-foots exactly: $0.24764904923735687 = 12,800 pre-freeze trials x $0.0094/1k (rounded rate committed with the first CPU a004 artifact at e2a8050, measured 0.0094224) + 13,400 freeze trials x $0.009502167853532263/1k (freeze-time re-measure in the current artifact). F-002's corrected manifest figure recovered: 13,400 x current rate = $0.1273, i.e. the mangled string was '~$0.13'. Note: the re-measure overwrote the first CPU artifact in place (prior value survives only in git history).",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "S-10",
+     "assessment": "Probed read-only: regenerated frozen trial tier1:nominal:r000 locally on the M4 (mujoco 3.11.0, code tree byte-identical to freeze) \u2014 sha256 MISMATCHES the committed tier1.sha256 digest. Expected from trial_header.code_git_sha alone (cdf7fbf vs b493e7a): the digest lists verify regenerations ONLY at a b493e7a checkout, and arm64-vs-x86 float identity at that SHA is unverified by any committed artifact. Document this two-part caveat beside the MANIFEST or commit a same-SHA cross-platform check.",
+     "proposed_disposition": "RECORDED"
+    }
+   ],
+   "notes": "ISS-08 (lane F, not in F1's params/scenarios charter) is included per the 'all remaining lane F rows' rule \u2014 flag to the orchestrator if F1 also claimed it. All 75 tests in the lane's files pass at HEAD. S-10 probe artifact left in scratchpad s10/ (outside repo). Cross-lane observations for G: sim/results/tier1_prior_v1_summary.json and tier2_prior_v1_summary.json carry no source/code-sha provenance fields and their numbers differ from the freeze (pre-freeze H-18 evidence snapshots \u2014 worth a label); the first A-004 CPU measurement (0.0094224/1k) was overwritten in place by the freeze re-measure. probe33 (nominal) used the committed sweep_root 20260808 but distinct tags, so no seed collision with committed plans. tier2 freeze census (2050 IS8-2/26 success) vs root snapshot (2065/18) is code-evolution between snapshots, not a same-code discrepancy."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "sigma_px (#40) committed as swept {0.3,0.5,1.0} px but pinned at 0.5 in all trials; exclusion unrecorded",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur: #40 and ARCH \u00a73 verbatim commit swept \u03c3_px; trial.py:144 pins PARAMS[40].default; SWEEP_AXES, tier1 grids, tier1 excluded block, tier2 domains all omit it; the amendment trial.py's docstring promises does not exist. Kills fail: no ratifying D-xxx (D-032(e) lists pitch/roll+curve_set only); D-031/P-07 reaffirm the sweep, not supersede; PHASE1_PARAMETERS is itself a committed-domain source; no test covers it; no causal claim. E med stands.",
+     "probe_required": false
+    },
+    {
+     "finding_title": "A-004 GPU leg never measured \u2014 'both measurements committed' unmet at freeze; waiver drafted, unratified",
+     "ruling": "ADVANCE",
+     "reasoning": "Concur: ARCH \u00a75 commits both $/1k measurements; a004/ holds one CPU artifact; MANIFEST records Newton unprovisioned. Kills fail: D-039 is a P-08(a) draft, not a ratified decision, so (a) does not fire; D-032(c) 'when they exist' governs the spend-meter input, not the comparison obligation; provenance in-domain; (d)/(e) n/a. Value limited \u2014 P-08(a) already self-records the gap \u2014 so fold disposition into the existing P-08 sitting. E low concurred.",
+     "probe_required": false
+    }
+   ]
+  }
+ },
+ {
+  "lane": "G",
+  "review": {
+   "verdicts": [
+    {
+     "row_id": "C-01",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:13",
+     "evidence": "research/RFI_ACC-APG.md exists; EVIDENCED status accurate at HEAD. Doc-only row, untestable-by-nature (no code binding)."
+    },
+    {
+     "row_id": "C-02",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:14",
+     "evidence": "research/FOLLOW_ON.md exists; A-008 recorded at MASTER_CONTEXT.md:484. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-03",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:15",
+     "evidence": "research/VENDORS.md exists; EVIDENCED accurate. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-04",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:16",
+     "evidence": "PARTIAL status honest: MIL-PRF-32383/7 gap named; P-04 still open in PENDING_HUMAN.md. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-05",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:17",
+     "evidence": "D-003-R(a) at DECISIONS.md:34 states 15 kN latch tension; ASSERTED-until-Phase-2 accurate. Doc-only row, untestable-by-nature.",
+     "note": "Evidence cites D-003-R correctly; contrast the stale bare-D-003 pointers found under G-6."
+    },
+    {
+     "row_id": "C-06",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:18",
+     "evidence": "IS \u00a72.1 derivation present (INTERFACE_SPEC.md:45-50: 462 N-m, SF ~2.2 at 20 deg, 1.5 at 30 deg); PARTIAL accurate. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-07",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:19",
+     "evidence": "ASSERTED pending MR-001 still accurate: P-03 unapproved, no MR data landed (mr_ingest.py is ingest scaffolding only, no mr_v1 data committed). Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-08",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:20",
+     "evidence": "D-012/D-025 assumed-camera basis unchanged; ASSERTED accurate. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-09",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:21",
+     "evidence": "studies/C09_VALUE_THRESHOLD.md exists; A-010 at MASTER_CONTEXT.md:506; retired phrasing 'simulation shows value at 40%' greps clean repo-wide. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-10",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:22",
+     "evidence": "H08 study + STANDARDS + IDSS/SSP citations present; PARTIAL ('Phase 1 measures it') accurate pre-swap. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-11",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:23",
+     "evidence": "PARTIAL accurate: D-017 curve exists only pre-swap (analysis built T12); final within-sortie pricing correctly still pending. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-12",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:24",
+     "evidence": "All six prior-art citations present at INTERFACE_SPEC.md:90-110; D-031 Stage B caveat wording matches P-06/P-07 ledger state. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-13",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:25",
+     "evidence": "H04 Addendum A2 (studies/H04_FUNNEL_COMPLIANCE.md:138-140) shows 353 N-m < 462 N-m; static-only caveat consumed by ARCH \u00a76.7 (ARCHITECTURE.md:130-134) as stated. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "C-14",
+     "verdict": "CONFORMS",
+     "code_ref": "CLAIMS.md:26",
+     "evidence": "perception_prior.md Paper 5 (Adamek 2023) committed with FORM-only anchoring; sanctioned sweep phrasing consistent with #39/#40 and D-014. Doc-only row, untestable-by-nature.",
+     "note": "IS \u00a710 item 5 still says 'literature-derived' internally; tension noted under ISS-09, not a C-14 status error."
+    },
+    {
+     "row_id": "G-1",
+     "verdict": "DEVIATES",
+     "code_ref": "sim/results/freeze_prior_v1/MANIFEST.json:18",
+     "evidence": "F-002 confirmed: records_storage ends '...rate: ~/bin/zsh.13.' ($0 heredoc expansion). All else verified: counts 4400+4000+5000=13400; sha256 of the three .sha256 lists match dataset_digest; code_git_sha = freeze b493e7a.",
+     "finding_id": "F-002",
+     "note": "Corrected figure recoverable: 13,400 x $0.009502167853532263/1k (sim/results/a004) = $0.1273 -> original text '~$0.13.'"
+    },
+    {
+     "row_id": "G-2",
+     "verdict": "DEVIATES",
+     "code_ref": "ARCHITECTURE.md:111",
+     "evidence": "ARCH \u00a76.4 promises 'seeds, parameters, and results sufficient to re-run any trial bit-identically'; MANIFEST.json:18 says records 'not retained' \u2014 only digests + summaries committed. Regeneration closure meets the intent, not the wording.",
+     "finding_id": "F-G2",
+     "note": "Class E regeneration-closure clarification proposed per lane charter; frozen bytes untouched."
+    },
+    {
+     "row_id": "G-3",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "sim/results/tier3_prior_v1/README.md:11",
+     "evidence": "All 4 sidecars stamp code_git_sha a2a5bab; git diff b493e7a..a2a5bab over code tree is empty (doc-only descendant, as README discloses). Seed recoverable from trial_id (trial.py:117-120); plans committed \u2014 regeneration auditable.",
+     "note": "Hygiene wart: every sidecar source_record points to a dead session scratchpad path \u2014 see finding F-G3."
+    },
+    {
+     "row_id": "G-4",
+     "verdict": "CONFORMS",
+     "code_ref": "HOW-FAR-ALONG.md:8",
+     "evidence": "All checkable figures verified: 13,400 trials; gate 0%/5,000 all-refusal (freeze_summary census IS8-1:4997, IS8-3:3); clean 89.2%; ~$0.25 ledger; T11-T12 built; ROADMAP + PENDING_HUMAN current at 2026-08-11. Doc-only row, untestable-by-nature."
+    },
+    {
+     "row_id": "G-5",
+     "verdict": "CONFORMS-WITH-NOTE",
+     "code_ref": "tools/charts.py:1",
+     "test_ref": "tests/test_analysis.py::TestCharts::test_render_all_writes_figures_and_index",
+     "evidence": "PHASE1_PLAN.md:64 reads literally 'tools/charts.py'; file lives at repo-root tools/charts.py, thin CLI over tested wyzantium_sim.analysis.charts. Table heading says harness dir but already mixes repo-relative paths (sim/scenarios/); literal path wins."
+    },
+    {
+     "row_id": "G-6",
+     "verdict": "DEVIATES",
+     "code_ref": "DECISIONS.md:26",
+     "evidence": "Struck rows clean: D-003/D-008/D-009 all name successors with dates; D-008/D-009 have no external orphans. But bare 'D-003' citations persist at ARCHITECTURE.md:13 and INTERFACE_SPEC.md:37,41,357,358 where the live decision is D-003-R.",
+     "finding_id": "F-G6"
+    },
+    {
+     "row_id": "ISS-09",
+     "verdict": "DEVIATES",
+     "code_ref": "INTERFACE_SPEC.md:374",
+     "evidence": "IS \u00a710 item 11 says compliance 'unratified... every contact-model number downstream is pending' \u2014 contradicted by same doc's \u00a72.3 header 'RATIFIED: T1 (D-027, 2026-08-02)' (line 66) and 13,400 frozen contact trials. Items 1-2 stale D-003 pointers counted under G-6.",
+     "finding_id": "F-ISS09",
+     "note": "Item 5 'literature-derived' wording is in tension with C-14's sanctioned phrasing but defensible as internal weakness statement; noted, not a finding."
+    },
+    {
+     "row_id": "X-4",
+     "verdict": "NOT-REALIZED",
+     "code_ref": "sim/REPORT.md:1",
+     "evidence": "REPORT is a one-line stub, so 'every REPORT claim traceable' has no object yet. Recorded plan: T13 assembles post-swap (HOW-FAR-ALONG, ROADMAP curve-swap protocol). Honest deferral; the stub line's false content is F-001."
+    },
+    {
+     "row_id": "X-5",
+     "verdict": "NOT-REALIZED",
+     "code_ref": "CLAIMS.md:11",
+     "evidence": "No Phase-1-result CLAIMS rows yet (register is C-01..C-14, pre-result). A-007 artifacts exist pre-swap (tier3_prior_v1, 4 classes) so the mechanism is proven; rows land with post-swap results per ROADMAP deliverables. Recorded deferral, no finding."
+    },
+    {
+     "row_id": "T-T0",
+     "verdict": "CONFORMS",
+     "code_ref": "sim/pyproject.toml:1",
+     "test_ref": "tests/ (full suite: 582 passed, 8 skipped at HEAD)",
+     "evidence": "Gate as written ('suite green empty; packages import') exceeded: wirefmt+wyzantium_sim import clean; .venv/bin/python -m pytest -q = 582 passed, 8 skipped (Newton skips per plan \u00a72).",
+     "note": "Task text names 'lint' but no lint tool/config exists anywhere; the verification gate does not require it, so noted only."
+    },
+    {
+     "row_id": "T-T13",
+     "verdict": "NOT-REALIZED",
+     "code_ref": "sim/REPORT.md:1",
+     "evidence": "REPORT assembly + CLAIMS rows not built \u2014 REPORT.md is a stub, no ARCH \u00a76.1-6.7 output assembled. This is the recorded post-swap plan (HOW-FAR-ALONG; P-03/P-08 sequencing). Honest NOT-REALIZED per charter; only defect is the stub's false first line (F-001)."
+    }
+   ],
+   "findings": [
+    {
+     "title": "F-001 CONFIRMED \u2014 REPORT stub line 'No simulation exists yet' is a false repo statement at HEAD",
+     "clause_anchor": "MASTER_CONTEXT \u00a74.3",
+     "clause_quote": "If the repository and a published claim disagree, the repository is right",
+     "code_ref": "sim/REPORT.md:1",
+     "observed": "Line 1 reads verbatim: 'STUB \u2014 Phase 1 deliverable. Not yet written. No simulation exists yet.' Meanwhile 13,400 frozen trials, a freeze manifest, tier-3 replay artifacts, and a 582-test green suite exist at the same SHA.",
+     "failure_scenario": "Any reader or review-packet flow (P-05 style) that opens sim/REPORT.md at cdf7fbf takes the line at face value and concludes Phase 1 has not started; expected-per-doc: repo statements are ground truth, so ground truth now lies about itself.",
+     "proposed_class": "M",
+     "severity": "med",
+     "probe_needed": false
+    },
+    {
+     "title": "F-002 CONFIRMED \u2014 MANIFEST records_storage mangled by $0 shell expansion; corrected figure recovered: ~$0.13",
+     "clause_anchor": "ARCHITECTURE \u00a76.4 / A-007 committed-dataset discipline",
+     "clause_quote": "Committed, reproducible dataset \u2014 seeds, parameters, and results sufficient to re-run any trial bit-identically",
+     "code_ref": "sim/results/freeze_prior_v1/MANIFEST.json:18",
+     "observed": "Field ends '...rate: ~/bin/zsh.13.' \u2014 unquoted heredoc expanded $0 inside '~$0.13.'. Recovery: 13,400 trials x usd_per_1k 0.009502167853532263 (sim/results/a004) = $0.1273, so intended text was '~$0.13.' Consistent with spend_ledger.json ($0.2476 / 26,200 lifetime trials).",
+     "failure_scenario": "An auditor of the frozen record-of-record reads a nonsense provenance sentence in the exact field that justifies not retaining the records; the regeneration-cost assurance is unreadable precisely where it matters.",
+     "proposed_class": "E",
+     "severity": "med",
+     "probe_needed": false
+    },
+    {
+     "title": "IS \u00a710 item 11 still declares the funnel compliance unratified \u2014 contradicted by D-027 and by IS \u00a72.3 itself",
+     "clause_anchor": "INTERFACE_SPEC \u00a710 item 11 vs \u00a72.3 / DECISIONS D-027",
+     "clause_quote": "The **funnel compliance is unratified** (\u00a72.3) \u2014 the crux mechanism's topology awaits a human decision; every contact-model number downstream of it is pending.",
+     "code_ref": "INTERFACE_SPEC.md:374",
+     "observed": "Same document's \u00a72.3 header (INTERFACE_SPEC.md:66) reads 'RATIFIED: T1 (D-027, 2026-08-02)'; PENDING_HUMAN P-01 struck DONE; 13,400 frozen contact trials ran on the ratified T1 model.",
+     "failure_scenario": "A reader auditing 'known weaknesses' at HEAD concludes the crux mechanism is undecided and every downstream contact number provisional; expected-per-doc: \u00a710 is the honesty section and must be accurate; actual: it overstates weakness by ten days of ratified history and its own \u00a72.3 pointer refutes it.",
+     "proposed_class": "E",
+     "severity": "med",
+     "probe_needed": false
+    },
+    {
+     "title": "Orphan references to superseded D-003 in ARCHITECTURE and INTERFACE_SPEC (live decision is D-003-R)",
+     "clause_anchor": "DECISIONS.md D-003 strike header / R01 G-6 pointer-integrity clause",
+     "clause_quote": "~~D-003 \u2014 Preliminary latch load rating: 15 kN design~~ \u2014 superseded by D-003-R, 2026-08-01",
+     "code_ref": "INTERFACE_SPEC.md:357",
+     "observed": "Bare '(D-003)' citations at ARCHITECTURE.md:13 and INTERFACE_SPEC.md:37, 41, 357, 358 point at a struck decision; surviving content (15 kN latch tension, single-point-of-failure) lives in D-003-R(a)/(b). D-008/D-009 chains are clean.",
+     "failure_scenario": "A reader follows '(D-003)' from IS \u00a710 item 1, lands on strike-through text with a different rating structure (single 15 kN design vs two ratings), and must guess whether the citing sentence survived the supersession; expected: struck decisions referenced only via successors.",
+     "proposed_class": "M",
+     "severity": "low",
+     "probe_needed": false
+    },
+    {
+     "title": "ARCH \u00a76.4 'results sufficient to re-run' vs freeze records_storage 'not retained' \u2014 regeneration-closure wording gap",
+     "clause_anchor": "ARCHITECTURE \u00a76.4",
+     "clause_quote": "Committed, reproducible dataset \u2014 seeds, parameters, and results sufficient to re-run any trial bit-identically.",
+     "code_ref": "sim/results/freeze_prior_v1/MANIFEST.json:18",
+     "observed": "The freeze commits seeds/plans/code SHA/per-record sha256 digests and summaries but not the per-trial records ('not retained \u2014 records regenerate deterministically from this manifest'). The regeneration closure meets \u00a76.4's intent; 'results' as committed content is not literally satisfied.",
+     "failure_scenario": "An external auditor holds Phase 1 to \u00a76.4 as written, asks for the committed results dataset, and receives digests plus a regeneration recipe \u2014 defensible but undocumented substitution that reads as a broken promise until the closure argument is written into \u00a76.4.",
+     "proposed_class": "E",
+     "severity": "low",
+     "probe_needed": false
+    },
+    {
+     "title": "Tier-3 sidecars' source_record fields point at dead session-scratchpad paths",
+     "clause_anchor": "tier3_prior_v1 README provenance claim",
+     "clause_quote": "Every GIF carries its trial_id; every sidecar JSON maps artifact \u2192 trial record (seed, code SHA).",
+     "code_ref": "sim/results/tier3_prior_v1/mujoco-2154431973576305756-0cff8d51.simulated.json:7",
+     "observed": "All four committed sidecars set source_record to /private/tmp/claude-501/.../scratchpad/tier3-hunt/*.ndjson \u2014 ephemeral, nonexistent paths. The map closes indirectly (seed embedded in trial_id per trial.py:117-120; code_git_sha a2a5bab verified code-identical to freeze), but the explicit pointer dangles.",
+     "failure_scenario": "An auditor follows a sidecar's source_record to verify artifact-to-record mapping and hits a nonexistent path on any machine including the origin; they must reverse-engineer seed and sweep cell from trial_id against committed plans \u2014 auditable, but not via the field provided for it.",
+     "proposed_class": "M",
+     "severity": "low",
+     "probe_needed": false
+    }
+   ],
+   "solidification": [
+    {
+     "item": "F-001 seed verification (lane G deep lens)",
+     "assessment": "CONFIRMED at sim/REPORT.md:1, verbatim as seeded. Prosecution: no D-xxx ratifies the stale line; T13's recorded deferral does not license a false present-tense repo statement. Class M stands; batch-fix the stub line, full REPORT remains T13 post-swap.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "F-002 seed verification + corrected-figure recovery (lane G deep lens)",
+     "assessment": "CONFIRMED at MANIFEST.json:18. Corrected figure recovered without touching frozen bytes: 13,400 x $0.009502167853532263/1k (a004 committed rate) = $0.1273 => original text '~$0.13.'; the surviving '.13.' fragment corroborates. Disposition per seed: MANIFEST_ERRATA.md sidecar carrying this computation.",
+     "proposed_disposition": "DONE"
+    },
+    {
+     "item": "Anchor integrity check (bonus): code tree b493e7a == a2a5bab == cdf7fbf",
+     "assessment": "git diff empty over sim/wyzantium_sim, sim/wirefmt, sim/tests, sim/scenarios for both intervals \u2014 the tier3 sidecar SHA a2a5bab is genuinely a doc/results-only descendant of the freeze, exactly as tier3 README discloses.",
+     "proposed_disposition": "RECORDED"
+    }
+   ],
+   "notes": "Lane G complete, 25/25 rows. Suite run at HEAD: 582 passed, 8 skipped. Both seed findings CONFIRMED; F-002 corrected figure recovered as ~$0.13 from committed a004 rate. New findings: IS \u00a710 item 11 stale vs D-027 (E), bare D-003 orphan pointers (M), ARCH \u00a76.4 regeneration-closure wording (E, per charter), tier3 sidecar dead source_record paths (M). CLAIMS register fully re-audited: all 14 statuses accurate at HEAD; retired C-09 phrasing greps clean. X-4/X-5/T-T13 honestly NOT-REALIZED per the recorded post-swap plan; no findings beyond F-001."
+  },
+  "prosecution": {
+   "results": [
+    {
+     "finding_title": "F-001 CONFIRMED \u2014 REPORT stub line 'No simulation exists yet' is a false repo statement at HEAD",
+     "ruling": "ADVANCE",
+     "reasoning": "Re-read sim/REPORT.md:1 (verbatim as quoted; untouched since Phase 0 scaffold d8e9bb4) and MC \u00a74.3 line 326 ('If the repository and the site ever disagree, the repository is right' \u2014 finding paraphrases slightly but substance holds, plus 'Stub is labeled stub'). 13,400 frozen trials + green suite exist at same SHA. No D-xxx ratifies the stub text. Kill (a)-(e): none apply. Class M correct (doc-only, no record bytes).",
+     "probe_required": false
+    },
+    {
+     "finding_title": "F-002 CONFIRMED \u2014 MANIFEST records_storage mangled by $0 shell expansion; corrected figure recovered: ~$0.13",
+     "ruling": "ADVANCE",
+     "reasoning": "MANIFEST.json:18 ends '~/bin/zsh.13.' \u2014 exact signature of unquoted-heredoc $0 expansion of '~$0.13.' under zsh. Arithmetic independently confirmed: 13,400 \u00d7 0.009502167853532263/1000 = $0.1273 (a004 rate file), consistent with spend_ledger. No decision ratifies the text. Class E correct: MANIFEST is the frozen record-of-record (e52903d), so sidecar erratum, not in-place edit, is the right pipeline.",
+     "probe_required": false
+    },
+    {
+     "finding_title": "IS \u00a710 item 11 still declares the funnel compliance unratified \u2014 contradicted by D-027 and by IS \u00a72.3 itself",
+     "ruling": "RECLASSIFY",
+     "reclassify_to": "M",
+     "reasoning": "Contradiction confirmed: IS:374-375 says 'unratified (\u00a72.3)' while IS:66 reads 'RATIFIED: T1 (D-027, 2026-08-02)' and P-01 is struck DONE. Not a kill \u2014 kill (b) targets findings citing superseded text as authority; here the staleness IS the defect. But E is wrong class: the meaning change was already human-ratified (D-027), \u00a72.3 already revised in place; fixing item 11 is mechanical propagation needing no new sign-off \u2014 same class as the D-003 orphan finding. E\u2192M; severity med stands.",
+     "probe_required": false
+    },
+    {
+     "finding_title": "Orphan references to superseded D-003 in ARCHITECTURE and INTERFACE_SPEC (live decision is D-003-R)",
+     "ruling": "ADVANCE",
+     "reasoning": "All five bare '(D-003)' cites verified (ARCH:13; IS:37,41,357,358); DECISIONS:26 strikes D-003, superseded by D-003-R. Surviving content confirmed relocated: 15 kN \u2192 D-003-R(a); single-point-of-failure \u2192 D-003-R consequence '(unchanged)'. IS:41 also preserves the old single-rating framing while IS:49-50 states the two-rating structure; IS \u00a710 item 1 omits the 462 N\u00b7m rating \u2014 reinforcing. No later decision blesses stale pointers. M/low concurred.",
+     "probe_required": false
+    },
+    {
+     "finding_title": "ARCH \u00a76.4 'results sufficient to re-run' vs freeze records_storage 'not retained' \u2014 regeneration-closure wording gap",
+     "ruling": "ADVANCE",
+     "reasoning": "ARCH:111-112 verified verbatim; MANIFEST says 'not retained'. Searched DECISIONS (incl. D-032/D-038 full text), PENDING_HUMAN, MC AMENDMENTS: nothing ratifies the digest-plus-regeneration substitution, so kill (a) fails. Committed content is per-record sha256 lists (4400/4000/5000 counted) + summaries \u2014 closure real, but 'results' as committed data not literally met. Class E correct: fix is a contract-meaning revision to \u00a76.4 with human sign-off. Low severity apt.",
+     "probe_required": false
+    },
+    {
+     "finding_title": "Tier-3 sidecars' source_record fields point at dead session-scratchpad paths",
+     "ruling": "ADVANCE",
+     "reasoning": "All four sidecars verified pointing at nonexistent /private/tmp session-scratchpad ndjson paths; writer confirmed at replay/artifact.py:120 (stores str(record_path) as passed). Indirect closure confirmed stronger than drafted: all four trial_ids appear in committed freeze tier1/tier2.sha256 lists, and seed embeds in trial_id (_trial_id, trial.py). A-007(a) 'every replay maps to a committed trial record' tightens, not kills. No ratified transient-path convention. M/low concurred.",
+     "probe_required": false
+    }
+   ]
+  }
+ }
+]

@@ -1,19 +1,22 @@
-# R01 Metric Solidification Sweep (Lane F2)
+# R01 Metric Solidification Sweep (Lane F2) — dispositions 2026-08-11
 
-Not violations — opportunities to make the numbers harder. Dispositions:
-DONE (computation-only, landed pre-REPORT) / RE-RUN (folds into the batched
-freeze_prior_v2 run) / RECORDED (caveat documented, no computation) /
-DECLINED (with reason).
+Dispositions: DONE (verified/computed, land in REPORT) / CODE (analysis-layer
+change, joins the Class M batch — no record bytes touched) / RECORDED (caveat
+documented) / RE-RUN (folds into batched freeze_prior_v2).
 
 | # | Item | Disposition | Evidence |
 |---|---|---|---|
-| S-01 | Gate-cell CI method named + committed — freeze states "0.0% (N=5,000, CI [0, 0.08%])": Clopper-Pearson one-sided? rule-of-three gives 0.06%; Wilson differs. Reconcile with D-038's Wilson-based sizing | | |
-| S-02 | Per-cell N adequacy vs cell-level pass/fail language in tier1 summary; disclose absence of multiplicity correction across axis×level cells or add one | | |
-| S-03 | #33 convergence statistic audited at a 0-success refusal-dominated cell — convergence *of what* (success rate degenerate at 0; refusal rate? outcome census?); verify probe artifacts cover the frozen configuration | | |
-| S-04 | Seed/substream discipline: D-032 seed rule vs rng.py spawn; substream reuse across attempts within a trial; spawn-key stability across kill/resume at the frozen plans' resume points | | |
-| S-05 | Pooling guard extended to (curve_set, code_git_sha) pairs BEFORE prior_v2/mr_v1 exist, so cross-freeze pooling is mechanically impossible | | |
-| S-06 | Refusal-vs-failure census emitted alongside the headline rate (success / refusal-escalation / damage-class split); reconcile D-029 gate wording with D-017 refusal-is-a-deliverable framing | | |
-| S-07 | #63 pinned cross-check reproduced with numeric tolerance stated, not implied ((0.2, 300 kg) → k_max ≈ 17 N/mm → {30, 70} masked infeasible) | | |
-| S-08 | D-014/D-017 curve JSONs carry per-point N and binomial CIs; charts render them | | |
-| S-09 | Spend-ledger cross-foot vs A-004 committed $/1k × realized counts (simultaneously recovers the manifest's mangled dollar figure for F-002) | | |
-| S-10 | Determinism scope recorded: byte-identical regeneration claimed from the manifest — instance-class/BLAS caveat (M4 vs c7i.8xlarge float identity) documented or cross-platform verification artifact committed | | |
+| S-01 | Gate-cell CI method | **DONE** | Freeze CI [0, 0.000768] matches **Wilson 95%** to the last digit (venv-computed); tier1 (3926/4400) and tier2 (26/4000) intervals also Wilson exact. CP two-sided 7.38e-4, CP one-sided 5.99e-4, rule-of-three 6.0e-4 all differ. REPORT names Wilson; reconciles with D-038's Wilson sizing. |
+| S-02 | Per-cell N adequacy + multiplicity | **DONE** (disclose) | Tier-1 cells n=50 → worst-case Wilson half-width ~13.9 pp: fine for curve shape, not cell-level pass/fail reads. Summary JSON emits raw rates, no CIs, no multiplicity note across ~88 cells → REPORT discloses both. |
+| S-03 | #33 convergence at refusal-dominated cell | **RECORDED** (+ candidate RE-RUN) | Gate probe covers frozen timestep but both arms score 0.0 — the success-rate delta is degenerate (0−0 < 1 pp halts vacuously). Convergence of the operative statistic (refusal census) unverified; re-probe on census recommended with the v2 run. |
+| S-04 | Seed/substream + kill/resume | **DONE** | Seed rule (digest[:8]>>1) matches D-032(b), pure in (root, tag) → resume-stable; kill/resume byte-identity test proves end-to-end; substreams crc32-keyed order-independent. Retry-noise realization stays the labeled D-037 residual limitation. |
+| S-05 | Pooling guard → (curve_set, code_git_sha) | **CODE** | Guard keys on curve_set only (dataset.py:55–59); TrialRow doesn't even load code_git_sha — pre/post-fix prior_v1 records would pool silently. Extend key before v2/mr_v1 exist. |
+| S-06 | Refusal-vs-failure census | **DONE** | Gate cell 5,000 = 4,997 IS8-1 + 3 IS8-3 → success 0.0% / refusal 100.0% / damage 0.0%, zero false captures. The D-029 number is entirely policy refusal — headline framing for REPORT + D-017 tie-in. |
+| S-07 | #63 pinned cross-check tolerance | **DONE** | test_analysis asserts k_max ≈ 16.82 abs=0.02, masks {30,70} False; feasibility_63.json carries 16.8171. Stated, not implied. |
+| S-08 | Per-point N + CIs on curves | **DONE**/**CODE** | d014 charts render Wilson bands; committed index.json lacks per-point JSON; D-017 ThresholdStat has no CI fields → emit per-point JSON + D-017 CIs (analysis-layer, Class M batch). |
+| S-09 | Spend-ledger cross-foot | **DONE** | $0.2476 = 12,800 pre-freeze × $0.0094/1k + 13,400 × $0.009502/1k — exact. Recovers F-002's corrected figure: 13,400 × $0.009502/1k = **$0.1273** ("~$0.13."). |
+| S-10 | Determinism scope | **RECORDED** | M4 regeneration of a frozen trial mismatches committed sha256 (F-018): header SHA drift + genuine cross-platform float divergence. Caveat: byte-identity is per-instance-class; verification recipe must say so. F-017's instance field is the structural fix. |
+
+Cross-lane note (F2→G): `tier1_prior_v1_summary.json` / `tier2_prior_v1_summary.json`
+carry no source/code-sha provenance and differ from the freeze (pre-freeze H-18
+evidence snapshots) — label as historical evidence when REPORT cites them.
