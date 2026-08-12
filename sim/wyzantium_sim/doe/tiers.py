@@ -152,15 +152,24 @@ def _band_value(gen, spec):
 
 def gate_plan(sweep_root, n) -> tuple[PlannedTrial, ...]:
     """Uniform samples over the D-029 moderate band (read from
-    gate_moderate.json only), system parameters at nominal."""
-    band = scenarios.load_gate_moderate()["band"]
+    gate_moderate.json only), system parameters at nominal. D-046(b): the
+    gate's encounter-geometry marginalization is real — host pitch/roll
+    sample the committed D-024 envelope per trial (the JSON's additive
+    encounter_geometry_realization block; the band block stays verbatim)."""
+    gate = scenarios.load_gate_moderate()
+    band = gate["band"]
+    geometry = {axis: spec for axis, spec
+                in gate.get("encounter_geometry_realization", {}).items()
+                if isinstance(spec, dict)}
     nominal = load_nominal()["sweep_point"]
     gen = _sampler(sweep_root, "gate")
     plan = []
     for i in range(int(n)):
         point = {**nominal,
                  **{axis: _band_value(gen, spec)
-                    for axis, spec in band.items()}}
+                    for axis, spec in band.items()},
+                 **{axis: _band_value(gen, spec)
+                    for axis, spec in geometry.items()}}
         tag = f"gate:{i:05d}"
         plan.append(PlannedTrial(tag, derive_seed(sweep_root, tag),
                                  scenarios.build_sweep_point(**point)))

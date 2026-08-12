@@ -31,7 +31,7 @@ NOMINAL = {
     "mu_contact": 0.4, "restitution_e": 0.2, "perception_rate_hz": 30,
     "perception_latency_ms": 30, "chassis_error_scale": 1.0,
     "conf_min_attempt": 0.85, "time_budget_min": 15, "mud_f_c": 0.8,
-    "flip_kappa": 1.0, "stiffness_k_n_mm": 10.0, "head_mass_kg": 15.0,
+    "flip_kappa": 1.0, "sigma_px": 0.5, "stiffness_k_n_mm": 10.0, "head_mass_kg": 15.0,
     "curve_set": "prior_v1",
 }
 
@@ -60,8 +60,13 @@ GRIDS = {
     "time_budget_min": [5, 15, 30],
     "mud_f_c": [0.6, 0.8, 1.0],
     "flip_kappa": [0.5, 1.0, 2.0],
+    # D-046(a): the #40 committed sweep, realized (R01 F-009)
+    "sigma_px": [0.3, 0.5, 1.0],
     "stiffness_k_n_mm": [1.0, 3.0, 10.0, 30.0, 70.0],
     "head_mass_kg": [8.0, 15.0, 30.0],
+    # D-046(b): host attitude realized (H-17 closure) — D-024 envelope
+    "host_pitch_deg": [-20.0, -10.0, 0.0, 10.0, 20.0],
+    "host_roll_deg": [-20.0, -10.0, 0.0, 10.0, 20.0],
 }
 
 # The cell arithmetic, independently: every grid value is a cell, minus the
@@ -82,11 +87,11 @@ class TestCommittedFiles:
         assert all(g["basis"].strip()
                    for g in tiers.load_tier1()["grids"].values())
 
-    def test_excluded_axes_are_pitch_roll_and_curve_set(self):
+    def test_excluded_axes_are_curve_set_only(self):
+        # D-046(b) retired the pitch/roll exclusions (H-17 realized);
+        # the curve-swap seam is the one remaining non-marginal axis.
         excluded = tiers.load_tier1()["excluded"]
-        assert set(excluded) == {"host_pitch_deg", "host_roll_deg",
-                                 "curve_set"}
-        assert "H-17" in excluded["host_pitch_deg"]
+        assert set(excluded) == {"curve_set"}
 
     def test_spend_file_carries_the_p02_ceiling(self):
         spend = tiers.load_spend()
@@ -96,7 +101,7 @@ class TestCommittedFiles:
 
 class TestTier1Cells:
     def test_cell_count_matches_the_arithmetic(self):
-        assert len(tiers.tier1_cells()) == N_CELLS == 88
+        assert len(tiers.tier1_cells()) == N_CELLS == 98  # D-046: +2 sigma_px, +4 pitch, +4 roll
 
     def test_nominal_cell_appears_exactly_once(self):
         cells = tiers.tier1_cells()
@@ -211,11 +216,28 @@ class TestGatePlan:
                 == band["tag_knockout_mask"]["value"]
 
     def test_system_parameters_sit_at_nominal(self):
-        band = set(scenarios.load_gate_moderate()["band"])
+        gate_json = scenarios.load_gate_moderate()
+        band = set(gate_json["band"])
+        # D-046(b): encounter geometry (host pitch/roll) marginalizes per
+        # trial; everything else still sits at its labeled default.
+        geometry = {a for a, s in
+                    gate_json.get("encounter_geometry_realization", {}).items()
+                    if isinstance(s, dict)}
         for p in tiers.gate_plan(20260808, n=8):
             for axis, v in p.sweep_point.items():
-                if axis not in band:
+                if axis not in band | geometry:
                     assert v == NOMINAL[axis], axis
+
+    def test_gate_marginalizes_host_attitude_within_the_envelope(self):
+        # D-046(b): the D-029 "marginalize over their full committed
+        # distributions" text is now a real per-trial draw, not a no-op.
+        pitches = set()
+        for p in tiers.gate_plan(20260808, n=64):
+            sp = p.sweep_point
+            assert -20.0 <= sp["host_pitch_deg"] <= 20.0
+            assert -20.0 <= sp["host_roll_deg"] <= 20.0
+            pitches.add(round(sp["host_pitch_deg"], 3))
+        assert len(pitches) > 8  # varies across trials — not pinned at 0
 
     def test_deterministic_and_independent_of_tier2(self):
         assert tiers.gate_plan(20260808, n=8) == tiers.gate_plan(20260808,

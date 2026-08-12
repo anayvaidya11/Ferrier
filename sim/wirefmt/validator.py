@@ -139,6 +139,14 @@ def _validate_trial_header(obj, errors):
             and isinstance(engine.get("name"), str)
             and isinstance(engine.get("version"), str)):
         errors.append("engine must be {name, version}")
+    if "instance" in obj:
+        # D-046(f): optional additive field (pre-D-046 records lack it);
+        # when present it must carry a stable class label (ARCH §5).
+        inst = obj["instance"]
+        if not (isinstance(inst, dict) and isinstance(inst.get("class"), str)
+                and inst["class"]):
+            errors.append("instance, when present, must be "
+                          "{class: non-empty string}")
 
 
 def _validate_sim_truth(obj, errors):

@@ -1,5 +1,5 @@
 {
-  "source": "INTERFACE_SPEC §9.1 defaults column + zero degradation; D-032",
+  "source": "INTERFACE_SPEC §9.1 defaults column + zero degradation; D-032; D-046(a) added sigma_px (2026-08-11 sitting)",
   "description": "The committed nominal sweep point: every degradation axis at zero/undegraded, every swept system parameter at its IS §9.1 labeled default. 41000 lux is undegraded daylight, deliberately off the #47 sweep grid (the grid probes degradation; nominal is the absence of it). stiffness_k_n_mm = 10 is the D-026 log-grid midpoint — IS §9.1 lists no default for k (derived envelope; Phase 1 outputs the required-stiffness band) — arbitrary, labeled.",
   "sweep_point": {
     "outer_occlusion": 0.0,
@@ -24,6 +24,7 @@
     "time_budget_min": 15,
     "mud_f_c": 0.8,
     "flip_kappa": 1.0,
+    "sigma_px": 0.5,
     "stiffness_k_n_mm": 10.0,
     "head_mass_kg": 15.0,
     "curve_set": "prior_v1"

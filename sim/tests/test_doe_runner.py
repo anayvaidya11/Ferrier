@@ -34,7 +34,7 @@ CHEAP = {
     "mu_contact": 0.4, "restitution_e": 0.2, "perception_rate_hz": 30,
     "perception_latency_ms": 30, "chassis_error_scale": 1.0,
     "conf_min_attempt": 0.85, "time_budget_min": 0.05, "mud_f_c": 0.8,
-    "flip_kappa": 1.0, "stiffness_k_n_mm": 10.0, "head_mass_kg": 15.0,
+    "flip_kappa": 1.0, "sigma_px": 0.5, "stiffness_k_n_mm": 10.0, "head_mass_kg": 15.0,
     "curve_set": "prior_v1",
 }
 

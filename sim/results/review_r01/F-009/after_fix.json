@@ -1,0 +1,10 @@
+{
+ "build_sweep_point_sigma_1p0": 1.0,
+ "tier1_grid": [
+  0.3,
+  0.5,
+  1.0
+ ],
+ "before": "SweepPointError('unknown axes'); pinned at PARAMS[40].default",
+ "fixed": true
+}

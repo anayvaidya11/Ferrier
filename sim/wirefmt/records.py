@@ -18,7 +18,7 @@ CANONICAL_ORDER = {
     ],
     "trial_header": [
         "v", "type", "trial_id", "seed", "code_git_sha", "engine",
-        "sweep_point", "params_ref", "solver",
+        "instance", "sweep_point", "params_ref", "solver",
     ],
     "sim_truth": [
         "v", "type", "t", "T_world_head", "T_world_stud", "contact_wrench",

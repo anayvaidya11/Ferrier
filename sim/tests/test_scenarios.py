@@ -30,7 +30,7 @@ AXES = (
     "attempts_per_encounter", "speed_outer_ms", "speed_inner_ms",
     "speed_insertion_ms", "mu_contact", "restitution_e",
     "perception_rate_hz", "perception_latency_ms", "chassis_error_scale",
-    "conf_min_attempt", "time_budget_min", "mud_f_c", "flip_kappa",
+    "conf_min_attempt", "time_budget_min", "mud_f_c", "flip_kappa", "sigma_px",
     "stiffness_k_n_mm", "head_mass_kg",
     # Curve-swap seam
     "curve_set",
@@ -45,7 +45,7 @@ NOMINAL = {
     "mu_contact": 0.4, "restitution_e": 0.2, "perception_rate_hz": 30,
     "perception_latency_ms": 30, "chassis_error_scale": 1.0,
     "conf_min_attempt": 0.85, "time_budget_min": 15, "mud_f_c": 0.8,
-    "flip_kappa": 1.0, "stiffness_k_n_mm": 10.0, "head_mass_kg": 15.0,
+    "flip_kappa": 1.0, "sigma_px": 0.5, "stiffness_k_n_mm": 10.0, "head_mass_kg": 15.0,
     "curve_set": "prior_v1",
 }
 

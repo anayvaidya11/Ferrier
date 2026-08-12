@@ -1,0 +1,8 @@
+{
+ "header_instance": {
+  "class": "darwin-arm64"
+ },
+ "validator_errors": [],
+ "before": "no instance field at any of the 4 contract layers",
+ "fixed": true
+}

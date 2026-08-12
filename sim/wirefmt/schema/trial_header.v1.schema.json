@@ -4,23 +4,72 @@
   "title": "trial_header v1 — WIRE_FORMAT.md trial record header",
   "description": "A trial whose header cannot name its seed, SHA, and sweep point is not a result; it is an anecdote. sweep_point carries every INTERFACE_SPEC §9/§9.1 axis value for this trial. solver (optional in schema, always written by the harness) records the PHASE1_PARAMETERS #33 convergence-procedure values per run.",
   "type": "object",
-  "required": ["v", "type", "trial_id", "seed", "code_git_sha", "engine", "sweep_point", "params_ref"],
+  "required": [
+    "v",
+    "type",
+    "trial_id",
+    "seed",
+    "code_git_sha",
+    "engine",
+    "sweep_point",
+    "params_ref"
+  ],
   "properties": {
-    "v": {"const": 1},
-    "type": {"const": "trial_header"},
-    "trial_id": {"type": "string", "description": "unique, stable"},
-    "seed": {"type": "integer", "description": "single RNG root; all streams derive from it"},
-    "code_git_sha": {"type": "string", "description": "repo commit the harness ran from"},
+    "v": {
+      "const": 1
+    },
+    "type": {
+      "const": "trial_header"
+    },
+    "trial_id": {
+      "type": "string",
+      "description": "unique, stable"
+    },
+    "seed": {
+      "type": "integer",
+      "description": "single RNG root; all streams derive from it"
+    },
+    "code_git_sha": {
+      "type": "string",
+      "description": "repo commit the harness ran from"
+    },
     "engine": {
       "type": "object",
-      "required": ["name", "version"],
+      "required": [
+        "name",
+        "version"
+      ],
       "properties": {
-        "name": {"type": "string"},
-        "version": {"type": "string"}
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
       }
     },
-    "sweep_point": {"type": "object"},
-    "params_ref": {"type": "string", "description": "path to the committed parameter file"},
-    "solver": {"type": "object", "description": "#33: solver timestep/stiffness values logged per run"}
+    "instance": {
+      "type": "object",
+      "required": [
+        "class"
+      ],
+      "properties": {
+        "class": {
+          "type": "string"
+        }
+      },
+      "description": "Compute-instance identity (ARCH §5; D-046(f), additive v1 revision like false_capture). Optional: pre-D-046 records lack it. class is a stable label (e.g. 'c7i.8xlarge', 'darwin-arm64') — byte-identity is a per-instance-class contract (R01 F-018)."
+    },
+    "sweep_point": {
+      "type": "object"
+    },
+    "params_ref": {
+      "type": "string",
+      "description": "path to the committed parameter file"
+    },
+    "solver": {
+      "type": "object",
+      "description": "#33: solver timestep/stiffness values logged per run"
+    }
   }
 }

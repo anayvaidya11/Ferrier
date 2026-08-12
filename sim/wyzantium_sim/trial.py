@@ -29,11 +29,11 @@ precedent):
 - The trial's default SolverSettings uses timestep 2e-4 s (T7 wedge-test
   precedent): 1 ms is unstable for hard contact at the 300 kg m_rv
   inertia.
-- sigma_px comes from PARAMS[40].default — injector-required but absent
-  from scenarios.SWEEP_AXES (pre-existing axis-list gap, flagged for a
-  recorded amendment; not edited here).
-- Jam thresholds: #62 mid-grid cell (T7 test precedent) until #62 joins
-  the sweep axes.
+- sigma_px is a sweep axis (D-046(a) realized the #40 committed sweep —
+  the former PARAMS[40].default pin was R01 F-009).
+- Jam thresholds: #62 mid-grid cell, a RECORDED exclusion (D-046(e);
+  D-040 fixed the semantics — discrimination lives in the persistence
+  window; joining the sweep axes is a future revision).
 - Frame truth is zero-order-held on the kinematic step grid (≤ ds worth
   of lag); sightings use the coplanar layout (injector default, D-011
   selection pending MR-003).
@@ -67,6 +67,8 @@ from __future__ import annotations
 import functools
 import hashlib
 import json
+import os
+import platform
 import subprocess
 from dataclasses import replace
 from pathlib import Path
@@ -114,6 +116,18 @@ def _git_sha() -> str:
     return sha + ("-dirty" if status.stdout.strip() else "")
 
 
+def _instance_id() -> dict:
+    """D-046(f): compute-instance identity in every header (ARCH §5).
+    The class label is stable by construction (no OS patch versions —
+    byte-identity across time on one machine must survive OS updates):
+    WYZ_INSTANCE_CLASS when the runner sets it (e.g. 'c7i.8xlarge'),
+    else system-machine (e.g. 'darwin-arm64')."""
+    label = os.environ.get("WYZ_INSTANCE_CLASS")
+    if not label:
+        label = f"{platform.system()}-{platform.machine()}".lower()
+    return {"class": label}
+
+
 def _trial_id(seed, sweep_point, engine_name) -> str:
     digest = hashlib.sha1(json.dumps(
         sweep_point, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
@@ -141,7 +155,7 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
         gravity_head_ms2=G_INSERTION_STANDIN), solver)
 
     cfg = {k: sp[k] for k in _INJECTOR_KEYS}
-    cfg["sigma_px"] = params.PARAMS[40].default
+    cfg["sigma_px"] = sp["sigma_px"]     # D-046(a): the #40 axis, realized
     injector = PerceptionInjector(root_seed=seed, config=cfg)
 
     budget_s = float(sp["time_budget_min"]) * 60.0
@@ -159,8 +173,9 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
     out_dir = Path(out_dir) if out_dir is not None else DEFAULT_OUT_DIR
     log = TrialLogger(out_dir / f"{trial_id}.ndjson")
     log.header(trial_id=trial_id, seed=seed, code_git_sha=_git_sha(),
-               engine=dict(engine.engine_id), sweep_point=sp,
-               params_ref=PARAMS_REF, solver=solver.to_wire())
+               engine=dict(engine.engine_id), instance=_instance_id(),
+               sweep_point=sp, params_ref=PARAMS_REF,
+               solver=solver.to_wire())
 
     speeds = (sp["speed_outer_ms"], sp["speed_inner_ms"],
               sp["speed_insertion_ms"])

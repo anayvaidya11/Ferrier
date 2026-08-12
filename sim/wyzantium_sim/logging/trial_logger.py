@@ -66,10 +66,12 @@ class TrialLogger:
         self.lines.append(line)
 
     def header(self, *, trial_id, seed, code_git_sha, engine, sweep_point,
-               params_ref, solver=None):
+               params_ref, solver=None, instance=None):
         line = {"v": 1, "type": "trial_header", "trial_id": trial_id,
                 "seed": seed, "code_git_sha": code_git_sha, "engine": engine,
                 "sweep_point": sweep_point, "params_ref": params_ref}
+        if instance is not None:    # D-046(f): compute-instance identity
+            line["instance"] = instance
         if solver is not None:
             line["solver"] = solver
         self._buffer(line)

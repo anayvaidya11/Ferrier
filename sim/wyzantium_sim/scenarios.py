@@ -23,6 +23,7 @@ SWEEP_AXES = (
     "speed_insertion_ms", "mu_contact", "restitution_e",
     "perception_rate_hz", "perception_latency_ms", "chassis_error_scale",
     "conf_min_attempt", "time_budget_min", "mud_f_c", "flip_kappa",
+    "sigma_px",   # #40 committed sweep, realized by D-046(a) (R01 F-009)
     "stiffness_k_n_mm", "head_mass_kg",
     # Curve-swap seam: which perception curve set generated this trial
     "curve_set",

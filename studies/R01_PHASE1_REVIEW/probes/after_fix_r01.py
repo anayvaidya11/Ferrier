@@ -176,5 +176,30 @@ record("F-016", {
 }, fixed=(outs[10]["t_total"] != outs[100]["t_total"]
           or outs[10]["outcome"] != outs[100]["outcome"]))
 
+# --- F-009: sigma_px is a real sweep axis (D-046(a)) ---
+from wyzantium_sim import scenarios as scen
+from wyzantium_sim.doe import tiers as tiers_mod
+sp_hi = scen.build_sweep_point(**{**nominal, "sigma_px": 1.0})
+grid = tiers_mod.load_tier1()["grids"].get("sigma_px", {}).get("cells")
+record("F-009", {
+    "build_sweep_point_sigma_1p0": sp_hi["sigma_px"],
+    "tier1_grid": grid,
+    "before": "SweepPointError('unknown axes'); pinned at PARAMS[40].default",
+}, fixed=(sp_hi["sigma_px"] == 1.0 and grid == [0.3, 0.5, 1.0]))
+
+# --- F-017: trial_header carries instance identity (D-046(f)) ---
+from wirefmt import validator as wf_validator
+with tempfile.TemporaryDirectory() as tmp:
+    p = trial_mod.run_trial(101, nominal, MuJoCoEngine(),
+                            nominal["curve_set"], out_dir=Path(tmp))
+    hdr = json.loads(p.read_text().splitlines()[0])
+record("F-017", {
+    "header_instance": hdr.get("instance"),
+    "validator_errors": wf_validator.validate_line(hdr),
+    "before": "no instance field at any of the 4 contract layers",
+}, fixed=(isinstance(hdr.get("instance"), dict)
+          and bool(hdr["instance"].get("class"))
+          and wf_validator.validate_line(hdr) == []))
+
 print(json.dumps({k: v["fixed"] for k, v in RESULTS.items()}, indent=1))
 sys.exit(0 if OK else 1)
