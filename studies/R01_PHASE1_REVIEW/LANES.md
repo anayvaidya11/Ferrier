@@ -47,6 +47,16 @@ outcome" claim must be probed with X varied in isolation. A killed finding is
 RECLASSIFIED or REJECTED with the kill recorded — rejected findings are
 evidence too.
 
+*Protocol amendment (2026-08-11 late, usage economy — human-flagged): the
+standalone L2 probe campaign was over-built. Every Class B finding already
+carried two independent reproductions (lane reviewer + prosecutor, committed
+in raw_lanes.json) — sufficient evidence for the ratification sitting. From
+here forward, probe artifacts are built **fix-time** (before/after in the
+fixing session, the D-034/035/036 shape), never as standalone multi-agent
+campaigns. The in-flight run was allowed to finish because >half its results
+were already durable and F-012's probe (contamination magnitude of the
+orientation inversion) carries genuine sitting-decision value.*
+
 ## Triage classes (pipeline per class)
 
 - **M mechanical** (no behavior, no record bytes): one batched PR after read

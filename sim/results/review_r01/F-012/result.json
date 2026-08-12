@@ -1,0 +1,1384 @@
+{
+  "finding": "F-012",
+  "probe": "probe_f012.py",
+  "claim": "Q_NOMINAL = (0,0,1,0) = Ry(180\u00b0) inverts head-up vs plate-up: the outer tag renders at z = -185 mm in head_frame instead of +185 mm, and cam A views it ~37.7\u00b0/~62.4\u00b0 oblique (300 mm / handoff) where the IS \u00a74 committed nominal Rz(180\u00b0) = (0,0,0,1) gives ~6.1\u00b0/~14.8\u00b0",
+  "code_git_sha": "2b9a5c7",
+  "sweep": {
+    "sweep_point_source": "sim/scenarios/nominal.json (committed nominal cell, D-032 (a))",
+    "seed_rule": "tiers.derive_seed(SWEEP_ROOT, 'f012:{i:05d}') \u2014 D-032 (b) scheme, probe-specific root",
+    "sweep_root": 20260811,
+    "n_trials_per_arm": 50,
+    "same_seeds_both_arms": true,
+    "engine": "mujoco (local M4, zero spend)"
+  },
+  "is4_reading": {
+    "constraints": [
+      "IS \u00a74: head +X and stud +X anti-parallel at nominal engagement",
+      "IS \u00a74 + \u00a77: stud +Z 'plate up' and head +Z 'head-up' both world-up at level attitude (nominal host_pitch = host_roll = 0) => stud +Z maps to head +Z",
+      "right-handed (+Y = Z x X in both frames)"
+    ],
+    "q_frozen_Ry180": {
+      "maps_stud_X_to": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "maps_stud_Y_to": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "maps_stud_Z_to": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "anti_parallel_X_ok": true,
+      "plate_up_head_up_Z_ok": false
+    },
+    "q_Rz180": {
+      "maps_stud_X_to": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "maps_stud_Y_to": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "maps_stud_Z_to": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "anti_parallel_X_ok": true,
+      "plate_up_head_up_Z_ok": true
+    },
+    "unique_solution_is_Rz180": true,
+    "frozen_violates_Z_row": true
+  },
+  "analytic_ideal_centers": {
+    "frozen_Ry180": {
+      "at_300mm": {
+        "outer_tag_z_m": -0.185,
+        "cam_a_view_deg": 37.733046,
+        "prior_v1_angle_factor": 0.790871
+      },
+      "at_handoff": {
+        "outer_tag_z_m": -0.185,
+        "cam_a_view_deg": 62.386972,
+        "prior_v1_angle_factor": 0.463498
+      }
+    },
+    "Rz180": {
+      "at_300mm": {
+        "outer_tag_z_m": 0.185,
+        "cam_a_view_deg": 6.115504,
+        "prior_v1_angle_factor": 0.994309
+      },
+      "at_handoff": {
+        "outer_tag_z_m": 0.185,
+        "cam_a_view_deg": 14.82648,
+        "prior_v1_angle_factor": 0.966705
+      }
+    }
+  },
+  "arm_a_frozen_Ry180": {
+    "q_nominal": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "n_trials": 50,
+    "outcome_census": {
+      "success": 50
+    },
+    "frames_observed": 8498,
+    "frames_with_tag0_sighted": 8498,
+    "aggregates": {
+      "outer_tag_z_at_300mm_m": {
+        "n": 50,
+        "mean": -0.187159,
+        "min": -0.203717,
+        "max": -0.169115
+      },
+      "cam_a_view_at_300mm_deg": {
+        "n": 50,
+        "mean": 37.983493,
+        "min": 34.743007,
+        "max": 41.061796
+      },
+      "outer_tag_z_at_handoff_m": {
+        "n": 50,
+        "mean": -0.185853,
+        "min": -0.204044,
+        "max": -0.161531
+      },
+      "cam_a_view_at_handoff_deg": {
+        "n": 50,
+        "mean": 60.977045,
+        "min": 57.242058,
+        "max": 63.69473
+      }
+    },
+    "per_trial": [
+      {
+        "i": 0,
+        "seed": 6796093092281699675,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30025,
+        "outer_tag_z_at_300mm_m": -0.198874,
+        "cam_a_view_at_300mm_deg": 37.777142,
+        "range_at_handoff_frame_m": 0.062146,
+        "outer_tag_z_at_handoff_m": -0.199523,
+        "cam_a_view_at_handoff_deg": 62.249041
+      },
+      {
+        "i": 1,
+        "seed": 8233684175355426132,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300079,
+        "outer_tag_z_at_300mm_m": -0.184207,
+        "cam_a_view_at_300mm_deg": 37.038847,
+        "range_at_handoff_frame_m": 0.06161,
+        "outer_tag_z_at_handoff_m": -0.202663,
+        "cam_a_view_at_handoff_deg": 60.403543
+      },
+      {
+        "i": 2,
+        "seed": 3366230063592299759,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30046,
+        "outer_tag_z_at_300mm_m": -0.17073,
+        "cam_a_view_at_300mm_deg": 37.033309,
+        "range_at_handoff_frame_m": 0.062506,
+        "outer_tag_z_at_handoff_m": -0.167471,
+        "cam_a_view_at_handoff_deg": 59.665046
+      },
+      {
+        "i": 3,
+        "seed": 1912182333393847784,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300206,
+        "outer_tag_z_at_300mm_m": -0.19207,
+        "cam_a_view_at_300mm_deg": 40.05276,
+        "range_at_handoff_frame_m": 0.060012,
+        "outer_tag_z_at_handoff_m": -0.180182,
+        "cam_a_view_at_handoff_deg": 62.335208
+      },
+      {
+        "i": 4,
+        "seed": 4259435259616082025,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300084,
+        "outer_tag_z_at_300mm_m": -0.194412,
+        "cam_a_view_at_300mm_deg": 36.452839,
+        "range_at_handoff_frame_m": 0.060946,
+        "outer_tag_z_at_handoff_m": -0.196037,
+        "cam_a_view_at_handoff_deg": 60.51334
+      },
+      {
+        "i": 5,
+        "seed": 6192711448076740196,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300341,
+        "outer_tag_z_at_300mm_m": -0.195116,
+        "cam_a_view_at_300mm_deg": 41.061796,
+        "range_at_handoff_frame_m": 0.061294,
+        "outer_tag_z_at_handoff_m": -0.189336,
+        "cam_a_view_at_handoff_deg": 63.209422
+      },
+      {
+        "i": 6,
+        "seed": 2418561194800833380,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300044,
+        "outer_tag_z_at_300mm_m": -0.179705,
+        "cam_a_view_at_300mm_deg": 37.421303,
+        "range_at_handoff_frame_m": 0.060673,
+        "outer_tag_z_at_handoff_m": -0.19227,
+        "cam_a_view_at_handoff_deg": 61.118465
+      },
+      {
+        "i": 7,
+        "seed": 8056065705849569804,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300369,
+        "outer_tag_z_at_300mm_m": -0.177127,
+        "cam_a_view_at_300mm_deg": 36.952314,
+        "range_at_handoff_frame_m": 0.060633,
+        "outer_tag_z_at_handoff_m": -0.191369,
+        "cam_a_view_at_handoff_deg": 59.158979
+      },
+      {
+        "i": 8,
+        "seed": 8670338131880825800,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300368,
+        "outer_tag_z_at_300mm_m": -0.200443,
+        "cam_a_view_at_300mm_deg": 37.699908,
+        "range_at_handoff_frame_m": 0.060947,
+        "outer_tag_z_at_handoff_m": -0.189885,
+        "cam_a_view_at_handoff_deg": 60.438517
+      },
+      {
+        "i": 9,
+        "seed": 6211286753808132596,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300179,
+        "outer_tag_z_at_300mm_m": -0.196345,
+        "cam_a_view_at_300mm_deg": 36.432875,
+        "range_at_handoff_frame_m": 0.06055,
+        "outer_tag_z_at_handoff_m": -0.180699,
+        "cam_a_view_at_handoff_deg": 58.921911
+      },
+      {
+        "i": 10,
+        "seed": 2981168127235883112,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300075,
+        "outer_tag_z_at_300mm_m": -0.191489,
+        "cam_a_view_at_300mm_deg": 38.311473,
+        "range_at_handoff_frame_m": 0.060915,
+        "outer_tag_z_at_handoff_m": -0.19472,
+        "cam_a_view_at_handoff_deg": 61.506738
+      },
+      {
+        "i": 11,
+        "seed": 7510290173186232070,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300219,
+        "outer_tag_z_at_300mm_m": -0.195341,
+        "cam_a_view_at_300mm_deg": 38.127747,
+        "range_at_handoff_frame_m": 0.060419,
+        "outer_tag_z_at_handoff_m": -0.187614,
+        "cam_a_view_at_handoff_deg": 60.245167
+      },
+      {
+        "i": 12,
+        "seed": 1604513231527587869,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300295,
+        "outer_tag_z_at_300mm_m": -0.17233,
+        "cam_a_view_at_300mm_deg": 36.28749,
+        "range_at_handoff_frame_m": 0.060542,
+        "outer_tag_z_at_handoff_m": -0.182035,
+        "cam_a_view_at_handoff_deg": 58.304051
+      },
+      {
+        "i": 13,
+        "seed": 8456986291739615639,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300349,
+        "outer_tag_z_at_300mm_m": -0.184219,
+        "cam_a_view_at_300mm_deg": 37.228351,
+        "range_at_handoff_frame_m": 0.060771,
+        "outer_tag_z_at_handoff_m": -0.185838,
+        "cam_a_view_at_handoff_deg": 60.650337
+      },
+      {
+        "i": 14,
+        "seed": 997601526713199096,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300101,
+        "outer_tag_z_at_300mm_m": -0.187172,
+        "cam_a_view_at_300mm_deg": 37.558255,
+        "range_at_handoff_frame_m": 0.060561,
+        "outer_tag_z_at_handoff_m": -0.177377,
+        "cam_a_view_at_handoff_deg": 61.461528
+      },
+      {
+        "i": 15,
+        "seed": 8415030569033364111,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300749,
+        "outer_tag_z_at_300mm_m": -0.200343,
+        "cam_a_view_at_300mm_deg": 38.461114,
+        "range_at_handoff_frame_m": 0.060932,
+        "outer_tag_z_at_handoff_m": -0.196122,
+        "cam_a_view_at_handoff_deg": 60.079872
+      },
+      {
+        "i": 16,
+        "seed": 8214235753771040006,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300021,
+        "outer_tag_z_at_300mm_m": -0.187595,
+        "cam_a_view_at_300mm_deg": 38.440688,
+        "range_at_handoff_frame_m": 0.060046,
+        "outer_tag_z_at_handoff_m": -0.185421,
+        "cam_a_view_at_handoff_deg": 60.372132
+      },
+      {
+        "i": 17,
+        "seed": 975086838180247153,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300274,
+        "outer_tag_z_at_300mm_m": -0.18533,
+        "cam_a_view_at_300mm_deg": 40.929982,
+        "range_at_handoff_frame_m": 0.063068,
+        "outer_tag_z_at_handoff_m": -0.191109,
+        "cam_a_view_at_handoff_deg": 62.137518
+      },
+      {
+        "i": 18,
+        "seed": 5406175202951000491,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300435,
+        "outer_tag_z_at_300mm_m": -0.186483,
+        "cam_a_view_at_300mm_deg": 40.277643,
+        "range_at_handoff_frame_m": 0.060579,
+        "outer_tag_z_at_handoff_m": -0.17734,
+        "cam_a_view_at_handoff_deg": 62.255019
+      },
+      {
+        "i": 19,
+        "seed": 7019600823338982342,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30002,
+        "outer_tag_z_at_300mm_m": -0.183093,
+        "cam_a_view_at_300mm_deg": 40.194641,
+        "range_at_handoff_frame_m": 0.061823,
+        "outer_tag_z_at_handoff_m": -0.17469,
+        "cam_a_view_at_handoff_deg": 61.751744
+      },
+      {
+        "i": 20,
+        "seed": 7653852090737314296,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300721,
+        "outer_tag_z_at_300mm_m": -0.169115,
+        "cam_a_view_at_300mm_deg": 35.003304,
+        "range_at_handoff_frame_m": 0.064411,
+        "outer_tag_z_at_handoff_m": -0.164426,
+        "cam_a_view_at_handoff_deg": 58.370004
+      },
+      {
+        "i": 21,
+        "seed": 3361275965326444467,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300284,
+        "outer_tag_z_at_300mm_m": -0.180558,
+        "cam_a_view_at_300mm_deg": 37.193082,
+        "range_at_handoff_frame_m": 0.060174,
+        "outer_tag_z_at_handoff_m": -0.184595,
+        "cam_a_view_at_handoff_deg": 61.257005
+      },
+      {
+        "i": 22,
+        "seed": 6835180141816878208,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300222,
+        "outer_tag_z_at_300mm_m": -0.174705,
+        "cam_a_view_at_300mm_deg": 36.917497,
+        "range_at_handoff_frame_m": 0.064176,
+        "outer_tag_z_at_handoff_m": -0.161531,
+        "cam_a_view_at_handoff_deg": 59.912458
+      },
+      {
+        "i": 23,
+        "seed": 6703345762614442404,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300161,
+        "outer_tag_z_at_300mm_m": -0.18068,
+        "cam_a_view_at_300mm_deg": 34.752577,
+        "range_at_handoff_frame_m": 0.060837,
+        "outer_tag_z_at_handoff_m": -0.186384,
+        "cam_a_view_at_handoff_deg": 60.57809
+      },
+      {
+        "i": 24,
+        "seed": 8518603682923255533,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300036,
+        "outer_tag_z_at_300mm_m": -0.185821,
+        "cam_a_view_at_300mm_deg": 39.818286,
+        "range_at_handoff_frame_m": 0.060272,
+        "outer_tag_z_at_handoff_m": -0.183543,
+        "cam_a_view_at_handoff_deg": 60.993378
+      },
+      {
+        "i": 25,
+        "seed": 4184020614816181359,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300195,
+        "outer_tag_z_at_300mm_m": -0.193183,
+        "cam_a_view_at_300mm_deg": 36.22497,
+        "range_at_handoff_frame_m": 0.060516,
+        "outer_tag_z_at_handoff_m": -0.191872,
+        "cam_a_view_at_handoff_deg": 59.628918
+      },
+      {
+        "i": 26,
+        "seed": 3521080908869570887,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300069,
+        "outer_tag_z_at_300mm_m": -0.186641,
+        "cam_a_view_at_300mm_deg": 38.105259,
+        "range_at_handoff_frame_m": 0.060926,
+        "outer_tag_z_at_handoff_m": -0.185732,
+        "cam_a_view_at_handoff_deg": 61.264856
+      },
+      {
+        "i": 27,
+        "seed": 7607019427012325874,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300139,
+        "outer_tag_z_at_300mm_m": -0.188056,
+        "cam_a_view_at_300mm_deg": 39.516815,
+        "range_at_handoff_frame_m": 0.061336,
+        "outer_tag_z_at_handoff_m": -0.186492,
+        "cam_a_view_at_handoff_deg": 62.370066
+      },
+      {
+        "i": 28,
+        "seed": 5353770477068076880,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300005,
+        "outer_tag_z_at_300mm_m": -0.183602,
+        "cam_a_view_at_300mm_deg": 39.487421,
+        "range_at_handoff_frame_m": 0.061506,
+        "outer_tag_z_at_handoff_m": -0.17591,
+        "cam_a_view_at_handoff_deg": 60.597767
+      },
+      {
+        "i": 29,
+        "seed": 3743387345763959919,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300005,
+        "outer_tag_z_at_300mm_m": -0.188195,
+        "cam_a_view_at_300mm_deg": 37.004142,
+        "range_at_handoff_frame_m": 0.060351,
+        "outer_tag_z_at_handoff_m": -0.188072,
+        "cam_a_view_at_handoff_deg": 62.119004
+      },
+      {
+        "i": 30,
+        "seed": 6300766079283822842,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30041,
+        "outer_tag_z_at_300mm_m": -0.19351,
+        "cam_a_view_at_300mm_deg": 38.425589,
+        "range_at_handoff_frame_m": 0.060622,
+        "outer_tag_z_at_handoff_m": -0.191222,
+        "cam_a_view_at_handoff_deg": 61.083213
+      },
+      {
+        "i": 31,
+        "seed": 6760553519636859551,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300277,
+        "outer_tag_z_at_300mm_m": -0.185302,
+        "cam_a_view_at_300mm_deg": 37.171164,
+        "range_at_handoff_frame_m": 0.061079,
+        "outer_tag_z_at_handoff_m": -0.178576,
+        "cam_a_view_at_handoff_deg": 59.759533
+      },
+      {
+        "i": 32,
+        "seed": 1341784232698289692,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300263,
+        "outer_tag_z_at_300mm_m": -0.193026,
+        "cam_a_view_at_300mm_deg": 40.711836,
+        "range_at_handoff_frame_m": 0.060346,
+        "outer_tag_z_at_handoff_m": -0.186971,
+        "cam_a_view_at_handoff_deg": 62.429898
+      },
+      {
+        "i": 33,
+        "seed": 3146040706071315107,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300187,
+        "outer_tag_z_at_300mm_m": -0.197627,
+        "cam_a_view_at_300mm_deg": 36.430377,
+        "range_at_handoff_frame_m": 0.06026,
+        "outer_tag_z_at_handoff_m": -0.191819,
+        "cam_a_view_at_handoff_deg": 59.96666
+      },
+      {
+        "i": 34,
+        "seed": 5745731559581699072,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30036,
+        "outer_tag_z_at_300mm_m": -0.171209,
+        "cam_a_view_at_300mm_deg": 36.015766,
+        "range_at_handoff_frame_m": 0.062602,
+        "outer_tag_z_at_handoff_m": -0.165809,
+        "cam_a_view_at_handoff_deg": 60.508093
+      },
+      {
+        "i": 35,
+        "seed": 1802261948696523674,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300198,
+        "outer_tag_z_at_300mm_m": -0.187484,
+        "cam_a_view_at_300mm_deg": 38.808779,
+        "range_at_handoff_frame_m": 0.061081,
+        "outer_tag_z_at_handoff_m": -0.194673,
+        "cam_a_view_at_handoff_deg": 61.264529
+      },
+      {
+        "i": 36,
+        "seed": 2281956554804688052,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30017,
+        "outer_tag_z_at_300mm_m": -0.184238,
+        "cam_a_view_at_300mm_deg": 39.271328,
+        "range_at_handoff_frame_m": 0.060233,
+        "outer_tag_z_at_handoff_m": -0.184712,
+        "cam_a_view_at_handoff_deg": 62.785726
+      },
+      {
+        "i": 37,
+        "seed": 8415574302048068242,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300609,
+        "outer_tag_z_at_300mm_m": -0.203717,
+        "cam_a_view_at_300mm_deg": 36.912562,
+        "range_at_handoff_frame_m": 0.063583,
+        "outer_tag_z_at_handoff_m": -0.204044,
+        "cam_a_view_at_handoff_deg": 62.50797
+      },
+      {
+        "i": 38,
+        "seed": 2232094192160351164,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300095,
+        "outer_tag_z_at_300mm_m": -0.191071,
+        "cam_a_view_at_300mm_deg": 37.711151,
+        "range_at_handoff_frame_m": 0.060892,
+        "outer_tag_z_at_handoff_m": -0.194892,
+        "cam_a_view_at_handoff_deg": 61.530688
+      },
+      {
+        "i": 39,
+        "seed": 7267939979473643109,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300147,
+        "outer_tag_z_at_300mm_m": -0.184359,
+        "cam_a_view_at_300mm_deg": 37.962011,
+        "range_at_handoff_frame_m": 0.060347,
+        "outer_tag_z_at_handoff_m": -0.18875,
+        "cam_a_view_at_handoff_deg": 60.991639
+      },
+      {
+        "i": 40,
+        "seed": 283760548915793943,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300002,
+        "outer_tag_z_at_300mm_m": -0.184568,
+        "cam_a_view_at_300mm_deg": 37.653469,
+        "range_at_handoff_frame_m": 0.060304,
+        "outer_tag_z_at_handoff_m": -0.183828,
+        "cam_a_view_at_handoff_deg": 61.11803
+      },
+      {
+        "i": 41,
+        "seed": 7525368420743304083,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300135,
+        "outer_tag_z_at_300mm_m": -0.191215,
+        "cam_a_view_at_300mm_deg": 39.599562,
+        "range_at_handoff_frame_m": 0.060124,
+        "outer_tag_z_at_handoff_m": -0.185441,
+        "cam_a_view_at_handoff_deg": 60.90837
+      },
+      {
+        "i": 42,
+        "seed": 4598682843785611259,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300296,
+        "outer_tag_z_at_300mm_m": -0.179475,
+        "cam_a_view_at_300mm_deg": 40.147248,
+        "range_at_handoff_frame_m": 0.060711,
+        "outer_tag_z_at_handoff_m": -0.191276,
+        "cam_a_view_at_handoff_deg": 62.76825
+      },
+      {
+        "i": 43,
+        "seed": 3153817960956768938,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300034,
+        "outer_tag_z_at_300mm_m": -0.189208,
+        "cam_a_view_at_300mm_deg": 38.253555,
+        "range_at_handoff_frame_m": 0.060976,
+        "outer_tag_z_at_handoff_m": -0.189676,
+        "cam_a_view_at_handoff_deg": 61.644449
+      },
+      {
+        "i": 44,
+        "seed": 4789368620062432575,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300447,
+        "outer_tag_z_at_300mm_m": -0.187822,
+        "cam_a_view_at_300mm_deg": 39.282582,
+        "range_at_handoff_frame_m": 0.060075,
+        "outer_tag_z_at_handoff_m": -0.180817,
+        "cam_a_view_at_handoff_deg": 62.808212
+      },
+      {
+        "i": 45,
+        "seed": 5270053236749747383,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300023,
+        "outer_tag_z_at_300mm_m": -0.191557,
+        "cam_a_view_at_300mm_deg": 34.927054,
+        "range_at_handoff_frame_m": 0.060234,
+        "outer_tag_z_at_handoff_m": -0.184297,
+        "cam_a_view_at_handoff_deg": 60.402221
+      },
+      {
+        "i": 46,
+        "seed": 2696370136563496259,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300499,
+        "outer_tag_z_at_300mm_m": -0.200627,
+        "cam_a_view_at_300mm_deg": 39.868783,
+        "range_at_handoff_frame_m": 0.063799,
+        "outer_tag_z_at_handoff_m": -0.201793,
+        "cam_a_view_at_handoff_deg": 63.69473
+      },
+      {
+        "i": 47,
+        "seed": 2064910448544882478,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300124,
+        "outer_tag_z_at_300mm_m": -0.19132,
+        "cam_a_view_at_300mm_deg": 39.078277,
+        "range_at_handoff_frame_m": 0.060221,
+        "outer_tag_z_at_handoff_m": -0.190887,
+        "cam_a_view_at_handoff_deg": 61.097371
+      },
+      {
+        "i": 48,
+        "seed": 6473242263089466156,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300058,
+        "outer_tag_z_at_300mm_m": -0.179589,
+        "cam_a_view_at_300mm_deg": 38.436719,
+        "range_at_handoff_frame_m": 0.060131,
+        "outer_tag_z_at_handoff_m": -0.182572,
+        "cam_a_view_at_handoff_deg": 60.471506
+      },
+      {
+        "i": 49,
+        "seed": 2542566639012405897,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300185,
+        "outer_tag_z_at_300mm_m": -0.178061,
+        "cam_a_view_at_300mm_deg": 34.743007,
+        "range_at_handoff_frame_m": 0.063435,
+        "outer_tag_z_at_handoff_m": -0.17034,
+        "cam_a_view_at_handoff_deg": 57.242058
+      }
+    ]
+  },
+  "arm_b_control_Rz180": {
+    "q_nominal": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "n_trials": 50,
+    "outcome_census": {
+      "success": 50
+    },
+    "frames_observed": 6488,
+    "frames_with_tag0_sighted": 6488,
+    "aggregates": {
+      "outer_tag_z_at_300mm_m": {
+        "n": 50,
+        "mean": 0.182613,
+        "min": 0.165655,
+        "max": 0.20072
+      },
+      "cam_a_view_at_300mm_deg": {
+        "n": 50,
+        "mean": 6.085304,
+        "min": 2.47043,
+        "max": 10.838318
+      },
+      "outer_tag_z_at_handoff_m": {
+        "n": 50,
+        "mean": 0.183885,
+        "min": 0.165955,
+        "max": 0.208383
+      },
+      "cam_a_view_at_handoff_deg": {
+        "n": 50,
+        "mean": 14.068087,
+        "min": 6.894471,
+        "max": 21.592636
+      }
+    },
+    "per_trial": [
+      {
+        "i": 0,
+        "seed": 6796093092281699675,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30025,
+        "outer_tag_z_at_300mm_m": 0.171,
+        "cam_a_view_at_300mm_deg": 6.012887,
+        "range_at_handoff_frame_m": 0.062146,
+        "outer_tag_z_at_handoff_m": 0.170472,
+        "cam_a_view_at_handoff_deg": 9.509889
+      },
+      {
+        "i": 1,
+        "seed": 8233684175355426132,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300079,
+        "outer_tag_z_at_300mm_m": 0.185758,
+        "cam_a_view_at_300mm_deg": 6.97307,
+        "range_at_handoff_frame_m": 0.06161,
+        "outer_tag_z_at_handoff_m": 0.166714,
+        "cam_a_view_at_handoff_deg": 11.310408
+      },
+      {
+        "i": 2,
+        "seed": 3366230063592299759,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30046,
+        "outer_tag_z_at_300mm_m": 0.199246,
+        "cam_a_view_at_300mm_deg": 7.574263,
+        "range_at_handoff_frame_m": 0.062506,
+        "outer_tag_z_at_handoff_m": 0.202529,
+        "cam_a_view_at_handoff_deg": 19.175962
+      },
+      {
+        "i": 3,
+        "seed": 1912182333393847784,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300206,
+        "outer_tag_z_at_300mm_m": 0.177675,
+        "cam_a_view_at_300mm_deg": 3.693036,
+        "range_at_handoff_frame_m": 0.060012,
+        "outer_tag_z_at_handoff_m": 0.189347,
+        "cam_a_view_at_handoff_deg": 13.402043
+      },
+      {
+        "i": 4,
+        "seed": 4259435259616082025,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300084,
+        "outer_tag_z_at_300mm_m": 0.17519,
+        "cam_a_view_at_300mm_deg": 7.351653,
+        "range_at_handoff_frame_m": 0.060946,
+        "outer_tag_z_at_handoff_m": 0.173671,
+        "cam_a_view_at_handoff_deg": 12.460897
+      },
+      {
+        "i": 5,
+        "seed": 6192711448076740196,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300341,
+        "outer_tag_z_at_300mm_m": 0.174361,
+        "cam_a_view_at_300mm_deg": 3.026708,
+        "range_at_handoff_frame_m": 0.061294,
+        "outer_tag_z_at_handoff_m": 0.180068,
+        "cam_a_view_at_handoff_deg": 10.353725
+      },
+      {
+        "i": 6,
+        "seed": 2418561194800833380,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300044,
+        "outer_tag_z_at_300mm_m": 0.190294,
+        "cam_a_view_at_300mm_deg": 6.713769,
+        "range_at_handoff_frame_m": 0.060673,
+        "outer_tag_z_at_handoff_m": 0.177692,
+        "cam_a_view_at_handoff_deg": 12.772385
+      },
+      {
+        "i": 7,
+        "seed": 8056065705849569804,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300369,
+        "outer_tag_z_at_300mm_m": 0.19287,
+        "cam_a_view_at_300mm_deg": 7.744379,
+        "range_at_handoff_frame_m": 0.060633,
+        "outer_tag_z_at_handoff_m": 0.177615,
+        "cam_a_view_at_handoff_deg": 15.5336
+      },
+      {
+        "i": 8,
+        "seed": 8670338131880825800,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300368,
+        "outer_tag_z_at_300mm_m": 0.169372,
+        "cam_a_view_at_300mm_deg": 6.385983,
+        "range_at_handoff_frame_m": 0.060947,
+        "outer_tag_z_at_handoff_m": 0.179951,
+        "cam_a_view_at_handoff_deg": 14.234921
+      },
+      {
+        "i": 9,
+        "seed": 6211286753808132596,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300179,
+        "outer_tag_z_at_300mm_m": 0.173113,
+        "cam_a_view_at_300mm_deg": 8.330327,
+        "range_at_handoff_frame_m": 0.06055,
+        "outer_tag_z_at_handoff_m": 0.188696,
+        "cam_a_view_at_handoff_deg": 17.7331
+      },
+      {
+        "i": 10,
+        "seed": 2981168127235883112,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300075,
+        "outer_tag_z_at_300mm_m": 0.178511,
+        "cam_a_view_at_300mm_deg": 5.214026,
+        "range_at_handoff_frame_m": 0.060915,
+        "outer_tag_z_at_handoff_m": 0.175272,
+        "cam_a_view_at_handoff_deg": 11.459059
+      },
+      {
+        "i": 11,
+        "seed": 7510290173186232070,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300219,
+        "outer_tag_z_at_300mm_m": 0.174637,
+        "cam_a_view_at_300mm_deg": 5.474523,
+        "range_at_handoff_frame_m": 0.060419,
+        "outer_tag_z_at_handoff_m": 0.182217,
+        "cam_a_view_at_handoff_deg": 14.687444
+      },
+      {
+        "i": 12,
+        "seed": 1604513231527587869,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300295,
+        "outer_tag_z_at_300mm_m": 0.197659,
+        "cam_a_view_at_300mm_deg": 8.232786,
+        "range_at_handoff_frame_m": 0.060542,
+        "outer_tag_z_at_handoff_m": 0.186737,
+        "cam_a_view_at_handoff_deg": 18.379951
+      },
+      {
+        "i": 13,
+        "seed": 8456986291739615639,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300349,
+        "outer_tag_z_at_300mm_m": 0.185758,
+        "cam_a_view_at_300mm_deg": 7.276667,
+        "range_at_handoff_frame_m": 0.060771,
+        "outer_tag_z_at_handoff_m": 0.184112,
+        "cam_a_view_at_handoff_deg": 15.201485
+      },
+      {
+        "i": 14,
+        "seed": 997601526713199096,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300101,
+        "outer_tag_z_at_300mm_m": 0.182814,
+        "cam_a_view_at_300mm_deg": 6.531363,
+        "range_at_handoff_frame_m": 0.060561,
+        "outer_tag_z_at_handoff_m": 0.192445,
+        "cam_a_view_at_handoff_deg": 15.167913
+      },
+      {
+        "i": 15,
+        "seed": 8415030569033364111,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300749,
+        "outer_tag_z_at_300mm_m": 0.169625,
+        "cam_a_view_at_300mm_deg": 5.163275,
+        "range_at_handoff_frame_m": 0.060932,
+        "outer_tag_z_at_handoff_m": 0.173318,
+        "cam_a_view_at_handoff_deg": 13.371306
+      },
+      {
+        "i": 16,
+        "seed": 8214235753771040006,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300021,
+        "outer_tag_z_at_300mm_m": 0.182384,
+        "cam_a_view_at_300mm_deg": 5.172761,
+        "range_at_handoff_frame_m": 0.060046,
+        "outer_tag_z_at_handoff_m": 0.184493,
+        "cam_a_view_at_handoff_deg": 14.886571
+      },
+      {
+        "i": 17,
+        "seed": 975086838180247153,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300274,
+        "outer_tag_z_at_300mm_m": 0.183797,
+        "cam_a_view_at_300mm_deg": 3.19434,
+        "range_at_handoff_frame_m": 0.063068,
+        "outer_tag_z_at_handoff_m": 0.178796,
+        "cam_a_view_at_handoff_deg": 11.826254
+      },
+      {
+        "i": 18,
+        "seed": 5406175202951000491,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300435,
+        "outer_tag_z_at_300mm_m": 0.182982,
+        "cam_a_view_at_300mm_deg": 2.902409,
+        "range_at_handoff_frame_m": 0.060579,
+        "outer_tag_z_at_handoff_m": 0.19209,
+        "cam_a_view_at_handoff_deg": 14.09785
+      },
+      {
+        "i": 19,
+        "seed": 7019600823338982342,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30002,
+        "outer_tag_z_at_300mm_m": 0.18629,
+        "cam_a_view_at_300mm_deg": 3.142943,
+        "range_at_handoff_frame_m": 0.061823,
+        "outer_tag_z_at_handoff_m": 0.194954,
+        "cam_a_view_at_handoff_deg": 16.118375
+      },
+      {
+        "i": 20,
+        "seed": 7653852090737314296,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300721,
+        "outer_tag_z_at_300mm_m": 0.20072,
+        "cam_a_view_at_300mm_deg": 9.850543,
+        "range_at_handoff_frame_m": 0.064411,
+        "outer_tag_z_at_handoff_m": 0.205351,
+        "cam_a_view_at_handoff_deg": 21.482136
+      },
+      {
+        "i": 21,
+        "seed": 3361275965326444467,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300284,
+        "outer_tag_z_at_300mm_m": 0.18944,
+        "cam_a_view_at_300mm_deg": 6.957258,
+        "range_at_handoff_frame_m": 0.060174,
+        "outer_tag_z_at_handoff_m": 0.185391,
+        "cam_a_view_at_handoff_deg": 13.780359
+      },
+      {
+        "i": 22,
+        "seed": 6835180141816878208,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300222,
+        "outer_tag_z_at_300mm_m": 0.195295,
+        "cam_a_view_at_300mm_deg": 7.627663,
+        "range_at_handoff_frame_m": 0.064176,
+        "outer_tag_z_at_handoff_m": 0.208383,
+        "cam_a_view_at_handoff_deg": 20.284845
+      },
+      {
+        "i": 23,
+        "seed": 6703345762614442404,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300161,
+        "outer_tag_z_at_300mm_m": 0.188579,
+        "cam_a_view_at_300mm_deg": 10.838318,
+        "range_at_handoff_frame_m": 0.060837,
+        "outer_tag_z_at_handoff_m": 0.183541,
+        "cam_a_view_at_handoff_deg": 15.22121
+      },
+      {
+        "i": 24,
+        "seed": 8518603682923255533,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300036,
+        "outer_tag_z_at_300mm_m": 0.183834,
+        "cam_a_view_at_300mm_deg": 4.253993,
+        "range_at_handoff_frame_m": 0.060272,
+        "outer_tag_z_at_handoff_m": 0.186455,
+        "cam_a_view_at_handoff_deg": 14.325378
+      },
+      {
+        "i": 25,
+        "seed": 4184020614816181359,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300195,
+        "outer_tag_z_at_300mm_m": 0.17637,
+        "cam_a_view_at_300mm_deg": 7.692596,
+        "range_at_handoff_frame_m": 0.060516,
+        "outer_tag_z_at_handoff_m": 0.177484,
+        "cam_a_view_at_handoff_deg": 14.58467
+      },
+      {
+        "i": 26,
+        "seed": 3521080908869570887,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300069,
+        "outer_tag_z_at_300mm_m": 0.183354,
+        "cam_a_view_at_300mm_deg": 5.640948,
+        "range_at_handoff_frame_m": 0.060926,
+        "outer_tag_z_at_handoff_m": 0.18426,
+        "cam_a_view_at_handoff_deg": 13.757335
+      },
+      {
+        "i": 27,
+        "seed": 7607019427012325874,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300139,
+        "outer_tag_z_at_300mm_m": 0.181732,
+        "cam_a_view_at_300mm_deg": 3.825336,
+        "range_at_handoff_frame_m": 0.061336,
+        "outer_tag_z_at_handoff_m": 0.183258,
+        "cam_a_view_at_handoff_deg": 12.610242
+      },
+      {
+        "i": 28,
+        "seed": 5353770477068076880,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300005,
+        "outer_tag_z_at_300mm_m": 0.186121,
+        "cam_a_view_at_300mm_deg": 5.25211,
+        "range_at_handoff_frame_m": 0.061506,
+        "outer_tag_z_at_handoff_m": 0.194074,
+        "cam_a_view_at_handoff_deg": 16.464296
+      },
+      {
+        "i": 29,
+        "seed": 3743387345763959919,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300005,
+        "outer_tag_z_at_300mm_m": 0.181713,
+        "cam_a_view_at_300mm_deg": 6.910098,
+        "range_at_handoff_frame_m": 0.060351,
+        "outer_tag_z_at_handoff_m": 0.181794,
+        "cam_a_view_at_handoff_deg": 11.903117
+      },
+      {
+        "i": 30,
+        "seed": 6300766079283822842,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30041,
+        "outer_tag_z_at_300mm_m": 0.17649,
+        "cam_a_view_at_300mm_deg": 5.099185,
+        "range_at_handoff_frame_m": 0.060622,
+        "outer_tag_z_at_handoff_m": 0.178754,
+        "cam_a_view_at_handoff_deg": 12.674221
+      },
+      {
+        "i": 31,
+        "seed": 6760553519636859551,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300277,
+        "outer_tag_z_at_300mm_m": 0.184667,
+        "cam_a_view_at_300mm_deg": 6.813452,
+        "range_at_handoff_frame_m": 0.061079,
+        "outer_tag_z_at_handoff_m": 0.191315,
+        "cam_a_view_at_handoff_deg": 17.05836
+      },
+      {
+        "i": 32,
+        "seed": 1341784232698289692,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300263,
+        "outer_tag_z_at_300mm_m": 0.176502,
+        "cam_a_view_at_300mm_deg": 2.47043,
+        "range_at_handoff_frame_m": 0.060346,
+        "outer_tag_z_at_handoff_m": 0.182755,
+        "cam_a_view_at_handoff_deg": 11.75559
+      },
+      {
+        "i": 33,
+        "seed": 3146040706071315107,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300187,
+        "outer_tag_z_at_300mm_m": 0.171847,
+        "cam_a_view_at_300mm_deg": 7.395986,
+        "range_at_handoff_frame_m": 0.06026,
+        "outer_tag_z_at_handoff_m": 0.177752,
+        "cam_a_view_at_handoff_deg": 14.068526
+      },
+      {
+        "i": 34,
+        "seed": 5745731559581699072,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30036,
+        "outer_tag_z_at_300mm_m": 0.198764,
+        "cam_a_view_at_300mm_deg": 8.731865,
+        "range_at_handoff_frame_m": 0.062602,
+        "outer_tag_z_at_handoff_m": 0.204006,
+        "cam_a_view_at_handoff_deg": 18.363083
+      },
+      {
+        "i": 35,
+        "seed": 1802261948696523674,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300198,
+        "outer_tag_z_at_300mm_m": 0.182449,
+        "cam_a_view_at_300mm_deg": 4.882533,
+        "range_at_handoff_frame_m": 0.061081,
+        "outer_tag_z_at_handoff_m": 0.175287,
+        "cam_a_view_at_handoff_deg": 12.042876
+      },
+      {
+        "i": 36,
+        "seed": 2281956554804688052,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.30017,
+        "outer_tag_z_at_300mm_m": 0.185539,
+        "cam_a_view_at_300mm_deg": 4.683845,
+        "range_at_handoff_frame_m": 0.060233,
+        "outer_tag_z_at_handoff_m": 0.184773,
+        "cam_a_view_at_handoff_deg": 12.097441
+      },
+      {
+        "i": 37,
+        "seed": 8415574302048068242,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300609,
+        "outer_tag_z_at_300mm_m": 0.165655,
+        "cam_a_view_at_300mm_deg": 7.98214,
+        "range_at_handoff_frame_m": 0.063583,
+        "outer_tag_z_at_handoff_m": 0.165955,
+        "cam_a_view_at_handoff_deg": 9.089369
+      },
+      {
+        "i": 38,
+        "seed": 2232094192160351164,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300095,
+        "outer_tag_z_at_300mm_m": 0.178902,
+        "cam_a_view_at_300mm_deg": 5.975737,
+        "range_at_handoff_frame_m": 0.060892,
+        "outer_tag_z_at_handoff_m": 0.1751,
+        "cam_a_view_at_handoff_deg": 11.446496
+      },
+      {
+        "i": 39,
+        "seed": 7267939979473643109,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300147,
+        "outer_tag_z_at_300mm_m": 0.185636,
+        "cam_a_view_at_300mm_deg": 6.417346,
+        "range_at_handoff_frame_m": 0.060347,
+        "outer_tag_z_at_handoff_m": 0.181229,
+        "cam_a_view_at_handoff_deg": 13.698441
+      },
+      {
+        "i": 40,
+        "seed": 283760548915793943,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300002,
+        "outer_tag_z_at_300mm_m": 0.185432,
+        "cam_a_view_at_300mm_deg": 6.310781,
+        "range_at_handoff_frame_m": 0.060304,
+        "outer_tag_z_at_handoff_m": 0.186167,
+        "cam_a_view_at_handoff_deg": 14.275586
+      },
+      {
+        "i": 41,
+        "seed": 7525368420743304083,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300135,
+        "outer_tag_z_at_300mm_m": 0.178634,
+        "cam_a_view_at_300mm_deg": 4.253554,
+        "range_at_handoff_frame_m": 0.060124,
+        "outer_tag_z_at_handoff_m": 0.184556,
+        "cam_a_view_at_handoff_deg": 14.083712
+      },
+      {
+        "i": 42,
+        "seed": 4598682843785611259,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300296,
+        "outer_tag_z_at_300mm_m": 0.189823,
+        "cam_a_view_at_300mm_deg": 4.57909,
+        "range_at_handoff_frame_m": 0.060711,
+        "outer_tag_z_at_handoff_m": 0.178446,
+        "cam_a_view_at_handoff_deg": 10.377588
+      },
+      {
+        "i": 43,
+        "seed": 3153817960956768938,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300034,
+        "outer_tag_z_at_300mm_m": 0.180791,
+        "cam_a_view_at_300mm_deg": 5.770867,
+        "range_at_handoff_frame_m": 0.060976,
+        "outer_tag_z_at_handoff_m": 0.180308,
+        "cam_a_view_at_handoff_deg": 12.374337
+      },
+      {
+        "i": 44,
+        "seed": 4789368620062432575,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300447,
+        "outer_tag_z_at_300mm_m": 0.18204,
+        "cam_a_view_at_300mm_deg": 5.126662,
+        "range_at_handoff_frame_m": 0.060075,
+        "outer_tag_z_at_handoff_m": 0.188425,
+        "cam_a_view_at_handoff_deg": 12.433613
+      },
+      {
+        "i": 45,
+        "seed": 5270053236749747383,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300023,
+        "outer_tag_z_at_300mm_m": 0.17738,
+        "cam_a_view_at_300mm_deg": 9.34949,
+        "range_at_handoff_frame_m": 0.060234,
+        "outer_tag_z_at_handoff_m": 0.185648,
+        "cam_a_view_at_handoff_deg": 14.987819
+      },
+      {
+        "i": 46,
+        "seed": 2696370136563496259,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300499,
+        "outer_tag_z_at_300mm_m": 0.169311,
+        "cam_a_view_at_300mm_deg": 2.997448,
+        "range_at_handoff_frame_m": 0.063799,
+        "outer_tag_z_at_handoff_m": 0.167841,
+        "cam_a_view_at_handoff_deg": 6.894471
+      },
+      {
+        "i": 47,
+        "seed": 2064910448544882478,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300124,
+        "outer_tag_z_at_300mm_m": 0.178625,
+        "cam_a_view_at_300mm_deg": 4.665346,
+        "range_at_handoff_frame_m": 0.060221,
+        "outer_tag_z_at_handoff_m": 0.179091,
+        "cam_a_view_at_handoff_deg": 12.7553
+      },
+      {
+        "i": 48,
+        "seed": 6473242263089466156,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300058,
+        "outer_tag_z_at_300mm_m": 0.190288,
+        "cam_a_view_at_300mm_deg": 5.447413,
+        "range_at_handoff_frame_m": 0.060131,
+        "outer_tag_z_at_handoff_m": 0.187405,
+        "cam_a_view_at_handoff_deg": 15.238137
+      },
+      {
+        "i": 49,
+        "seed": 2542566639012405897,
+        "outcome": "success",
+        "attempts_used": 1,
+        "range_at_300mm_frame_m": 0.300185,
+        "outer_tag_z_at_300mm_m": 0.191368,
+        "cam_a_view_at_300mm_deg": 10.351974,
+        "range_at_handoff_frame_m": 0.063435,
+        "outer_tag_z_at_handoff_m": 0.198281,
+        "cam_a_view_at_handoff_deg": 21.592636
+      }
+    ]
+  },
+  "verdict_checks": {
+    "is4_unique_solution_is_Rz180": true,
+    "is4_frozen_violates_plate_up": true,
+    "armA_tag_z_negative_all_trials": true,
+    "armA_tag_z_mean_near_minus_0p185": true,
+    "armA_view_300mm_near_37p7": true,
+    "armA_view_handoff_near_62p4": true,
+    "armB_tag_z_positive_all_trials": true,
+    "armB_tag_z_mean_near_plus_0p185": true,
+    "armB_view_300mm_near_6p1": true,
+    "armB_view_handoff_near_14p8": true
+  },
+  "confirmed": true
+}

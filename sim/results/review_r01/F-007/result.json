@@ -1,0 +1,130 @@
+{
+  "finding": "F-007",
+  "probe": "studies/R01_PHASE1_REVIEW/probes/probe_f007.py",
+  "clause": "D-011 qualification (lone 10 mm tag cannot self-disambiguate); studies/H08 SS2 lone-inner-tag row + SS4 (D from the *visible* span); WIRE_FORMAT worked example 3 (lone tag -> ratio 1.08, flag true)",
+  "code_git_sha": "2b9a5c70b838695b2b0884c57cd4faca0002454b",
+  "root_seed": 20260804,
+  "n_frames": 3000,
+  "knockout_mask": 503,
+  "lone_tag_id": 3,
+  "config": {
+    "outer_occlusion": 0.0,
+    "inner_occlusion": 0.0,
+    "illuminance_lux": 41000,
+    "rain": 0.0,
+    "dropout_p": 0.0,
+    "lens_contamination": 0.0,
+    "mud_f_c": 0.8,
+    "flip_kappa": 1.0,
+    "perception_rate_hz": 30,
+    "perception_latency_ms": 30,
+    "curve_set": "prior_v1",
+    "sigma_px": 0.5
+  },
+  "layout": "coplanar",
+  "pose_window_m": {
+    "x": [
+      0.24,
+      0.26
+    ],
+    "y": [
+      0.01,
+      0.05
+    ],
+    "z": [
+      -0.02,
+      0.02
+    ],
+    "q": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ]
+  },
+  "focal_b_px": 880.0,
+  "spans_m": {
+    "frozen_inner_constellation": 0.11,
+    "h08_lone_tag": 0.01
+  },
+  "arms": {
+    "arm1_head_FAILING": {
+      "arm": "head_span_0.11_FAILING",
+      "span_m_used": [
+        0.11
+      ],
+      "n_frames": 3000,
+      "n_detected": 1596,
+      "dist_m_range": [
+        0.24909670054743294,
+        0.2924309104664089
+      ],
+      "view_deg_range": [
+        52.243925552007,
+        60.18022834591815
+      ],
+      "px_size_range": [
+        331.0183586461845,
+        388.6041034958123
+      ],
+      "flag_count": 0,
+      "flag_rate": 0.0,
+      "ambiguity_ratio_min": 69.69087631461619,
+      "ambiguity_ratio_max": 94.27525982910913,
+      "p_flip_used_min": 0.0,
+      "p_flip_used_max": 0.0,
+      "p_flip_used_mean": 0.0,
+      "flips_realized": 0,
+      "flip_rate_realized": 0.0,
+      "h08_expected_S0.010": {
+        "p_flip_mean": 0.1660408012188405,
+        "expected_flips": 265.0011187452694,
+        "binomial_3sigma": 44.52169121293484
+      },
+      "p_flip_used_vs_h08_maxabsdiff": 0.21202117225365208
+    },
+    "arm2_control_H08_span": {
+      "arm": "lone_span_0.010_CONTROL",
+      "span_m_used": [
+        0.01
+      ],
+      "n_frames": 3000,
+      "n_detected": 1596,
+      "dist_m_range": [
+        0.24909670054743294,
+        0.2924309104664089
+      ],
+      "view_deg_range": [
+        52.243925552007,
+        60.18022834591815
+      ],
+      "px_size_range": [
+        30.092578058744046,
+        35.32764577234658
+      ],
+      "flag_count": 1596,
+      "flag_rate": 1.0,
+      "ambiguity_ratio_min": 0.5759576554926958,
+      "ambiguity_ratio_max": 0.7791343787529682,
+      "p_flip_used_min": 0.1104328106235159,
+      "p_flip_used_max": 0.21202117225365208,
+      "p_flip_used_mean": 0.1660408012188405,
+      "flips_realized": 238,
+      "flip_rate_realized": 0.14912280701754385,
+      "h08_expected_S0.010": {
+        "p_flip_mean": 0.1660408012188405,
+        "expected_flips": 265.0011187452694,
+        "binomial_3sigma": 44.52169121293484
+      },
+      "p_flip_used_vs_h08_maxabsdiff": 0.0
+    }
+  },
+  "detected_sets_paired": true,
+  "checks": {
+    "arm1_flip_immune_at_head": true,
+    "h08_expects_flip_prone_here": true,
+    "arm2_realizes_h08_scale": true
+  },
+  "verdict": "CONFIRMED",
+  "confirmed": true
+}

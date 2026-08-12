@@ -1,0 +1,308 @@
+{
+  "finding": "F-016",
+  "probe": "studies/R01_PHASE1_REVIEW/probes/probe_f016.py",
+  "clause": "WIRE_FORMAT consumer checklist item 4: 'Staleness check: receive-time age beyond the consumer's staleness bound -> treat as pose-absent'",
+  "claim": "no consumer reads t_emit or holds a staleness bound; perception_latency_ms feeds timing.emit_time and nothing else; frames are consumed at capture time (closed_loop.py:59-60) \u2014 the frozen Tier-1 latency marginal {10,30,100} ms is behaviorally inert",
+  "code_git_sha": "2b9a5c7",
+  "sweep_point_source": "sim/scenarios/nominal.json (committed nominal)",
+  "seeds": [
+    101,
+    202,
+    303
+  ],
+  "arms": {
+    "latency_pairs_FAILING": [
+      {
+        "seed": 101,
+        "latency_ms_pair": [
+          10,
+          100
+        ],
+        "n_lines": [
+          10762,
+          10762
+        ],
+        "outcome": {
+          "v": 1,
+          "type": "trial_result",
+          "outcome": "success",
+          "first_attempt_success": true,
+          "attempts_used": 1,
+          "t_total": 7.891133333337657,
+          "handoff_reached": true
+        },
+        "outcome_byte_equal": true,
+        "raw_lines_differing": 176,
+        "differing_line_types": {
+          "trial_header": 1,
+          "target_state": 175
+        },
+        "target_state_diffs_confined_to_t_emit": true,
+        "t_emit_equals_t_capture_plus_latency_exactly": true,
+        "header_diff_confined_to_latency_and_derived_trial_id": true,
+        "trial_ids": [
+          "mujoco-101-3fbd72ce",
+          "mujoco-101-0a5ba73f"
+        ],
+        "normalized_records_byte_identical": true,
+        "pair_inert": true
+      },
+      {
+        "seed": 202,
+        "latency_ms_pair": [
+          10,
+          100
+        ],
+        "n_lines": [
+          10741,
+          10741
+        ],
+        "outcome": {
+          "v": 1,
+          "type": "trial_result",
+          "outcome": "success",
+          "first_attempt_success": true,
+          "attempts_used": 1,
+          "t_total": 7.356800000004323,
+          "handoff_reached": true
+        },
+        "outcome_byte_equal": true,
+        "raw_lines_differing": 160,
+        "differing_line_types": {
+          "trial_header": 1,
+          "target_state": 159
+        },
+        "target_state_diffs_confined_to_t_emit": true,
+        "t_emit_equals_t_capture_plus_latency_exactly": true,
+        "header_diff_confined_to_latency_and_derived_trial_id": true,
+        "trial_ids": [
+          "mujoco-202-3fbd72ce",
+          "mujoco-202-0a5ba73f"
+        ],
+        "normalized_records_byte_identical": true,
+        "pair_inert": true
+      },
+      {
+        "seed": 303,
+        "latency_ms_pair": [
+          10,
+          100
+        ],
+        "n_lines": [
+          10786,
+          10786
+        ],
+        "outcome": {
+          "v": 1,
+          "type": "trial_result",
+          "outcome": "success",
+          "first_attempt_success": true,
+          "attempts_used": 1,
+          "t_total": 7.697133333337671,
+          "handoff_reached": true
+        },
+        "outcome_byte_equal": true,
+        "raw_lines_differing": 170,
+        "differing_line_types": {
+          "trial_header": 1,
+          "target_state": 169
+        },
+        "target_state_diffs_confined_to_t_emit": true,
+        "t_emit_equals_t_capture_plus_latency_exactly": true,
+        "header_diff_confined_to_latency_and_derived_trial_id": true,
+        "trial_ids": [
+          "mujoco-303-3fbd72ce",
+          "mujoco-303-0a5ba73f"
+        ],
+        "normalized_records_byte_identical": true,
+        "pair_inert": true
+      }
+    ],
+    "rate_pairs_CONTROL": [
+      {
+        "seed": 101,
+        "rate_hz_pair": [
+          10,
+          30
+        ],
+        "n_lines": [
+          10652,
+          10762
+        ],
+        "outcomes": [
+          {
+            "v": 1,
+            "type": "trial_result",
+            "outcome": "success",
+            "first_attempt_success": true,
+            "attempts_used": 1,
+            "t_total": 8.557800000001848,
+            "handoff_reached": true
+          },
+          {
+            "v": 1,
+            "type": "trial_result",
+            "outcome": "success",
+            "first_attempt_success": true,
+            "attempts_used": 1,
+            "t_total": 7.891133333337657,
+            "handoff_reached": true
+          }
+        ],
+        "outcome_byte_equal": false,
+        "normalized_records_byte_identical": false,
+        "normalized_lines_differing_or_extra": 10756,
+        "pair_live": true
+      },
+      {
+        "seed": 202,
+        "rate_hz_pair": [
+          10,
+          30
+        ],
+        "n_lines": [
+          10636,
+          10741
+        ],
+        "outcomes": [
+          {
+            "v": 1,
+            "type": "trial_result",
+            "outcome": "success",
+            "first_attempt_success": true,
+            "attempts_used": 1,
+            "t_total": 7.456800000004323,
+            "handoff_reached": true
+          },
+          {
+            "v": 1,
+            "type": "trial_result",
+            "outcome": "success",
+            "first_attempt_success": true,
+            "attempts_used": 1,
+            "t_total": 7.356800000004323,
+            "handoff_reached": true
+          }
+        ],
+        "outcome_byte_equal": false,
+        "normalized_records_byte_identical": false,
+        "normalized_lines_differing_or_extra": 10735,
+        "pair_live": true
+      },
+      {
+        "seed": 303,
+        "rate_hz_pair": [
+          10,
+          30
+        ],
+        "n_lines": [
+          10671,
+          10786
+        ],
+        "outcomes": [
+          {
+            "v": 1,
+            "type": "trial_result",
+            "outcome": "success",
+            "first_attempt_success": true,
+            "attempts_used": 1,
+            "t_total": 7.463800000004339,
+            "handoff_reached": true
+          },
+          {
+            "v": 1,
+            "type": "trial_result",
+            "outcome": "success",
+            "first_attempt_success": true,
+            "attempts_used": 1,
+            "t_total": 7.697133333337671,
+            "handoff_reached": true
+          }
+        ],
+        "outcome_byte_equal": false,
+        "normalized_records_byte_identical": false,
+        "normalized_lines_differing_or_extra": 10780,
+        "pair_live": true
+      }
+    ]
+  },
+  "runtime_introspection": {
+    "seed": 101,
+    "latency_ms": 100,
+    "frames_consumed": 175,
+    "every_frame_consumed_at_t_capture": true,
+    "any_frame_consumed_at_t_emit": false,
+    "t_emit_value_reads_by_file": {
+      "sim/wirefmt/validator.py": 350,
+      "sim/wirefmt/records.py": 175
+    },
+    "t_emit_value_reads_from_wyzantium_sim_modules": {},
+    "t_emit_presence_checks_by_file": {
+      "sim/wirefmt/validator.py": 175,
+      "sim/wyzantium_sim/guidance/gate.py": 88,
+      "sim/wirefmt/records.py": 175
+    },
+    "note": "wirefmt reads are the producer-side serialization layer (records.py canonical order, validator.py t_emit >= t_capture); gate.py's touches are membership tests only \u2014 checklist item 2 (presence), never item 4 (staleness)",
+    "introspection_ok": true
+  },
+  "static_scan": {
+    "t_emit_files_in_wyzantium_sim": {
+      "sim/wyzantium_sim/guidance/gate.py": [
+        28
+      ],
+      "sim/wyzantium_sim/perception/inject.py": [
+        90
+      ],
+      "sim/wyzantium_sim/perception/timing.py": [
+        1
+      ]
+    },
+    "t_emit_files_expected": [
+      "sim/wyzantium_sim/guidance/gate.py",
+      "sim/wyzantium_sim/perception/inject.py",
+      "sim/wyzantium_sim/perception/timing.py"
+    ],
+    "t_emit_files_in_wirefmt_serialization_layer": {
+      "sim/wirefmt/records.py": [
+        15
+      ],
+      "sim/wirefmt/validator.py": [
+        78,
+        81,
+        82,
+        83
+      ]
+    },
+    "perception_latency_ms_files": {
+      "sim/wyzantium_sim/perception/inject.py": [
+        34,
+        90
+      ],
+      "sim/wyzantium_sim/scenarios.py": [
+        24
+      ],
+      "sim/wyzantium_sim/trial.py": [
+        101
+      ]
+    },
+    "perception_latency_ms_files_expected": [
+      "sim/wyzantium_sim/perception/inject.py",
+      "sim/wyzantium_sim/scenarios.py",
+      "sim/wyzantium_sim/trial.py"
+    ],
+    "gate_reads_t_emit_value": false,
+    "files_containing_token_stale": {},
+    "capture_time_consumption_site": {
+      "file": "sim/wyzantium_sim/kinematic/closed_loop.py",
+      "lines_59_60": [
+        "        t = next_frame_t",
+        "        d = on_frame(t, last)"
+      ]
+    },
+    "scan_ok": true
+  },
+  "latency_axis_inert_all_pairs": true,
+  "control_axis_live_all_pairs": true,
+  "verdict": "CONFIRMED",
+  "confirmed": true
+}

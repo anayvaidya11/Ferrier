@@ -13,56 +13,56 @@ in `sim/results/review_r01/F-NNN/` before the P-08 ratification sitting.
 
 ## Class B — behavioral (ratification + batched re-run required)
 
-## F-004 — Guidance wall timers persist across D-005 retry attempts [A; B/high; VERIFIED]
+## F-004 — Guidance wall timers persist across D-005 retry attempts [A; B/high; **CONFIRMED** — probe: attempt 2 aborts at 0.000 s vs 5.033 s fresh-machine control, 4/4 variants; sim/results/review_r01/F-004]
 - **Clause:** D-034 "any detection resets the window; single blips are held frames, not aborts"; D-036 ring absence is *sustained time*
 - **Observed:** `_hold_since`/`_ring_absent_since`/`_ambiguity_streak` initialized only in `__init__`, never reset at attempt boundaries; `trial.py:181` resets only `machine.stage`. A fresh attempt's first gap frame inherits the previous attempt's open window.
 - **Failure scenario:** gate cell, attempts=3: attempt 2's first <2-inner frame at ≤300 mm instantly aborts `inner_ring_absent` without 5 s of absence in that approach; a single dark blip instantly escalates.
 - **Prosecution:** ADVANCE — both seams reproduced at HEAD with fresh-machine controls.
 - **Probe:** required — F-004 dir; machine-level repro + isolation at gate_moderate, N=50, fixed seeds.
 
-## F-005 — Ambiguity-rejected frames still serve as commit evidence [A; B/med; VERIFIED]
+## F-005 — Ambiguity-rejected frames still serve as commit evidence [A; B/med; VERIFIED — probe deferred to fix-time per LANES protocol amendment 2026-08-11; static trace: gate.py has no ambiguity reference, machine rejects, trial latches from gate alone]
 - **Clause:** IS §8 row 5 "Reject frame; require multi-tag or oblique confirmation"; WIRE_FORMAT checklist 5 + worked flip example
 - **Observed:** `trial.py:206` latches `commit_line` from `gate.commit_allowed()` alone, ignoring the machine's `reject_frame`; `gate.py:44–74` never reads `tags[].ambiguity_flag`.
 - **Failure scenario:** flip_kappa=2 coplanar: a flagged frame (ratio 0.92, conf 0.87) is machine-rejected per row 5 yet authorizes insertion; bites hardest at D-017's low conf_min arms.
 - **Prosecution:** ADVANCE — reproduced at HEAD (gate returns (True,'commit') on the same line the machine rejects).
 - **Probe:** required — instrumented run logging gate-passes where ambiguity_flag=True ∧ machine rejected.
 
-## F-007 — Lone/sparse inner-tag frames use the full 110 mm constellation span for flip discriminability [B; B/high; VERIFIED]
+## F-007 — Lone/sparse inner-tag frames use the full 110 mm constellation span for flip discriminability [B; B/high; **CONFIRMED** — probe: 0/1596 flags where H08 expects mean p_flip 0.166; per-tag-span control yields 238 flips vs 265±44.5 expected (3σ); sim/results/review_r01/F-007]
 - **Clause:** D-011 qualification (lone 10 mm tag cannot self-disambiguate); H08 §2 (D from *visible* span) + §4; WIRE_FORMAT worked example (lone tag → ratio 1.08, flag true)
 - **Observed:** `sightings_for()` hard-codes `span_m=0.11` for every inner tag regardless of visible count → lone tag 3 at 0.246 m/52°: D=139 px, p_flip=0, ratio=93 (flag False) where H08 expects flip-prone.
 - **Failure scenario:** #46 knockout leaving one inner tag, or inner_occlusion ~0.8: flips and near-1 ratios expected per committed model; injected never.
 - **Prosecution:** ADVANCE — reproduced (0/1397 frames flagged on a lone tag at 61°).
 - **Probe:** required — knockout_mask=503, N=3000 frames, tag-span control.
 
-## F-008 — Inner-tag decode pixel extent uses constellation span: 10 mm tags decode at 3 m [B; B/high; VERIFIED]
+## F-008 — Inner-tag decode pixel extent uses constellation span: 10 mm tags decode at 3 m [B; B/high; **CONFIRMED** — probe: 34.4 px (span convention) vs 3.1 px (per-tag) at 2.9 m; 1000/1000 frames multi_tag_fused with outer destroyed, 0 in control; sim/results/review_r01/F-008]
 - **Clause:** IS §3.3 per-tag readability arithmetic (10 mm ⇒ 39 px at 300 mm); IS §3.2 20 px floor
 - **Observed:** decode probability computed from 110 mm ring span → 33–34 px at 2.9 m where the true per-tag extent is ~3 px; knockout_mask=1 (outer destroyed) still yields full fused pose at acquisition range.
 - **Failure scenario:** IS8-2's basis ("no ID-0 at expected range") coexists with a healthy pose stream; D-034 dark-window semantics bypassed in outer-destroyed cells.
 - **Prosecution:** ADVANCE — reproduced (all 8 inner tags detected at 2.9 m).
 - **Probe:** required — knockout_mask=1 at 2.9 m, N=1000 frames, both span conventions logged.
 
-## F-009 — σ_px (#40) committed sweep {0.3, 0.5, 1.0} px unrealizable: pinned at default, no recorded exclusion [B+F1+F2 independently; B/med; VERIFIED]
+## F-009 — σ_px (#40) committed sweep {0.3, 0.5, 1.0} px unrealizable: pinned at default, no recorded exclusion [B+F1+F2 independently; B/med; VERIFIED — probe deferred to fix-time per LANES amendment; paired-seed pilots (78 trials, 4 cells) already show σ shifts conf monotonically (0.269→0.253→0.235 mid-cell) and flag rate +40% at σ=1.0]
 - **Clause:** PHASE1_PARAMETERS #40; ARCH §3 pose-covariance row ("Swept σ_px {0.3, 0.5, 1.0} px stands in")
 - **Observed:** `sigma_px` absent from `SWEEP_AXES` (build_sweep_point raises on it); absent from tier1/tier2 grids AND tier1's excluded block; `trial.py:144` pins `PARAMS[40].default`; trial.py's own docstring promises "a recorded amendment" that does not exist.
 - **Failure scenario:** all 13,400 frozen trials ran σ_px=0.5; the #40 marginal feeding D-014/D-017 does not exist; an unrecorded H-17-style exclusion.
 - **Prosecution:** ADVANCE ×3 — all kills fail; D-032(e) excludes only pitch/roll+curve_set.
 - **Probe:** required (trivial) — SweepPointError repro + monkeypatched σ isolation run.
 
-## F-012 — Q_NOMINAL realized as Ry(180°): head-up vs plate-up inverted in every trial [D; B/high; VERIFIED]
+## F-012 — Q_NOMINAL realized as Ry(180°): head-up vs plate-up inverted in every trial [D; B/high; **CONFIRMED** — probe: 10/10 checks, N=50/arm; tag z −0.185 vs +0.185, view 37.7°/62.4° vs 6.1°/14.8°. Nuance: nominal-cell outcomes 50/50 success in BOTH arms — contamination concentrates in the degraded bands, i.e. the gate cell; sim/results/review_r01/F-012]
 - **Clause:** IS §4 frame table (+Z head-up; +Z stud "plate up"; anti-parallel +X at engagement) + §7 level host attitude ⇒ nominal is Rz(180°)=(0,0,0,1)
 - **Observed:** `Q_NOMINAL=(0,0,1,0)`=Ry(180°): X→−X *and Z→−Z* — outer tag renders at z=−185 mm in head_frame instead of +185. Cam A view angle at 300 mm: 37.7° realized vs 6.1° upright; at handoff 62.4° vs 14.8° — at the literature model's ~60° validity edge.
 - **Failure scenario:** every frozen trial's outer-tag perception geometry is tilted ~4–48° worse than the committed nominal; detection rates, confidence, and therefore the refusal-dominated gate cell all inherit it.
 - **Prosecution:** ADVANCE — prosecutor's independent venv probe reproduced all numbers exactly.
 - **Probe:** required — monkeypatch arm A (frozen quat) vs arm B (Rz(180)), N=50 nominal trials each, local MuJoCo.
 
-## F-016 — Staleness check unrealized; swept latency axis (#38) behaviorally inert [E; B/high; VERIFIED]
+## F-016 — Staleness check unrealized; swept latency axis (#38) behaviorally inert [E; B/high; **CONFIRMED** — probe: latency_axis_inert_all_pairs true, control axis live; sim/results/review_r01/F-016]
 - **Clause:** WIRE_FORMAT consumer checklist item 4 (staleness → treat as pose-absent)
 - **Observed:** no consumer reads `t_emit` or holds a staleness bound; `perception_latency_ms` feeds `timing.emit_time` and nothing else — frames are consumed at capture time (`closed_loop.py:59–60`).
 - **Failure scenario:** the frozen Tier-1 latency marginal {10,30,100} ms is fake-flat — the exact hazard D-032(e) excluded pitch/roll to avoid, yet latency stayed in tier1.json.
 - **Prosecution:** ADVANCE — byte-diffs confined to t_emit fields across latency arms.
 - **Probe:** required — latency 10 vs 100 ms pairs, assert outcome invariance (the inertness made mechanical).
 
-## F-017 — trial_header carries no compute-instance identity [E; B/med; VERIFIED]
+## F-017 — trial_header carries no compute-instance identity [E; B/med; **CONFIRMED** — probe: identity absent at all 4 contract layers, engine present+enforced at all 4; sim/results/review_r01/F-017]
 - **Clause:** ARCH §5 "engine and instance identity land in every trial_header"; PHASE1_PLAN §2 wirefmt row
 - **Observed:** canonical header order has no instance field; schema defines none; validator checks none; trial.py writes none.
 - **Failure scenario:** standalone records can't name their producing machine — compounding F-018's cross-platform divergence.
@@ -71,7 +71,7 @@ in `sim/results/review_r01/F-NNN/` before the P-08 ratification sitting.
 
 ## Class E — errata / recorded-clarification (no code behavior change)
 
-## F-018 — Frozen-dataset regeneration diverges off the freeze platform: 5/5 sampled sha256 mismatch on M4 [E; E/high; VERIFIED]
+## F-018 — Frozen-dataset regeneration diverges off the freeze platform: 5/5 sampled sha256 mismatch on M4 [E; E/high; **CONFIRMED** — probe: 7/7 raw mismatch, 7/7 after SHA normalization (body divergence), 7/7 local double-run deterministic. The script's own verdict field reads REFUTED only because its freeze-integrity gate trips on the two additive unimported post-freeze files — see F-018/README.md; sim/results/review_r01/F-018]
 - **Clause:** WIRE_FORMAT bit-identical re-run contract; MANIFEST records_storage regeneration instruction
 - **Observed:** first 5 tier1 trials regenerated on darwin/arm64 at the anchor tree: trial_ids match, all 5 hashes mismatch — and the mismatch survives rewriting code_git_sha (body float divergence, M4 vs c7i.8xlarge), on top of the header's embedded SHA drift (cdf7fbf vs b493e7a).
 - **Prosecution:** ADVANCE — independently reproduced 2/2.

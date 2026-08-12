@@ -1,0 +1,175 @@
+{
+  "finding": "F-018",
+  "probe": "studies/R01_PHASE1_REVIEW/probes/probe_f018.py",
+  "clause": "WIRE_FORMAT bit-identical re-run contract; freeze_prior_v1/MANIFEST.json records_storage: records 'regenerate deterministically from this manifest'; per-record sha256 lists 'verify any regeneration'",
+  "plans_regenerated": {
+    "tier1": "tiers.tier1_plan(20260808)[:5]",
+    "gate": "tiers.gate_plan(20260808, 5000)[:2]"
+  },
+  "freeze_platform": {
+    "code_git_sha": "b493e7a4e725e42c46c37981f607cfcb806b4441",
+    "instance": "c7i.8xlarge spot us-east-1c, ubuntu-24.04, python 3.12",
+    "engine": "mujoco 3.11.0 (Newton pending GPU quota, recorded)"
+  },
+  "local_platform": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6",
+    "mujoco": "3.11.0",
+    "engine_id": {
+      "name": "mujoco",
+      "version": "3.11.0"
+    },
+    "git_head": "2b9a5c70b838695b2b0884c57cd4faca0002454b",
+    "git_dirty": true
+  },
+  "code_freeze_integrity": {
+    "trees": [
+      "sim/wyzantium_sim",
+      "sim/wirefmt",
+      "sim/tests"
+    ],
+    "diff_names_vs_frozen_sha": "sim/tests/test_mr_ingest.py\nsim/wyzantium_sim/perception/mr_ingest.py",
+    "working_tree_porcelain": "",
+    "ok": false
+  },
+  "table": [
+    {
+      "plan": "tier1",
+      "plan_tag": "tier1:nominal:r000",
+      "seed": 8192818184298793502,
+      "trial_id": "mujoco-8192818184298793502-5f428a24",
+      "trial_id_in_committed_list": true,
+      "committed_list": "tier1",
+      "committed_sha256": "3309d042ec54f3cf4c100ea96be93b8289b48eb187834f71b5d6269a5e1898ab",
+      "local_sha256": "4d0c918aa1e371560c7dda5dd3576e4b55d1053f0f2e252785d7546e7d101ec0",
+      "match": false,
+      "local_sha256_code_sha_rewritten": "22cafd6a6cd4fe46b7804491e28abac6dd895cd594516879f65888f5cd2dbd76",
+      "match_after_code_sha_rewrite": false,
+      "code_sha_occurrences_in_record": 1,
+      "local_rerun_sha256": "4d0c918aa1e371560c7dda5dd3576e4b55d1053f0f2e252785d7546e7d101ec0",
+      "local_deterministic": true,
+      "record_bytes": 3833459
+    },
+    {
+      "plan": "tier1",
+      "plan_tag": "tier1:nominal:r001",
+      "seed": 4334646842683411520,
+      "trial_id": "mujoco-4334646842683411520-5f428a24",
+      "trial_id_in_committed_list": true,
+      "committed_list": "tier1",
+      "committed_sha256": "d9fb7b879462f54df94c20ec9dfcd0077f8dd41483586731872bfbe0397ec596",
+      "local_sha256": "7ed978d3b38519d52b9c82d56fc7797b81ba9086d5bbd2ad3907897053648b8d",
+      "match": false,
+      "local_sha256_code_sha_rewritten": "3a230f3e6408131b7eb782cfc2b9eab58f258f54707e90b2225b67f7536dc249",
+      "match_after_code_sha_rewrite": false,
+      "code_sha_occurrences_in_record": 1,
+      "local_rerun_sha256": "7ed978d3b38519d52b9c82d56fc7797b81ba9086d5bbd2ad3907897053648b8d",
+      "local_deterministic": true,
+      "record_bytes": 3811529
+    },
+    {
+      "plan": "tier1",
+      "plan_tag": "tier1:nominal:r002",
+      "seed": 3208683339568265940,
+      "trial_id": "mujoco-3208683339568265940-5f428a24",
+      "trial_id_in_committed_list": true,
+      "committed_list": "tier1",
+      "committed_sha256": "0d05a3c178de820b3d294a536fa2406c2bb605a8bf61647cc7af5a82b9c2867c",
+      "local_sha256": "17f9f409f617465b09336e4f50f0c1e5751f33f5876f8235af33c17c9304b16b",
+      "match": false,
+      "local_sha256_code_sha_rewritten": "efd1a9a83f3571a32fe16f75d28ce31d0ed3f2b9f3fe15963f7aa579970a5d58",
+      "match_after_code_sha_rewrite": false,
+      "code_sha_occurrences_in_record": 1,
+      "local_rerun_sha256": "17f9f409f617465b09336e4f50f0c1e5751f33f5876f8235af33c17c9304b16b",
+      "local_deterministic": true,
+      "record_bytes": 3829101
+    },
+    {
+      "plan": "tier1",
+      "plan_tag": "tier1:nominal:r003",
+      "seed": 1921563936491601663,
+      "trial_id": "mujoco-1921563936491601663-5f428a24",
+      "trial_id_in_committed_list": true,
+      "committed_list": "tier1",
+      "committed_sha256": "d7dd21b00f89ba7d22524279f9cd85da9336c38a51bc66415f5043d7d631c3f3",
+      "local_sha256": "2110f6baf6bc36d12d09ab566360b954239e2730fb890843adf770e0030ca6aa",
+      "match": false,
+      "local_sha256_code_sha_rewritten": "8aabdccc63083a8e9644df4ba41eb348f9bb4dfebf64c86f450bdbdaa3cf7aab",
+      "match_after_code_sha_rewrite": false,
+      "code_sha_occurrences_in_record": 1,
+      "local_rerun_sha256": "2110f6baf6bc36d12d09ab566360b954239e2730fb890843adf770e0030ca6aa",
+      "local_deterministic": true,
+      "record_bytes": 3842180
+    },
+    {
+      "plan": "tier1",
+      "plan_tag": "tier1:nominal:r004",
+      "seed": 4137460264023704788,
+      "trial_id": "mujoco-4137460264023704788-5f428a24",
+      "trial_id_in_committed_list": true,
+      "committed_list": "tier1",
+      "committed_sha256": "9e307277eedd45396ce5bcffe6cbc5e992ef7767ba249ab00f04b8df047556c8",
+      "local_sha256": "c612c540de3b38d07538642518443921738645b93cb02a19e682201e2d9a5ba5",
+      "match": false,
+      "local_sha256_code_sha_rewritten": "dbea50525ed94e920c102e640b0f8f5daf8d492a233e138eb784f71b42e23eaa",
+      "match_after_code_sha_rewrite": false,
+      "code_sha_occurrences_in_record": 1,
+      "local_rerun_sha256": "c612c540de3b38d07538642518443921738645b93cb02a19e682201e2d9a5ba5",
+      "local_deterministic": true,
+      "record_bytes": 3822757
+    },
+    {
+      "plan": "gate",
+      "plan_tag": "gate:00000",
+      "seed": 2328602992853293222,
+      "trial_id": "mujoco-2328602992853293222-8abdb687",
+      "trial_id_in_committed_list": true,
+      "committed_list": "gate",
+      "committed_sha256": "9f5054596a8644b4cd546bdf04c6be421ebae3854cc3a782fa495ffa88a7d7c3",
+      "local_sha256": "d0ea32c95d79c9e626ee02175c7659111c51b8dd5b20c95547d652413db72d79",
+      "match": false,
+      "local_sha256_code_sha_rewritten": "fc91e150a18f3c816dbf64e895d411bf51c6a054c88dd7a1b3de5f3999e6624e",
+      "match_after_code_sha_rewrite": false,
+      "code_sha_occurrences_in_record": 1,
+      "local_rerun_sha256": "d0ea32c95d79c9e626ee02175c7659111c51b8dd5b20c95547d652413db72d79",
+      "local_deterministic": true,
+      "record_bytes": 378865
+    },
+    {
+      "plan": "gate",
+      "plan_tag": "gate:00001",
+      "seed": 6008973407231237987,
+      "trial_id": "mujoco-6008973407231237987-a972c8a2",
+      "trial_id_in_committed_list": true,
+      "committed_list": "gate",
+      "committed_sha256": "19ec1e22a381759ccc21ba3cda9787301bce4e7e43f681cd04e532ff33e9561d",
+      "local_sha256": "200602d08742ffb5b62aa8f0ab9736e8fe928397cb1a8094dd1c1070051d2ff8",
+      "match": false,
+      "local_sha256_code_sha_rewritten": "067da215bcd0df3241ca800930311701a643c2f6b987ede310085df27ef9d58d",
+      "match_after_code_sha_rewrite": false,
+      "code_sha_occurrences_in_record": 1,
+      "local_rerun_sha256": "200602d08742ffb5b62aa8f0ab9736e8fe928397cb1a8094dd1c1070051d2ff8",
+      "local_deterministic": true,
+      "record_bytes": 304838
+    }
+  ],
+  "summary": {
+    "n": 7,
+    "trial_ids_resolved_in_committed_lists": 7,
+    "raw_sha256_mismatch": 7,
+    "mismatch_after_code_sha_rewrite": 7,
+    "local_double_run_deterministic": 7,
+    "code_sha_rewrite_surgical_1_occurrence": true
+  },
+  "sample_header_raw": "{\"v\":1,\"type\":\"trial_header\",\"trial_id\":\"mujoco-8192818184298793502-5f428a24\",\"seed\":8192818184298793502,\"code_git_sha\":\"2b9a5c70b838695b2b0884c57cd4faca0002454b-dirty\",\"engine\":{\"name\":\"mujoco\",\"version\":\"3.11.0\"},\"sweep_point\":{\"outer_occlusion\":0.0,\"inner_occlusion\":0.0,\"illuminance_lux\":41000,\"rain\":0.0,\"dropout_p\":0.0,\"lens_contamination\":0.0,\"host_pitch_deg\":0.0,\"host_roll_deg\":0.0,\"tag_knockout_mask\":0,\"attempts_per_encounter\":3,\"speed_outer_ms\":1.0,\"speed_inner_ms\":0.2,\"speed_insertion_ms\":0.05,\"mu_contact\":0.4,\"restitution_e\":0.2,\"perception_rate_hz\":30,\"perception_latency_ms\":30,\"chassis_error_scale\":1.0,\"conf_min_attempt\":0.85,\"time_budget_min\":15,\"mud_f_c\":0.8,\"flip_kappa\":1.0,\"stiffness_k_n_mm\":10.0,\"head_mass_kg\":15.0,\"curve_set\":\"prior_v1\"},\"params_ref\":\"PHASE1_PARAMETERS.md\",\"solver\":{\"timestep_s\":0.0002,\"integrator\":\"implicitfast\",\"solver_iterations\":100}}",
+  "sample_header_code_sha_rewritten": "{\"v\":1,\"type\":\"trial_header\",\"trial_id\":\"mujoco-8192818184298793502-5f428a24\",\"seed\":8192818184298793502,\"code_git_sha\":\"b493e7a4e725e42c46c37981f607cfcb806b4441\",\"engine\":{\"name\":\"mujoco\",\"version\":\"3.11.0\"},\"sweep_point\":{\"outer_occlusion\":0.0,\"inner_occlusion\":0.0,\"illuminance_lux\":41000,\"rain\":0.0,\"dropout_p\":0.0,\"lens_contamination\":0.0,\"host_pitch_deg\":0.0,\"host_roll_deg\":0.0,\"tag_knockout_mask\":0,\"attempts_per_encounter\":3,\"speed_outer_ms\":1.0,\"speed_inner_ms\":0.2,\"speed_insertion_ms\":0.05,\"mu_contact\":0.4,\"restitution_e\":0.2,\"perception_rate_hz\":30,\"perception_latency_ms\":30,\"chassis_error_scale\":1.0,\"conf_min_attempt\":0.85,\"time_budget_min\":15,\"mud_f_c\":0.8,\"flip_kappa\":1.0,\"stiffness_k_n_mm\":10.0,\"head_mass_kg\":15.0,\"curve_set\":\"prior_v1\"},\"params_ref\":\"PHASE1_PARAMETERS.md\",\"solver\":{\"timestep_s\":0.0002,\"integrator\":\"implicitfast\",\"solver_iterations\":100}}",
+  "interpretation": {
+    "raw_mismatch": "committed verification recipe fails off the freeze platform",
+    "mismatch_after_code_sha_rewrite": "divergence survives header sha normalization => record BODY diverges (per-frame float drift, M4/darwin/arm64 vs c7i.8xlarge/ubuntu) \u2014 not just header drift",
+    "local_deterministic": "same-platform double regeneration is byte-identical => determinism holds per instance class; the contract wording, not the generator, is what breaks cross-platform"
+  },
+  "verdict": "REFUTED",
+  "confirmed": false
+}

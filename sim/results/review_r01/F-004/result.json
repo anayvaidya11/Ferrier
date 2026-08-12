@@ -1,0 +1,102 @@
+{
+  "finding": "F-004",
+  "probe": "probe_f004.py",
+  "claim": "GuidanceMachine wall timers (_hold_since, _ring_absent_since, _ambiguity_streak) survive D-005 attempt boundaries; a new attempt's first qualifying frame aborts/escalates instantly instead of after the committed sustained window",
+  "code_git_sha": "0c76b52",
+  "machine_constants": {
+    "HOLD_TIMEOUT_S": 5.0,
+    "AMBIGUITY_PERSIST_FRAMES": 5,
+    "conf_min": 0.85,
+    "attempts_max": 3,
+    "time_budget_s": 900.0
+  },
+  "stream": {
+    "rate_hz": 30.0,
+    "t0_s": 100.0,
+    "deterministic": true,
+    "rng": "none (machine has no RNG stream, #60)"
+  },
+  "boundary_emulation": {
+    "abort_retry": "machine.stage='acquire' only (trial.py:181; attempt_n already advanced by _abort_retry)",
+    "contact_jam": "attempt_n += 1 then stage='acquire' (trial.py:307-308, 181)"
+  },
+  "variants": {
+    "R_ring_absence_D036": {
+      "clause": "D-036: '< 2 inner tags continuously for 5 s' aborts; stochastic gaps reject frames",
+      "doc_window_s": 5.0,
+      "attempt1_absence_carried_s": 4.5,
+      "arm1_stale_machine": {
+        "first_gap_frame_t_s": 113.666667,
+        "frames_below_2_inner_before_abort": 1,
+        "in_attempt_absence_s": 0.0,
+        "action": "abort_retry",
+        "abort_reason": "inner_ring_absent",
+        "attempt_n_at_abort": 3,
+        "stale_window_opened_t_s": 101.0,
+        "stale_age_at_first_gap_s": 12.666667
+      },
+      "arm2_fresh_machine_control": {
+        "first_gap_frame_t_s": 113.666667,
+        "frames_below_2_inner_before_abort": 152,
+        "in_attempt_absence_s": 5.033333,
+        "action": "abort_retry",
+        "abort_reason": "inner_ring_absent"
+      },
+      "violation": true
+    },
+    "Da_dark_window_D034": {
+      "clause": "D-034: row 2 escalates only when the dark window exceeds HOLD_TIMEOUT_S; any detection resets",
+      "doc_window_s": 5.0,
+      "attempt1_darkness_carried_s": 4.5,
+      "arm1_stale_machine": {
+        "first_dark_frame_t_s": 105.666667,
+        "dark_frames_before_escalate": 12,
+        "in_attempt_darkness_s": 0.366667,
+        "action": "escalate",
+        "abort_reason": "low_confidence",
+        "stale_window_opened_t_s": 101.0
+      },
+      "arm2_fresh_machine_control": {
+        "first_dark_frame_t_s": 105.666667,
+        "dark_frames_before_escalate": 152,
+        "in_attempt_darkness_s": 5.033333,
+        "action": "escalate",
+        "abort_reason": "low_confidence"
+      },
+      "violation": true
+    },
+    "Db_dark_blip_D034": {
+      "clause": "D-034: 'single blips are held frames, not aborts'",
+      "blip_t_s": 113.666667,
+      "arm1_stale_machine": {
+        "action": "escalate",
+        "abort_reason": "low_confidence",
+        "in_attempt_darkness_s": 0.0,
+        "dark_frames_seen_this_attempt": 1
+      },
+      "arm2_fresh_machine_control": {
+        "action": "hold",
+        "abort_reason": null
+      },
+      "violation": true,
+      "note": "no frames fed between boundary and blip: any attempt-2 frame reaching machine.py:214 (clean fall-through) resets _hold_since, so this arm stands for re-approaches whose early frames are non-resetting (dark/flagged/gap) \u2014 the gate cell's dropout regime; variant Da needs no such gap"
+    },
+    "S_ambiguity_streak_row5": {
+      "clause": "IS \u00a78 row 5 'persistent' realized as AMBIGUITY_PERSIST_FRAMES=5 consecutive flagged frames",
+      "doc_window_frames": 5,
+      "attempt1_flagged_frames_carried": 4,
+      "arm1_stale_machine": {
+        "in_attempt_flagged_frames_before_abort": 1,
+        "action": "abort_retry",
+        "abort_reason": "ambiguity_persistent"
+      },
+      "arm2_fresh_machine_control": {
+        "in_attempt_flagged_frames_before_abort": 5,
+        "action": "abort_retry",
+        "abort_reason": "ambiguity_persistent"
+      },
+      "violation": true
+    }
+  },
+  "confirmed": true
+}

@@ -1,0 +1,277 @@
+{
+  "finding": "F-008",
+  "claim": "Inner-tag decode pixel extent uses the 110 mm constellation span; 10 mm tags decode at ~2.9 m, so knockout_mask=1 (outer destroyed) still yields a full fused pose at acquisition range, bypassing D-034 dark-window semantics (IS8-2 basis).",
+  "clauses": [
+    "IS \u00a73.3 per-tag readability arithmetic (10 mm => 39 px at 300 mm)",
+    "IS \u00a73.2 20 px robust-decode floor",
+    "D-034 sustained dark window; FAILURE_TAXONOMY IS8-2"
+  ],
+  "code_git_sha": "2b9a5c70b838695b2b0884c57cd4faca0002454b",
+  "probe": "studies/R01_PHASE1_REVIEW/probes/probe_f008.py",
+  "seed": 20260811,
+  "n_frames": 1000,
+  "truth_pose_m": {
+    "t": [
+      2.9,
+      0.0,
+      0.0
+    ],
+    "q": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "note": "frozen Q_NOMINAL as-committed (see F-012; this probe tests F-008 at HEAD behavior)"
+  },
+  "knockout_mask": 1,
+  "config": {
+    "outer_occlusion": 0.0,
+    "inner_occlusion": 0.0,
+    "illuminance_lux": 41000,
+    "rain": 0.0,
+    "dropout_p": 0.0,
+    "lens_contamination": 0.0,
+    "mud_f_c": 0.8,
+    "flip_kappa": 1.0,
+    "perception_rate_hz": 30,
+    "perception_latency_ms": 30,
+    "curve_set": "prior_v1",
+    "sigma_px": 0.5
+  },
+  "curve": {
+    "detection_onset_px": 20.0,
+    "detection_onset_width_px": 10.0,
+    "ramp_bottom_px": 10.0
+  },
+  "focal_px": {
+    "A": 1371.0,
+    "B": 880.0
+  },
+  "span_conventions_m": {
+    "constellation_span": 0.11,
+    "per_tag": 0.01
+  },
+  "px_table_arm1_head_span": [
+    {
+      "tag_id": 1,
+      "camera": "B",
+      "dist_m": 2.811677,
+      "view_angle_deg": 5.224,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.428,
+      "px_size_per_tag_convention": 3.13,
+      "p_detect_span_convention": 0.995847,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 2,
+      "camera": "B",
+      "dist_m": 2.808216,
+      "view_angle_deg": 4.384,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.47,
+      "px_size_per_tag_convention": 3.134,
+      "p_detect_span_convention": 0.997074,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 3,
+      "camera": "B",
+      "dist_m": 2.806782,
+      "view_angle_deg": 3.984,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.488,
+      "px_size_per_tag_convention": 3.135,
+      "p_detect_span_convention": 0.997584,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 4,
+      "camera": "B",
+      "dist_m": 2.808216,
+      "view_angle_deg": 4.384,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.47,
+      "px_size_per_tag_convention": 3.134,
+      "p_detect_span_convention": 0.997074,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 5,
+      "camera": "B",
+      "dist_m": 2.811677,
+      "view_angle_deg": 5.224,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.428,
+      "px_size_per_tag_convention": 3.13,
+      "p_detect_span_convention": 0.995847,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 6,
+      "camera": "B",
+      "dist_m": 2.815132,
+      "view_angle_deg": 5.943,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.386,
+      "px_size_per_tag_convention": 3.126,
+      "p_detect_span_convention": 0.994625,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 7,
+      "camera": "B",
+      "dist_m": 2.816563,
+      "view_angle_deg": 6.217,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.368,
+      "px_size_per_tag_convention": 3.124,
+      "p_detect_span_convention": 0.99412,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 8,
+      "camera": "B",
+      "dist_m": 2.815132,
+      "view_angle_deg": 5.943,
+      "span_m_injected": 0.11,
+      "px_size_span_convention": 34.386,
+      "px_size_per_tag_convention": 3.126,
+      "p_detect_span_convention": 0.994625,
+      "p_detect_per_tag_convention": 0.0
+    }
+  ],
+  "px_table_arm2_per_tag": [
+    {
+      "tag_id": 1,
+      "camera": "B",
+      "dist_m": 2.811677,
+      "view_angle_deg": 5.224,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.13,
+      "px_size_per_tag_convention": 3.13,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 2,
+      "camera": "B",
+      "dist_m": 2.808216,
+      "view_angle_deg": 4.384,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.134,
+      "px_size_per_tag_convention": 3.134,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 3,
+      "camera": "B",
+      "dist_m": 2.806782,
+      "view_angle_deg": 3.984,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.135,
+      "px_size_per_tag_convention": 3.135,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 4,
+      "camera": "B",
+      "dist_m": 2.808216,
+      "view_angle_deg": 4.384,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.134,
+      "px_size_per_tag_convention": 3.134,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 5,
+      "camera": "B",
+      "dist_m": 2.811677,
+      "view_angle_deg": 5.224,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.13,
+      "px_size_per_tag_convention": 3.13,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 6,
+      "camera": "B",
+      "dist_m": 2.815132,
+      "view_angle_deg": 5.943,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.126,
+      "px_size_per_tag_convention": 3.126,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 7,
+      "camera": "B",
+      "dist_m": 2.816563,
+      "view_angle_deg": 6.217,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.124,
+      "px_size_per_tag_convention": 3.124,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    },
+    {
+      "tag_id": 8,
+      "camera": "B",
+      "dist_m": 2.815132,
+      "view_angle_deg": 5.943,
+      "span_m_injected": 0.01,
+      "px_size_span_convention": 3.126,
+      "px_size_per_tag_convention": 3.126,
+      "p_detect_span_convention": 0.0,
+      "p_detect_per_tag_convention": 0.0
+    }
+  ],
+  "arm1_head_span": {
+    "n_frames": 1000,
+    "sightings_per_frame": 8,
+    "span_m_in_effect": 0.11,
+    "inner_detections_total": 7967,
+    "mean_inner_tags_per_frame": 7.967,
+    "frames_with_all_8_inner": 967,
+    "frames_with_pose": 1000,
+    "frames_pose_source_none": 0,
+    "pose_source_counts": {
+      "multi_tag_fused": 1000
+    },
+    "inner_detected_histogram": {
+      "7": 33,
+      "8": 967
+    },
+    "outer_detections_total": 0,
+    "mean_conf": 0.0626
+  },
+  "arm2_pertag_control": {
+    "n_frames": 1000,
+    "sightings_per_frame": 8,
+    "span_m_in_effect": 0.01,
+    "inner_detections_total": 0,
+    "mean_inner_tags_per_frame": 0.0,
+    "frames_with_all_8_inner": 0,
+    "frames_with_pose": 0,
+    "frames_pose_source_none": 1000,
+    "pose_source_counts": {
+      "none": 1000
+    },
+    "inner_detected_histogram": {
+      "0": 1000
+    },
+    "outer_detections_total": 0,
+    "mean_conf": 0.0
+  },
+  "verdict": {
+    "arm1_inner_ring_decodes_at_2p9m": true,
+    "arm2_zero_inner_detections": true,
+    "confirmed": true
+  }
+}
