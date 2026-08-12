@@ -3,6 +3,8 @@ aborts end the attempt at the held position, ties go to grid arrivals."""
 
 from dataclasses import dataclass
 
+import pytest
+
 from wyzantium_sim.kinematic import closed_loop
 
 
@@ -21,8 +23,11 @@ def make_frame_cb(decisions):
     seen = []
     remaining = list(decisions)
 
-    def on_frame(t, point):
-        seen.append((round(t, 6), point.name))
+    def on_frame(t_capture, point, t_deliver):
+        # D-045 signature: with latency_s = 0 (these gates) delivery ==
+        # capture, reproducing the pre-D-045 semantics these tests pin.
+        assert t_deliver == pytest.approx(t_capture)
+        seen.append((round(t_capture, 6), point.name))
         action = remaining.pop(0) if remaining else "continue"
         return FakeDecision(action)
 

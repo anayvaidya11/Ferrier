@@ -11,6 +11,27 @@ in `sim/results/review_r01/F-NNN/` before the P-08 ratification sitting.
 **Statuses:** DRAFT (L0) → VERIFIED (L1) → CONFIRMED (L2) → triaged
 {M,B,E,S,T} → RESOLVED | REJECTED | RECLASSIFIED.
 
+## Resolution — P-08 ratified 2026-08-11 ("I ratify P-08"), fixes applied
+
+Before = each finding's committed probe artifact; after =
+`sim/results/review_r01/F-0NN/after_fix.json` (probes/after_fix_r01.py, all
+arms passing). Statuses below are RESOLVED-pending-refreeze until
+`freeze_prior_v2` lands.
+
+| Finding | Decision | Fix | After-arm |
+|---|---|---|---|
+| F-012 | D-041 | Q_NOMINAL = Rz(180°) | q=(0,0,0,1); tag z +0.185; view 6.1° |
+| F-004 | D-042 | machine.begin_attempt() at attempt boundaries | fresh walls: gap→reject_frame, blip→hold |
+| F-007/F-008 | D-043 | per-tag decode extent; visible-span flip/noise | lone-tag flag rate >0.5; 0 inner detections at 2.9 m |
+| F-005 | D-044 | gate ambiguity conjunct + trial honors machine reject | flagged frame refused ("D-044"), control commits |
+| F-016 | D-045 | arrival-time consumption + staleness bound | dropout cell: t_total differs across latency arms |
+| F-009 | D-046(a) | σ_px joins SWEEP_AXES + Tier-1 grid | lands with the D-046 batch (Wave 2) |
+| F-017 | D-046(f) | instance identity in trial_header | lands with the D-046 batch (Wave 2) |
+| F-018 | — | erratum (E-2) + D-046(f) structural fix | per-instance-class contract recorded |
+| F-013/F-014 | D-046(d) | recorded exclusions | no realization; written down |
+| #62 pin | D-040/D-046(e) | grid stands; pin recorded | REPORT documents semantics |
+| H-17 | D-046(b) | host tilt through truth/sightings/handoff/contact | test_host_tilt_composes_into_truth_orientation |
+
 ## Class B — behavioral (ratification + batched re-run required)
 
 ## F-004 — Guidance wall timers persist across D-005 retry attempts [A; B/high; **CONFIRMED** — probe: attempt 2 aborts at 0.000 s vs 5.033 s fresh-machine control, 4/4 variants; sim/results/review_r01/F-004]

@@ -1,0 +1,7 @@
+{
+ "flagged_frame_allowed": false,
+ "refusal_reason": "ambiguity_flag set on tag(s) [1] \u2014 rejected frames are not commit evidence (IS \u00a78 row 5, D-044)",
+ "unflagged_control_allowed": true,
+ "before": "gate returned (True,'commit') on machine-rejected lines (raw_lanes.json dual reproduction)",
+ "fixed": true
+}

@@ -1,0 +1,5 @@
+{
+ "inner_detections_at_2p9m_500_frames": 0,
+ "before": "all 8 inner tags detected per frame (34.4 px span convention); per-tag truth ~3 px vs 20 px floor",
+ "fixed": true
+}

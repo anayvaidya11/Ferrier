@@ -29,6 +29,11 @@ REQUIRED_FIELDS = ("type", "t_capture", "t_emit", "pose_source", "conf",
                    "stage")
 SECTOR_DEG = 20.0        # #24, D-018, normative
 INNER_TAGS_MIN = 2       # H-08 / IS §8 row 3
+# D-045: WIRE_FORMAT consumer-checklist item 4 realized — capture-age beyond
+# the staleness bound ⇒ pose-absent. The bound is the #38 committed latency
+# sweep ceiling (a labeled class value taken from the committed sweep, not
+# measured): consumers tolerate up to the swept ceiling; older is stale.
+STALENESS_BOUND_S = 0.100
 
 _HEAD_AXIS_NOMINAL = (-1.0, 0.0, 0.0)  # stud +X at anti-parallel engagement
 
@@ -50,6 +55,10 @@ def commit_allowed(line: dict, conf_min: float,
     for f in REQUIRED_FIELDS:
         if f not in line:
             return False, f"required field {f} missing"
+    if line["t_emit"] - line["t_capture"] > STALENESS_BOUND_S + 1e-9:
+        return False, (f"stale: capture age {line['t_emit'] - line['t_capture']:.3f}s "
+                       f"beyond the {STALENESS_BOUND_S}s bound — treated "
+                       "pose-absent (WIRE_FORMAT checklist 4, D-045)")
     if line["pose_source"] != "multi_tag_fused":
         return False, f"pose_source is {line['pose_source']!r}, not multi_tag_fused"
     if line["stage"] != "inner_servo":
@@ -62,6 +71,13 @@ def commit_allowed(line: dict, conf_min: float,
         if len(inner) < INNER_TAGS_MIN:
             return False, (f"only {len(inner)} inner-ring tags decoded "
                            f"(≥{INNER_TAGS_MIN} required, H-08)")
+        flagged = [t.get("id") for t in tags if t.get("ambiguity_flag")]
+        if flagged:
+            # D-044 (R01 F-005): a row-5-rejected frame is not commit
+            # evidence — IS §8 row 5 says reject; committing is acting.
+            return False, (f"ambiguity_flag set on tag(s) {flagged} — "
+                           "rejected frames are not commit evidence "
+                           "(IS §8 row 5, D-044)")
     pose = line.get("pose")
     if pose is None:
         # WIRE_FORMAT: absent pose means "no pose available this frame —

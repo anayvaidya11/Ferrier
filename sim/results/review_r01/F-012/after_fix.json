@@ -1,0 +1,12 @@
+{
+ "handoff_q": [
+  0.0,
+  0.0,
+  0.0,
+  1.0
+ ],
+ "outer_tag_z_m_at_300mm": 0.185,
+ "cam_a_view_angle_deg_at_300mm": 7.32640666016956,
+ "before": "q=(0,0,1,0): tag z=-0.185, view 37.7 deg",
+ "fixed": true
+}

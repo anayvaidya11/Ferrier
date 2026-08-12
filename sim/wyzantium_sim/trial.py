@@ -178,25 +178,31 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
         if t_clock > budget_s:
             escalation_reason = "attempt_budget_exhausted"
             break
-        machine.stage = "acquire"       # every attempt re-acquires (resync)
+        machine.begin_attempt()         # D-042: fresh walls; budgets survive
         path = KinematicStage(root=seed, scale=sp["chassis_error_scale"],
                               start_mm=start_mm, aim_mm=aim_mm,
                               attempt=attempt, t0_s=t_clock,
-                              speeds=speeds).spatial_path()
+                              speeds=speeds,
+                              host_tilt_deg=(sp["host_pitch_deg"],
+                                             sp["host_roll_deg"])
+                              ).spatial_path()
 
         commit_line = None
 
-        def frame(tf, point):
+        def frame(tc, point, td):
+            # D-045: content snapshots capture-time truth (t_capture = tc);
+            # the decision applies at delivery (td) — walls and budgets run
+            # on the delayed clock; range is the evidence's capture geometry.
             nonlocal commit_line, outer_seen
             truth_m = pose_mm_to_m(point.T_head_stud)
             line = injector.observe(
-                float(tf), truth_m,
+                float(tc), truth_m,
                 sightings_for(truth_m, knockout_mask=knockout),
                 machine.stage)
             line["attempt"] = {"n": attempt}
             if any(t.get("id") == 0 for t in line.get("tags") or ()):
                 outer_seen = True
-            d = machine.observe(line, point.range_mm, float(tf))
+            d = machine.observe(line, point.range_mm, float(td))
             if d.action in ("abort_retry", "escalate"):
                 line["stage"] = d.stage
                 line["abort_reason"] = d.abort_reason
@@ -204,8 +210,9 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
                     line["escalation"] = d.escalation
             log.target_state(line)
             if (commit_line is None
-                    and point.range_mm > INSERTION_ONSET_RANGE_MM
-                    and gate.commit_allowed(line,
+                    and d.action != "reject_frame"   # D-044: rejected frames
+                    and point.range_mm > INSERTION_ONSET_RANGE_MM   # are not
+                    and gate.commit_allowed(line,    # commit evidence
                                             sp["conf_min_attempt"])[0]):
                 commit_line = line  # first allowing inner-servo frame
             return d
@@ -216,7 +223,9 @@ def run_trial(seed, sweep_point, engine, curve_set, *, out_dir=None,
                 {"mode": "velocity", "v_cmd_ms": float(point.v_cmd_ms)})
 
         res = closed_loop.walk(path.points, t0_s=t_clock, rate_hz=rate_hz,
-                               on_truth=truth, on_frame=frame)
+                               on_truth=truth, on_frame=frame,
+                               latency_s=float(
+                                   sp["perception_latency_ms"]) / 1000.0)
         decision = res.decision
         abort_center = (_head_center(res.end_point.T_head_stud)
                         if decision is not None else None)

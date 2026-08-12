@@ -19,6 +19,7 @@ import math
 
 import pytest
 
+from wyzantium_sim import frames
 from wyzantium_sim.contact import engine
 from wyzantium_sim.contact.mujoco_engine import MuJoCoEngine
 from wyzantium_sim.kinematic import stage
@@ -67,9 +68,25 @@ class TestNominalHandoff:
         assert default.handoff.v_ms[0] == pytest.approx(-SPEEDS[2], rel=1e-6)
 
     def test_nominal_orientation_is_anti_parallel(self):
+        # D-041 (R01 F-012): nominal is Rz(180°) — anti-parallel +X with
+        # plate-up ∥ head-up; the former Ry(180°) pin mapped plate-up to
+        # head-DOWN and tilted every trial's camera geometry.
         result = make_stage().run()
         assert result.handoff.T_head_stud.q == pytest.approx(
-            (0.0, 0.0, 1.0, 0.0))
+            (0.0, 0.0, 0.0, 1.0))
+
+    def test_host_tilt_composes_into_truth_orientation(self):
+        # D-046(b), closes H-17: host pitch tilts the relative orientation;
+        # 10° pitch rotates the stud +Z axis by 10° in head_frame.
+        level = make_stage().run()
+        tilted = make_stage(host_tilt_deg=(10.0, 0.0)).run()
+        z_level = frames.Pose(t=(0, 0, 0),
+                              q=level.handoff.T_head_stud.q).apply((0, 0, 1))
+        z_tilt = frames.Pose(t=(0, 0, 0),
+                             q=tilted.handoff.T_head_stud.q).apply((0, 0, 1))
+        dot = sum(a * b for a, b in zip(z_level, z_tilt))
+        assert math.degrees(math.acos(max(-1.0, min(1.0, dot)))) == \
+            pytest.approx(10.0, abs=0.2)
 
     def test_time_matches_piecewise_stage_speeds(self):
         # 3000→200 mm at 1.0 m/s, 200→onset at 0.2 m/s, onset→50 mm at

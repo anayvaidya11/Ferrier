@@ -1,22 +1,32 @@
 """D-037 — closed-loop attempt walker: holds are physically real.
+D-045 — frames are consumed at ARRIVAL: capture at the camera cadence,
+delivery latency_s later, so the swept #38 latency axis is behaviorally
+live (the vehicle covers ground during the delay; walls, holds, and
+budgets run on the delayed clock).
 
 Walks a SpatialPath against sim time. The vehicle traverses segments at
 their commanded speeds; a "hold" decision freezes traversal (v = 0) while
-perception frames keep arriving at the cadence — stop, stare, reacquire; a
+frames keep being captured and delivered — stop, stare, reacquire; a
 "continue" (or "reject_frame") resumes; "abort_retry"/"escalate" end the
-attempt at the held position. Truth is zero-order-held at the last grid
-point (pre-existing T8 behavior); frames strictly between grid arrivals see
-that point, and a frame tying a grid arrival yields to the arrival (the T8
-strict-< rule). Frame times are t0 + j/rate, matching timing.frame_times.
+attempt at the position held at DELIVERY time. Truth is zero-order-held at
+the last grid point (pre-existing T8 behavior); a frame's CONTENT snapshots
+the capture-time held point (the evidence describes capture geometry;
+code-level choice, labeled in D-045), and its decision applies at capture +
+latency_s. With latency above the frame period several frames are in
+flight at once (FIFO). Event order on ties: grid arrival, then capture,
+then delivery — so latency_s = 0 reproduces the former capture-time
+semantics exactly. Frames still in flight when the path ends are dropped
+(the handoff transitions the stage; labeled).
 
 Determinism: everything here is a pure function of the path, t0, the rate,
-and the callbacks' decisions — no clocks, no RNG. Pauses shift arrival
-times; they never change the spatial realization (D-019 error is indexed by
-arc length; a stationary vehicle does not accrue slip — D-037).
+latency, and the callbacks' decisions — no clocks, no RNG. Pauses shift
+delivery-driven traversal; they never change the spatial realization
+(D-019 error is indexed by arc length — D-037).
 """
 
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import dataclass
 
 
@@ -28,23 +38,34 @@ class WalkResult:
     end_point: object     # PathPoint the vehicle was at when the walk ended
 
 
-def walk(points, *, t0_s, rate_hz, on_truth, on_frame) -> WalkResult:
+def walk(points, *, t0_s, rate_hz, on_truth, on_frame,
+         latency_s: float = 0.0) -> WalkResult:
     """on_truth(t_s, point) fires at every grid arrival (sim_truth cadence,
-    #59); on_frame(t_s, point) fires at every perception frame with the
-    zero-order-held point and returns the guidance Decision."""
+    #59); on_frame(t_capture_s, point, t_deliver_s) fires when a frame is
+    DELIVERED (capture + latency_s), with the point zero-order-held at its
+    capture instant, and returns the guidance Decision."""
     t = float(t0_s)
     on_truth(t, points[0])
     last = points[0]
 
-    j = 0
-    next_frame_t = t0_s + j / rate_hz
+    j = 0                       # next capture index
     i = 1
     rem = points[i].seg_dt_s if i < len(points) else None
     holding = False
+    pending = deque()           # (t_capture, capture-held point) FIFO
 
     while True:
+        next_capture = t0_s + j / rate_hz
+        next_delivery = pending[0][0] + latency_s if pending else None
         arrival = (t + rem) if (rem is not None and not holding) else None
-        if arrival is not None and arrival <= next_frame_t:
+
+        # Earliest event wins; ties resolve arrival → capture → delivery
+        # (the T8 strict-< rule generalized; latency 0 ⇒ old semantics).
+        candidates = [c for c in (arrival, next_capture, next_delivery)
+                      if c is not None]
+        t_next = min(candidates)
+
+        if arrival is not None and arrival == t_next:
             t = arrival
             on_truth(t, points[i])
             last = points[i]
@@ -55,11 +76,17 @@ def walk(points, *, t0_s, rate_hz, on_truth, on_frame) -> WalkResult:
             continue
 
         if arrival is not None:
-            rem -= next_frame_t - t     # traversal consumed up to the frame
-        t = next_frame_t
-        d = on_frame(t, last)
-        j += 1
-        next_frame_t = t0_s + j / rate_hz
+            rem -= t_next - t       # traversal consumed up to this event
+        t = t_next
+
+        if t == next_capture and (next_delivery is None
+                                  or next_capture <= next_delivery):
+            pending.append((next_capture, last))
+            j += 1
+            continue
+
+        t_capture, cap_point = pending.popleft()
+        d = on_frame(t_capture, cap_point, t)
         if d.action in ("abort_retry", "escalate"):
             return WalkResult("aborted", t, d, last)
         holding = d.action == "hold"

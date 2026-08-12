@@ -35,7 +35,9 @@ from wyzantium_sim.kinematic.handoff import HandoffState
 HANDOFF_X_MM = 50.0            # #15
 ANNULUS_R_MM = 160.0           # #13
 START_MM = (3000.0, 0.0, 0.0)  # D-004 outer-stage start (3 m)
-Q_NOMINAL = (0.0, 0.0, 1.0, 0.0)   # IS §4: anti-parallel, 180° about +Y
+Q_NOMINAL = (0.0, 0.0, 0.0, 1.0)   # IS §4+§7: anti-parallel +X with plate-up
+# ∥ head-up at level attitude — 180° about +Z (D-041; R01 F-012 corrected the
+# former Ry(180°) realization, which mapped plate-up to head-DOWN).
 HEAD_CENTER_STUD_MM = (70.0, 0.0, 0.0)  # exposed 90 − head radius 20
 
 INSERTION_ONSET_RANGE_MM = 100.0   # arbitrary: #26 insertion-speed onset
@@ -116,7 +118,18 @@ class KinematicStage:
 
     def __init__(self, root: int, scale: float = 1.0, start_mm=START_MM,
                  aim_mm=(0.0, 0.0, 0.0), attempt: int = 1, t0_s: float = 0.0,
-                 pose_cov=None, ds_mm: float = DS_MM, speeds=None):
+                 pose_cov=None, ds_mm: float = DS_MM, speeds=None,
+                 host_tilt_deg=(0.0, 0.0)):
+        # D-046(b), closes H-17: host (pitch, roll) tilts the stud frame
+        # relative to the level-approaching head — composed ahead of
+        # Q_NOMINAL so it flows through truth, sightings view angles,
+        # handoff, and the contact model. Translation aim is unchanged
+        # (attitude enters as relative orientation; code-level choice,
+        # labeled). Tilt order qy(pitch)∘qx(roll), labeled arbitrary.
+        pitch_deg, roll_deg = (float(v) for v in host_tilt_deg)
+        q_tilt = _rot(_axis_quat(math.radians(pitch_deg), 1)).compose(
+            _rot(_axis_quat(math.radians(roll_deg), 0))).q
+        self._q_base = _rot(q_tilt).compose(_rot(Q_NOMINAL)).q
         self._start = tuple(float(v) for v in start_mm)
         self._aim = tuple(float(v) for v in aim_mm)
         self._attempt = attempt
@@ -170,7 +183,7 @@ class KinematicStage:
                       self._start[2] + d[2] * s + float(err_z[k]))
             q_err = _rot(_axis_quat(math.radians(float(err_ry[k])), 1)).compose(
                 _rot(_axis_quat(math.radians(float(err_rz[k])), 2))).q
-            q = _rot(q_err).compose(_rot(Q_NOMINAL)).q
+            q = _rot(q_err).compose(_rot(self._q_base)).q
             rng_mm = math.sqrt(sum(v * v for v in center))
             v_cmd, stage_name = self._speed_stage(rng_mm)
             if k > 0:
@@ -209,7 +222,7 @@ class KinematicStage:
                       self._start[2] + d[2] * s + float(err_z[k]))
             q_err = _rot(_axis_quat(math.radians(float(err_ry[k])), 1)).compose(
                 _rot(_axis_quat(math.radians(float(err_rz[k])), 2))).q
-            q = _rot(q_err).compose(_rot(Q_NOMINAL)).q
+            q = _rot(q_err).compose(_rot(self._q_base)).q
             rng_mm = math.sqrt(sum(v * v for v in center))
             v_cmd, stage_name = self._speed_stage(rng_mm)
             seg_dt = 0.0 if k == 0 else self._ds / 1000.0 / v_cmd

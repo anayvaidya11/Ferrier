@@ -1,0 +1,5 @@
+{
+ "ring_gap_after_begin_attempt": "reject_frame",
+ "dark_blip_after_begin_attempt": "hold",
+ "fixed": true
+}

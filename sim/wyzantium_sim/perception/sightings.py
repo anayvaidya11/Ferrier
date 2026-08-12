@@ -11,9 +11,12 @@ Arbitrary code-level choices (spec gaps, chassis_error precedent):
   the inner ring (ids 1-8). No FOV cone is modeled — a tag is sighted iff
   its face normal points into the hemisphere containing its camera
   (view angle < 90°); the injector's px-size curve handles the rest.
-- span_m follows the injector's own convention (inject.TagSighting
-  docstring): the tag size for the lone outer tag (0.15), the visible
-  constellation span for inner-ring frames (0.11 = 2 x 55 mm ring radius).
+- D-043 (R01 F-007/F-008): each sighting carries its OWN tag size
+  (tag_size_m — decode pixel extent is per-tag, IS §3.2/§3.3) and its
+  stud-frame center (center_stud_m — the injector derives the
+  visible-constellation span for flip/noise from the tags actually
+  detected). span_m keeps the legacy constellation convention for
+  callers that still construct sightings by hand.
 - knockout_mask bit k removes tag k (the #16 tag_knockout_mask sweep axis).
 
 Units: truth pose and all returns are METRES (WIRE_FORMAT contract);
@@ -35,6 +38,10 @@ _CAM_T_M = {
 _SPAN_M = {
     "outer": geometry.OUTER_TAG_SIZE_MM * _MM,
     "inner": 2.0 * geometry.INNER_RING_RADIUS_MM * _MM,
+}
+_TAG_SIZE_M = {
+    "outer": geometry.OUTER_TAG_SIZE_MM * _MM,
+    "inner": geometry.INNER_TAG_SIZE_MM * _MM,
 }
 
 
@@ -63,8 +70,11 @@ def sightings_for(truth_m: Pose, knockout_mask: int = 0,
         cos = sum(n * v for n, v in zip(normal, to_cam)) / dist
         if cos <= 0.0:
             continue  # face points away from its camera
+        kind = "outer" if tag_id == 0 else "inner"
         out.append(TagSighting(
             tag_id=tag_id, camera=camera, dist_m=dist,
             view_angle_rad=math.acos(min(1.0, cos)),
-            span_m=_SPAN_M["outer" if tag_id == 0 else "inner"]))
+            span_m=_SPAN_M[kind],
+            tag_size_m=_TAG_SIZE_M[kind],
+            center_stud_m=tuple(t_stud_tag_m.t)))
     return out

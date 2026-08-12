@@ -50,17 +50,42 @@ def _conf(ps, ratio):
     return max(0.0, min(1.0, (1.0 - miss) * min(1.0, ratio)))
 
 
+def _visible_span_m(detected, rep):
+    """D-043 (R01 F-007): the feature baseline of THIS frame's detections —
+    a lone tag is its own size (H08 §2: a lone 10 mm tag cannot
+    self-disambiguate); multi-tag frames use the max chord between the
+    detected tags' centers (the visible-constellation span). Falls back to
+    the legacy span_m when hand-built sightings carry no geometry."""
+    if len(detected) == 1:
+        s = detected[0][0]
+        return s.tag_size_m if s.tag_size_m is not None else s.span_m
+    pts = [s.center_stud_m for s, _ in detected
+           if s.center_stud_m is not None]
+    if len(pts) >= 2:
+        return max(math.dist(a, b)
+                   for i, a in enumerate(pts) for b in pts[i + 1:])
+    return rep.span_m
+
+
 @dataclass(frozen=True)
 class TagSighting:
-    """One geometrically-possible tag observation this frame. span_m is the
-    size driving both decode (px extent) and flip discriminability for this
-    sighting's context — the tag for a lone tag, the visible constellation
-    span for fused inner-ring frames."""
+    """One geometrically-possible tag observation this frame.
+
+    D-043 (R01 F-007/F-008): decode pixel extent is PER-TAG (tag_size_m —
+    IS §3.2/§3.3 readability is per tag, so 10 mm tags stop "decoding" at
+    3 m); flip discriminability and pose-noise span come from the span of
+    the tags actually DETECTED this frame (H08 §2: lone tag = tag size;
+    multi-tag = visible-constellation chord, computed from center_stud_m).
+    span_m keeps the legacy constellation convention; when tag_size_m /
+    center_stud_m are None (hand-built sightings in older tests), the
+    injector falls back to span_m."""
     tag_id: int
     camera: str
     dist_m: float
     view_angle_rad: float
     span_m: float
+    tag_size_m: float = None
+    center_stud_m: tuple = None
 
 
 class PerceptionInjector:
@@ -104,7 +129,8 @@ class PerceptionInjector:
         for s in sightings:
             occ = (cfg["outer_occlusion"] if s.tag_id == 0
                    else cfg["inner_occlusion"])
-            px_size = _FOCAL_PX[s.camera] * s.span_m / s.dist_m
+            size_m = s.tag_size_m if s.tag_size_m is not None else s.span_m
+            px_size = _FOCAL_PX[s.camera] * size_m / s.dist_m  # D-043 per-tag
             p = detection.p_detect(
                 px_size, s.view_angle_rad, occ, cfg["mud_f_c"],
                 cfg["illuminance_lux"], self.curve,
@@ -138,11 +164,14 @@ class PerceptionInjector:
         else:
             line["pose_source"] = "outer_tag"
 
-        # Representative geometry: the nearest detected sighting.
+        # Representative geometry: the nearest detected sighting; the
+        # noise/flip baseline is the visible span of this frame's
+        # detections (D-043).
         rep, _ = min(detected, key=lambda pair: pair[0].dist_m)
         f_px = _FOCAL_PX[rep.camera]
+        span_vis = _visible_span_m(detected, rep)
         sigma = cfg["sigma_px"]
-        cov = noise.pose_cov_upper21(sigma, f_px, rep.dist_m, rep.span_m)
+        cov = noise.pose_cov_upper21(sigma, f_px, rep.dist_m, span_vis)
         sig = [math.sqrt(cov[0]), math.sqrt(cov[6]), math.sqrt(cov[11]),
                math.sqrt(cov[15]), math.sqrt(cov[15]), math.sqrt(cov[15])]
         draws = self._noise.standard_normal(6)
@@ -153,7 +182,7 @@ class PerceptionInjector:
         noisy = Pose(t_noisy, truth.q).compose(Pose((0.0, 0.0, 0.0), dq))
 
         d_px = flip.discriminability(
-            f_px, rep.span_m, rep.dist_m, rep.view_angle_rad
+            f_px, span_vis, rep.dist_m, rep.view_angle_rad
         )
         p_fl = flip.p_flip_for_layout(
             d_px, sigma, cfg["flip_kappa"], self.layout,

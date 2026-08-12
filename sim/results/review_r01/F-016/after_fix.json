@@ -1,0 +1,13 @@
+{
+ "cell": "nominal + dropout_p 0.2 (holds occur)",
+ "latency_10ms": {
+  "outcome": "success",
+  "t_total": 10.25779999999517
+ },
+ "latency_100ms": {
+  "outcome": "success",
+  "t_total": 10.124466666661839
+ },
+ "before": "byte-diffs confined to t_emit; outcomes and t_total identical across the swept axis at every cell",
+ "fixed": true
+}

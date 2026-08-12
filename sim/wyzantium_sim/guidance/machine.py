@@ -103,6 +103,18 @@ class GuidanceMachine:
         self._ring_absent_since = None
         self._hold_since = None
 
+    def begin_attempt(self) -> None:
+        """D-042: attempt boundaries reset the evidence windows and streaks —
+        a fresh approach must not inherit the previous attempt's open walls
+        (R01 F-004: an inherited window aborted attempt 2 on its first gap
+        frame at 0.000 s against D-036's 5 s condition). The attempt and
+        time budgets are encounter-scoped and survive; within-attempt
+        semantics (D-034/035/036) are unchanged."""
+        self.stage = "acquire"
+        self._ambiguity_streak = 0
+        self._ring_absent_since = None
+        self._hold_since = None
+
     def _escalate(self, reason: str, underlying: str = None) -> Decision:
         self.stage = "escalate"
         return Decision(action="escalate", stage=self.stage,
