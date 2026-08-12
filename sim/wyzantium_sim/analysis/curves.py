@@ -91,6 +91,11 @@ class ThresholdStat:
     contact_failure: float
     miss: float
     false_capture_rate: float
+    # R01 S-08: per-point Wilson CIs on the two headline series
+    success_ci_lo: float = 0.0
+    success_ci_hi: float = 1.0
+    refusal_ci_lo: float = 0.0
+    refusal_ci_hi: float = 1.0
 
 
 def refusal_damage(rows, nominal) -> tuple:
@@ -106,11 +111,15 @@ def refusal_damage(rows, nominal) -> tuple:
         contact = sum(census[c] for c in CONTACT_FAILURE_CLASSES)
         fc = sum(1 for r in cell_rows
                  if r.false_capture not in (None, 0))
+        s_lo, s_hi = wilson_ci(census["success"], n)
+        r_lo, r_hi = wilson_ci(refusals, n)
         curve.append(ThresholdStat(
             threshold=float(stat_value), n=n,
             success=census["success"] / n,
             refusal=refusals / n, contact_failure=contact / n,
-            miss=census["clean_miss"] / n, false_capture_rate=fc / n))
+            miss=census["clean_miss"] / n, false_capture_rate=fc / n,
+            success_ci_lo=s_lo, success_ci_hi=s_hi,
+            refusal_ci_lo=r_lo, refusal_ci_hi=r_hi))
     return tuple(curve)
 
 

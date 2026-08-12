@@ -74,6 +74,13 @@ def refusal_damage_chart(curve, out_dir, *, curve_set):
     legend + direct end labels."""
     fig, ax = _fig()
     xs = [s.threshold for s in curve]
+    # R01 S-08: Wilson bands on the two headline series
+    ax.fill_between(xs, [s.success_ci_lo for s in curve],
+                    [s.success_ci_hi for s in curve],
+                    color=SERIES[0], alpha=0.12, lw=0)
+    ax.fill_between(xs, [s.refusal_ci_lo for s in curve],
+                    [s.refusal_ci_hi for s in curve],
+                    color=SERIES[1], alpha=0.12, lw=0)
     series = [("success", [s.success for s in curve]),
               ("refusal", [s.refusal for s in curve]),
               ("contact failure", [s.contact_failure for s in curve]),
@@ -118,11 +125,15 @@ def render_all(rows, nominal, out_dir) -> dict:
     for axis, stats in sorted(sens.items()):
         p = sensitivity_chart(axis, stats, out_dir, curve_set=curve_set)
         index["figures"][f"d014_{axis}"] = p.name
+    # R01 S-08: per-point data committed beside the figures
+    index["d014_points"] = {
+        axis: [vars(s) for s in stats] for axis, stats in sorted(sens.items())}
 
     d017 = _curves.refusal_damage(rows, nominal)
     if d017:
         p = refusal_damage_chart(d017, out_dir, curve_set=curve_set)
         index["figures"]["d017_tradeoff"] = p.name
+        index["d017_points"] = [vars(s) for s in d017]
 
     census = _curves.outcome_census(rows)
     p = census_chart(census, out_dir, curve_set=curve_set)
