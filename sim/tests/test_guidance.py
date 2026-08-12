@@ -192,6 +192,18 @@ class TestRow2OuterDestroyed:
         assert d.escalation["recommend"] == "human_decision"
         assert t - 1.0 <= machine.HOLD_TIMEOUT_S + 0.2
 
+    def test_dark_frame_at_inner_range_holds_never_feeds_ring_streak(self):
+        # D-034 routing clause: a fully-dark frame is row 2's domain at ANY
+        # range and never feeds rows 3/4's ring window. Passes today; pins
+        # the guard so H-18's third cause cannot silently reopen (R01
+        # F-006 — every other row-2 case observes at 2500 mm only).
+        for range_mm in (250.0, 60.0):
+            for stage in ("outer_servo", "inner_servo"):
+                m = make_machine()
+                d = m.observe(line(**{**self._dark(), "stage": stage}),
+                              range_mm=range_mm, t_s=1.0)
+                assert d.action == "hold"
+
     def test_detection_resets_dark_window(self):
         m = make_machine()
         t = 1.0

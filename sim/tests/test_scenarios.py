@@ -103,8 +103,17 @@ def test_gate_band_is_not_hardcoded_anywhere_in_wyzantium_sim():
     # D-029: code reads the band from the JSON only. The distinctive band
     # values must not appear as literals in any wyzantium_sim module.
     package_dir = Path(scenarios.__file__).parent
-    for py in package_dir.glob("*.py"):
+    # R01 F-019: rglob, not glob — doe/tiers.py (the sole band consumer)
+    # and every other subpackage must be scanned too. The sanctioned path
+    # is scenarios.load_gate_moderate(); the guarded string is the QUOTED
+    # filename (an actual path resolution) — loader calls and docstring
+    # prose mentioning the file are fine.
+    for py in package_dir.rglob("*.py"):
         text = py.read_text()
-        assert "gate_moderate" not in text or py.name == "scenarios.py"
+        if py.name != "scenarios.py":
+            for quoted in ('"gate_moderate.json"', "'gate_moderate.json'"):
+                assert quoted not in text, (
+                    f"{py.name} resolves the gate JSON directly — the "
+                    "loader in scenarios.py is the only sanctioned path")
         for marker in ("0.3, 0.4", "[50, 100]"):
             assert marker not in text, f"{py.name} hardcodes the gate band"

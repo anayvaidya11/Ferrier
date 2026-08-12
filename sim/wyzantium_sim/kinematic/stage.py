@@ -16,8 +16,9 @@ trajectory aimed at the mouth center; start at D-004's 3 m outer-stage start;
 INSERTION_ONSET_RANGE_MM (the #26 insertion speed has no committed onset);
 DS_MM sampling grid; chassis error applied to lateral y/z and rotations about
 y/z (axis_index 1-4 on the "chassis" substream); zero angular rate at
-handoff; pose_cov defaults to zeros (placeholder until T6 wires perception
-into the loop — no current consumer reads it); r evaluated at the
+handoff; pose_cov defaults to zeros (no consumer reads HandoffState.pose_cov,
+and trial.py overwrites it with the commit frame's real covariance before
+contact — R01 F-003 settled the stale "until T6" wording); r evaluated at the
 handoff-plane crossing (IS §6's 160 mm derivation reserves 5 mm for the
 remaining 50 mm of drift); commanded direction used for the handoff velocity.
 """

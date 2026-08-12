@@ -30,6 +30,7 @@ class TrialRow:
     t_total: float
     handoff_reached: bool
     false_capture: object   # int | None
+    code_git_sha: str = ""  # R01 S-05: pooling guard keys on this too
 
 
 def _row(path: Path) -> TrialRow:
@@ -43,7 +44,8 @@ def _row(path: Path) -> TrialRow:
         first_attempt_success=result["first_attempt_success"],
         attempts_used=result["attempts_used"], t_total=result["t_total"],
         handoff_reached=result["handoff_reached"],
-        false_capture=result.get("false_capture"))
+        false_capture=result.get("false_capture"),
+        code_git_sha=header["code_git_sha"])
 
 
 def load_dataset(source, *, expect_curve_set=None) -> tuple:
@@ -52,12 +54,14 @@ def load_dataset(source, *, expect_curve_set=None) -> tuple:
     paths = (sorted(Path(source).glob("*.ndjson"))
              if isinstance(source, Path) else [Path(p) for p in source])
     rows = tuple(_row(p) for p in paths)
-    seen = sorted({r.curve_set for r in rows})
+    seen = sorted({(r.curve_set, r.code_git_sha) for r in rows})
     if len(seen) > 1:
         raise MixedCurveSetsError(
-            f"dataset spans curve sets {seen} — pooling across the swap "
-            "seam is refused (ROADMAP protocol); load each set separately")
-    if expect_curve_set is not None and seen and seen != [expect_curve_set]:
+            f"dataset spans (curve_set, code_git_sha) pairs {seen} — "
+            "pooling across the swap seam or across code freezes is "
+            "refused (ROADMAP protocol; R01 S-05); load each separately")
+    if (expect_curve_set is not None and seen
+            and seen[0][0] != expect_curve_set):
         raise MixedCurveSetsError(
-            f"dataset is {seen[0]!r}, expected {expect_curve_set!r}")
+            f"dataset is {seen[0][0]!r}, expected {expect_curve_set!r}")
     return rows

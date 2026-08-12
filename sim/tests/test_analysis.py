@@ -104,11 +104,11 @@ class TestFeasibility:
 
 
 class TestPoolingGuard:
-    def _write(self, path, curve_set):
+    def _write(self, path, curve_set, code_git_sha="s"):
         sp = scenarios.build_sweep_point(**{**NOMINAL,
                                             "curve_set": curve_set})
         header = {"v": 1, "type": "trial_header", "trial_id": "x",
-                  "seed": 1, "code_git_sha": "s",
+                  "seed": 1, "code_git_sha": code_git_sha,
                   "engine": {"name": "mujoco", "version": "0"},
                   "sweep_point": sp, "params_ref": "p"}
         result = {"v": 1, "type": "trial_result", "outcome": "success",
@@ -127,6 +127,14 @@ class TestPoolingGuard:
         self._write(tmp_path / "a.ndjson", "prior_v1")
         rows = load_dataset(tmp_path, expect_curve_set="prior_v1")
         assert len(rows) == 1 and rows[0].curve_set == "prior_v1"
+
+    def test_mixed_code_shas_refused(self, tmp_path):
+        # R01 S-05: same curve set, different code freezes — pre- and
+        # post-fix prior_v1 records must never pool silently.
+        self._write(tmp_path / "a.ndjson", "prior_v1", code_git_sha="aaa")
+        self._write(tmp_path / "b.ndjson", "prior_v1", code_git_sha="bbb")
+        with pytest.raises(MixedCurveSetsError):
+            load_dataset(tmp_path)
 
 
 class TestCharts:

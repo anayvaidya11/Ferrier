@@ -75,11 +75,13 @@ def test_slip_arrivals_are_poisson_in_distance():
     count = len(path.slip_events)
     expected = 0.2 * 0.1 * 500_000
     assert abs(count - expected) / expected < 0.05
-    # Dispersion consistent with Poisson: variance of per-km counts ~ mean.
-    km_bins = np.array_split(
-        np.array([s.distance_m for s in path.slip_events]), 1
-    )
-    assert count > 0
+    # Dispersion consistent with Poisson: index of dispersion of per-km
+    # counts ≈ 1. A clustered or periodic renewal process at the same mean
+    # rate fails this (R01 F-015 — the previous check here was dead code).
+    dists = np.array([s.distance_m for s in path.slip_events])
+    per_km = np.histogram(dists, bins=np.arange(0.0, 50_001.0, 1000.0))[0]
+    dispersion = per_km.var(ddof=1) / per_km.mean()
+    assert abs(dispersion - 1.0) < 0.3
 
 
 def test_slip_magnitudes_are_exponential():
