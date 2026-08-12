@@ -1,0 +1,72 @@
+{
+  "finding": "F-017",
+  "probe": "studies/R01_PHASE1_REVIEW/probes/probe_f017.py",
+  "clause": "ARCH \u00a75: 'engine and instance identity land in every trial_header'; PHASE1_PLAN \u00a72 wirefmt row: 'trial_header (incl. #33 solver block + compute-instance identity)'",
+  "seed": 101,
+  "sweep_point_source": "sim/scenarios/nominal.json (committed nominal)",
+  "trial_id": "mujoco-101-5f428a24",
+  "code_git_sha": "5c31f07ea76c4ec253ce052b9cdc1c6c37847810-dirty",
+  "engine": {
+    "name": "mujoco",
+    "version": "3.11.0"
+  },
+  "expected_header_keys": [
+    "code_git_sha",
+    "engine",
+    "params_ref",
+    "seed",
+    "solver",
+    "sweep_point",
+    "trial_id",
+    "type",
+    "v"
+  ],
+  "arms": {
+    "instance_identity_FAILING": {
+      "header_keys": [
+        "code_git_sha",
+        "engine",
+        "params_ref",
+        "seed",
+        "solver",
+        "sweep_point",
+        "trial_id",
+        "type",
+        "v"
+      ],
+      "header_keys_match_expected": true,
+      "instance_tokens_in_header_keys": [],
+      "instance_tokens_in_schema_properties": [],
+      "instance_tokens_in_schema_required": [],
+      "instance_tokens_in_canonical_order": [],
+      "instance_tokens_in_validator_checks": [],
+      "validate_line_errors_on_header_as_written": []
+    },
+    "engine_identity_CONTROL": {
+      "engine_in_header": {
+        "name": "mujoco",
+        "version": "3.11.0"
+      },
+      "engine_in_schema_properties": true,
+      "engine_in_schema_required": true,
+      "engine_subschema_required": [
+        "name",
+        "version"
+      ],
+      "engine_in_canonical_order": true,
+      "engine_checked_by_validator_source": true,
+      "validate_line_errors_with_engine_removed": [
+        "engine must be {name, version}"
+      ]
+    }
+  },
+  "instance_absent_at_all_four_layers": true,
+  "engine_present_and_enforced_at_all_four_layers": true,
+  "runtime_platform_with_nowhere_to_land": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "python": "3.14.6"
+  },
+  "verdict": "CONFIRMED",
+  "confirmed": true
+}
