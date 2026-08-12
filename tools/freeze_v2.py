@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import json
 import platform
+import shutil
 import sys
 from collections import Counter
 from pathlib import Path
@@ -85,6 +86,12 @@ def main():
         digests.append((name, hashlib.sha256(
             (out / f"{name}.sha256").read_bytes()).hexdigest()))
         rows_by_plan[name] = dataset.load_dataset(rec_dir)
+        # Records are not retained (manifest records_storage) — hash, load
+        # the analysis rows, then free the disk before the next plan (full
+        # contact records total tens of GB across the three plans).
+        shutil.rmtree(rec_dir)
+        print(f"[freeze_v2] {name}: hashed {counts[name]}, records freed",
+              flush=True)
 
     nominal = tiers.load_nominal()["sweep_point"]
     summary = {
