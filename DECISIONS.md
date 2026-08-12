@@ -93,8 +93,11 @@ First-attempt and multi-attempt distributions stay separate (D-005).
 ### D-023 — Interim mud-degradation model (until MR-001)
 P(detect | mud fraction f) = P_mask(f) · C(f), where P_mask is the clean-mask
 literature curve and C(f) = max(0, 1 − f/f_c) with f_c swept {0.6, 0.8, 1.0}
-(f_c = 1.0 degenerates to the literature mask model). Direction is conservative — mud
-strictly worse than clean masking. **The functional form is an assumption, labeled;
+*(parenthetical repaired 2026-08-11, R01 F-010: the original "f_c = 1.0
+degenerates to the literature mask model" was false under this decision's own
+product form — at f_c = 1.0, P = (1−f)·P_mask, the mask model squared under
+prior_v1's P_mask = 1−f; no f_c cell is a mask-only baseline)*. Direction is
+conservative — mud strictly worse than clean masking. **The functional form is an assumption, labeled;
 MR-001 replaces it.**
 **What would make it wrong:** wet-mud specularity locally *raising* contrast, breaking
 monotonicity — MR-001 would show it.
@@ -105,6 +108,119 @@ depth 180 mm + drawbar + approach margin); stud axis height 400–800 mm; host r
 attitude within ±20°. These are interface *requirements* on integrators, derived from
 the funnel envelope and §9's terrain sweep — renegotiated when real platform data
 lands (Phase 2 / vendor engagement; none is published today, VENDORS.md).
+
+### D-046 — Sweep-axes reconciliation + DOE revision for freeze_prior_v2 (R01 sitting; 2026-08-11)
+The R01 review (studies/R01_PHASE1_REVIEW) found four committed sweep axes that
+the frozen harness could not honestly produce. Reconciled here, all at once,
+before the v2 re-run: **(a) σ_px joins SWEEP_AXES** with the #40 grid
+{0.3, 0.5, 1.0} px and a Tier-1 marginal (F-009 — the pin at 0.5 was an
+unrecorded exclusion; trial.py's promised amendment is this one).
+**(b) Host pitch/roll are realized** (closes H-17): the sweep_point's
+host_pitch_deg/host_roll_deg compose a tilt into the target pose ahead of
+Q_NOMINAL, flowing through kinematic truth, sightings view angles, handoff,
+and the contact model; Tier-1 marginals added over the D-024 ±20° envelope
+and the D-029 gate cell marginalizes over the committed distributions as its
+text always claimed. **(c) Latency is live** per D-045. **(d) Still
+unrealized, now by recorded exclusion** (the H-17 lesson — exclusions are
+written down, never silent): the IS §5 mount-tolerance contributor (F-013)
+and the D-019 GM correlation-length sweep (F-014) — both stay fixed at their
+committed defaults; realizing either is a future recorded revision. **(e) The
+#62 jam force grid stays pinned at mid-grid** (per D-040 the discrimination
+lives in the persistence window; joining the sweep axes is a future revision
+if IS8-17 ever produces). **(f) trial_header gains compute-instance
+identity** (F-017; ARCH §5's commitment, additive v1 schema revision like
+H-16's false_capture) — engine AND instance now both land in every header.
+Ratified by the human (R01 sitting, 2026-08-11, "I ratify P-08").
+**What would make it wrong:** Tier-2 interactions invalidating the new
+marginals (D-021's failure mode → recorded DOE revision), or Phase-3 real
+data showing the tilt realization misses a dominant attitude effect.
+
+### D-045 — Frames are consumed at arrival; staleness bound = the committed latency ceiling (R01 F-016; 2026-08-11)
+The frozen harness consumed perception frames at capture time; t_emit was
+written to the wire and read by nothing, so the swept latency axis {10, 30,
+100} ms was behaviorally inert — a fake-flat marginal, the exact hazard
+D-032(e) named (probe: sim/results/review_r01/F-016). Realization: the
+closed-loop stage delivers each frame to guidance at **t_emit** (the vehicle
+covers ground during the delay; walls and holds see delayed evidence), and
+WIRE_FORMAT consumer-checklist item 4 is realized structurally — a frame
+whose capture-age at consumption exceeds the **staleness bound** is treated
+pose-absent. The bound is set to the #38 sweep ceiling (100 ms), **a labeled
+class value taken from the committed sweep, not measured**: consumers
+tolerate up to the swept latency ceiling; anything older (future queuing
+paths) is pose-absent. Ratified by the human (R01 sitting, 2026-08-11).
+**What would make it wrong:** a real perception stack whose queuing behavior
+demands a tighter bound than its own latency ceiling — a Phase 3 observable.
+
+### D-044 — Ambiguity-flagged frames are not commit evidence (R01 F-005; 2026-08-11)
+IS §8 row 5 ("reject frame") and the WIRE_FORMAT worked flip example were
+honored by the guidance machine but not by the commit path: trial.py latched
+commit_line from gate.commit_allowed alone, and the gate never read
+tags[].ambiguity_flag — a machine-rejected frame could authorize insertion
+(dual reproduction in raw_lanes.json; fix-time probe under
+sim/results/review_r01/F-005). Fix: the commit predicate gains an ambiguity
+conjunct — a line carrying any flagged tag, or rejected by the machine, is
+not commit evidence. D-013/#30 semantics otherwise unchanged.
+Ratified by the human (R01 sitting, 2026-08-11).
+
+### D-043 — Per-tag decode extent; flip discriminability from the visible span (R01 F-007/F-008; 2026-08-11)
+sightings_for() hard-coded span_m = 0.11 (the full inner-ring constellation
+span) for every inner tag, so (a) decode probability used a 34 px extent at
+2.9 m where the per-tag truth is ~3 px — 10 mm tags "decoded" at 3 m against
+IS §3.3's own arithmetic, bypassing IS8-2 semantics in outer-destroyed
+cells; and (b) flip discriminability made lone tags flip-immune, inverting
+D-011's qualification and H08's committed model (probes:
+sim/results/review_r01/F-007, F-008). Fix per the committed sources: decode
+pixel extent uses the **per-tag size** (IS §3.2/§3.3); flip discriminability
+and ambiguity ratio use the **visible-constellation span** (H08 §2: lone tag
+= tag size; multi-tag = span of the tags actually detected this frame).
+Ratified by the human (R01 sitting, 2026-08-11).
+**What would make it wrong:** MR-003 measuring flip behavior the H08
+visible-span model cannot reproduce — the curve-swap protocol owns that.
+
+### D-042 — Guidance walls and streaks reset at attempt boundaries (R01 F-004; 2026-08-11)
+_hold_since / _ring_absent_since / _ambiguity_streak survived D-005 retries:
+a fresh attempt's first gap frame inherited the previous attempt's open
+window and aborted at 0.000 s against D-036's 5 s wall (probe:
+sim/results/review_r01/F-004, four variants, fresh-machine controls). Same
+blip-vs-condition disease as D-034/035/036, at the attempt seam. Fix: the
+trial's attempt transition resets the machine's evidence windows and
+streaks; within-attempt semantics unchanged.
+Ratified by the human (R01 sitting, 2026-08-11).
+
+### D-041 — Nominal engagement orientation is Rz(180°) (R01 F-012; 2026-08-11)
+Q_NOMINAL was realized as (0, 0, 1, 0) = Ry(180°), mapping stud +Z ("plate
+up") to head −Z — every frozen trial rendered the outer tag at z = −185 mm
+in head_frame with cam A view angles 37.7°/62.4° at 300 mm/handoff where the
+IS §4 + §7 constraint set (anti-parallel +X, +Z∥+Z at level attitude,
+right-handed) uniquely requires Rz(180°) = (0, 0, 0, 1) → +185 mm,
+6.1°/14.8° (probe: sim/results/review_r01/F-012, N=50/arm; all 10 checks).
+Nominal-cell outcomes were invariant (50/50 both arms) — the contamination
+concentrates in the degraded bands, i.e. the D-029 gate cell. Fix:
+Q_NOMINAL = (0, 0, 0, 1); the freeze regenerates as freeze_prior_v2.
+Ratified by the human (R01 sitting, 2026-08-11).
+
+### D-040 — #62 jam grid stands; discrimination is carried by the persistence window (R01 sitting; 2026-08-11)
+The week-one #62 recalibration check (sim/results/probe62_check.json) found
+successful-insertion transients exceed F_ax_jam at p90 and F_lat_jam at p99
+— the force cells do not separate jam from normal contact; the 1.0 s
+persistence window does. Decision (P-08(b) Option 1, the no-behavior-change
+default under the blanket ratification): **the committed grid stands; IS8-17
+is a sustained-wrench criterion; the force cells are entry conditions only.**
+REPORT documents this semantics. Recalibrating the cells to measured scales
+remains open as a future recorded revision if IS8-17 ever fires.
+Ratified by the human (R01 sitting, 2026-08-11).
+
+### D-039 — MuJoCo is the Phase-1 engine of record; A-004 GPU leg waived as moot (2026-08-11)
+ARCH §4's day-one Newton conformance never ran — Newton was never
+provisioned (GPU quota; credits landed after the CPU path was proven). The
+entire experiment runs on MuJoCo 3.11.0, which passed the conformance suite
+and the bit-identical replay contract. PHASE1_PLAN §3's "both measurements
+committed" is waived by this record: the full DOE costs ~$0.25 of compute,
+so no GPU measurement could change the winner while costing more than it
+could recover. The Newton adapter stays in-tree as a labeled stub.
+Ratified by the human (R01 sitting, 2026-08-11).
+**What would make it wrong:** Phase 2+ contact workloads at a scale where
+the $/trial comparison stops being moot — re-open with a fresh cost test.
 
 ### D-038 — Gate-cell trial count: N = 5,000 (DOE addendum to D-032; 2026-08-09)
 D-021 fixed tier shapes and D-029 fixed the gate band, but no committed number set

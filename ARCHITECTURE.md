@@ -109,7 +109,12 @@ What the experiment produces, in full (D-005, D-006, D-014, A-007):
 3. **First-attempt and multi-attempt distributions, reported separately**, with
    `attempts-per-encounter` an explicit swept parameter (D-005).
 4. **Committed, reproducible dataset** — seeds, parameters, and results sufficient to
-   re-run any trial bit-identically.
+   re-run any trial bit-identically. *(Clarified 2026-08-11, R01 F-023/F-018, human
+   sign-off at the P-08 sitting: the committed deliverable is the **regeneration
+   closure** — plans + seed rule + code SHA + per-record sha256 lists — not retained
+   record files; byte-identity is a per-instance-class contract (cross-platform float
+   divergence measured and recorded in `sim/results/review_r01/F-018/`), and every
+   `trial_header` carries engine + compute-instance identity from D-046(f) on.)*
 5. **Replayable trial artifacts** — ≥1 successful dock + ≥1 per failure class,
    each generated from and mapping to a committed trial record, labeled *simulated*
    (A-007). First `CLAIMS.md` entries land with these.
