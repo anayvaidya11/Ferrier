@@ -1,0 +1,44 @@
+{
+ "source": "post-R01 pre-swap prior_v2 freeze (P-08 sitting, D-039..D-046; PHASE1_PLAN week-4 step; ROADMAP curve-swap protocol)",
+ "tier1": {
+  "n": 4900,
+  "success": 4313,
+  "rate": 0.8802040816326531,
+  "ci95_wilson": [
+   0.8708126814749686,
+   0.8889997888136314
+  ],
+  "census": {
+   "IS8-1": 537,
+   "success": 4313,
+   "IS8-2": 50
+  }
+ },
+ "tier2": {
+  "n": 4000,
+  "success": 39,
+  "rate": 0.00975,
+  "ci95_wilson": [
+   0.00714061705578644,
+   0.013300151629967762
+  ],
+  "census": {
+   "IS8-2": 2064,
+   "IS8-1": 1897,
+   "success": 39
+  }
+ },
+ "gate": {
+  "n": 5000,
+  "success": 0,
+  "rate": 0.0,
+  "ci95_wilson": [
+   0.0,
+   0.000767730137580694
+  ],
+  "census": {
+   "IS8-1": 4964,
+   "IS8-5": 36
+  }
+ }
+}

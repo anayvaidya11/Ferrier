@@ -15,8 +15,13 @@ in `sim/results/review_r01/F-NNN/` before the P-08 ratification sitting.
 
 Before = each finding's committed probe artifact; after =
 `sim/results/review_r01/F-0NN/after_fix.json` (probes/after_fix_r01.py, all
-arms passing). Statuses below are RESOLVED-pending-refreeze until
-`freeze_prior_v2` lands.
+8 arms passing). **freeze_prior_v2 landed 2026-08-12** (13,900 trials at
+`f6325bd`, c7i.8xlarge, $0.132 metered): every row below is **RESOLVED**.
+Gate cell restated pre-swap: 0/5,000 — still 100% policy refusal, but the
+composition validates the fixes (4,964 IS8-1 + 36 IS8-5 ambiguity refusals
+now that D-043 flip realism exists; the D-042 attempt-seam IS8-3 artifacts
+are gone). Tier-1 88.0% [87.1, 88.9] over the widened 98-cell pool. The
+honest lever on the gate number remains the P-03 measurement window.
 
 | Finding | Decision | Fix | After-arm |
 |---|---|---|---|

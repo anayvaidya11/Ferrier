@@ -1,0 +1,37 @@
+{
+ "source": "post-R01 pre-swap prior_v2 freeze (P-08 sitting, D-039..D-046; PHASE1_PLAN week-4 step; ROADMAP curve-swap protocol)",
+ "code_git_sha": "f6325bd8e20902770905ecc6b68a8cbc66c44943",
+ "engine": "mujoco (engine of record, D-039)",
+ "instance": {
+  "class": "c7i.8xlarge",
+  "platform": "Linux-6.17.0-1019-aws-x86_64-with-glibc2.39",
+  "python": "3.12.3"
+ },
+ "curve_set": "prior_v1",
+ "decisions_applied": [
+  "D-039",
+  "D-040",
+  "D-041",
+  "D-042",
+  "D-043",
+  "D-044",
+  "D-045",
+  "D-046"
+ ],
+ "plans": {
+  "tier1": "tiers.tier1_plan(20260808)",
+  "tier2": "tiers.tier2_plan(20260808)",
+  "gate": "tiers.gate_plan(20260808, 5000)"
+ },
+ "counts": {
+  "tier1": 4900,
+  "tier2": 4000,
+  "gate": 5000
+ },
+ "dataset_digest": {
+  "tier1": "2a43beb326be62da99e5ee8439e30c6c73025ad7e28ea2c823c1946ff8975040",
+  "tier2": "328a7a896aca35557e18cabd563fcb936da6a1ca5fae948cb51e8f8aabe450f4",
+  "gate": "77b9b00f58eda08379d733de2686079cfc78a5f1b1bd01e2167032c192b33739"
+ },
+ "records_storage": "not retained \u2014 records regenerate deterministically from this manifest (code sha + committed plans + seed rule); the per-record sha256 lists verify regeneration ON THIS INSTANCE CLASS ONLY (byte-identity is per-instance-class, R01 F-018; off-platform auditors verify trial_id reproduction and on-platform digests). Regeneration cost at the committed A-004 rate: ~$0.13."
+}

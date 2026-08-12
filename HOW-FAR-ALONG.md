@@ -4,7 +4,7 @@
      Update it whenever a T-task, phase, or gate changes state.
      Sources of truth: ROADMAP.md (phases), PHASE1_PLAN.md §4 (T0–T13 build order), git log. -->
 
-_Last updated: 2026-08-11 (R01 surgical review complete; ratification packet P-08 waiting)_
+_Last updated: 2026-08-12 (P-08 ratified; all R01 fixes applied; freeze_prior_v2 landed)_
 
 WyZantium is working toward a February submission in six phases, and right now
 we're in Phase 1: a simulated docking experiment that must hit its kill-gate
@@ -30,14 +30,19 @@ number: under moderate degradation the robot refuses every attempt (0% of
 clean-condition success sits near 89%. That number is built on stand-in
 perception curves; the one thing that can move it honestly is the late-
 August measurement window (about 3 days of human time — the approval packet
-is written and waiting). Since the freeze, a full surgical review swept all
-~9,000 lines of harness code against every committed contract clause (225
-of 225 checked, two independent agents per finding): it confirmed 24 issues,
-including a real orientation bug — every frozen trial ran with the target
-flipped the wrong way, making the cameras' view of the tags much worse than
-the specs intend — plus a handful of sweep axes that were promised but never
-actually varied. None of it was patched silently: the fixes wait as one
-written approval packet (P-08), then one cheap batched re-run replaces the
-frozen numbers before the measurement swap. After that: the curve swap, the
-final gate number reported before-and-after, and the T13 report. Phases 2
-through 5 haven't started yet.
+is written and waiting). A full surgical review then swept all ~9,000 lines
+of harness code against every committed contract clause (225 of 225
+checked, two independent agents per finding) and confirmed 24 issues —
+including a real orientation bug that had every trial viewing the target
+the wrong way up. The human ratified the whole fix packet in one sitting
+(P-08 → decisions D-039 through D-046), every fix landed with before-and-
+after evidence, and the experiment re-ran clean: 13,900 new trials for
+about 13 cents (freeze_prior_v2). The re-run says the fixes were real but
+the verdict is unchanged — in clean conditions docking succeeds ~88% of
+the time, and under the moderate mud-and-darkness gate band the robot
+still refuses every single attempt rather than risk the asset. That
+refusal is built on stand-in perception curves, so the one honest lever
+on the gate number is still the measurement window; everything is staged
+so the swap is mechanical when the three CSVs land. After that: the
+before/after gate report and the T13 writeup. Phases 2 through 5 haven't
+started yet.

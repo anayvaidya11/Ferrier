@@ -1,0 +1,163 @@
+{
+ "source": "#63; D-028 (intersection, not verdict); D-026 band; D-015 35 mm; interpretation: ARCHITECTURE \u00a76.7 only",
+ "required_band_n_mm": [
+  1.0,
+  70.0
+ ],
+ "band_threshold": 0.6,
+ "classes": [
+  {
+   "mu_trac": 0.2,
+   "m_rv_kg": 300.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 16.81714285714286,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": false,
+    "70.0": false
+   },
+   "intersection_n_mm": [
+    1.0,
+    16.81714285714286
+   ]
+  },
+  {
+   "mu_trac": 0.2,
+   "m_rv_kg": 500.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 28.02857142857143,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": false,
+    "70.0": false
+   },
+   "intersection_n_mm": [
+    1.0,
+    28.02857142857143
+   ]
+  },
+  {
+   "mu_trac": 0.2,
+   "m_rv_kg": 800.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 44.84571428571429,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": true,
+    "70.0": false
+   },
+   "intersection_n_mm": [
+    1.0,
+    44.84571428571429
+   ]
+  },
+  {
+   "mu_trac": 0.35,
+   "m_rv_kg": 300.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 29.43,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": false,
+    "70.0": false
+   },
+   "intersection_n_mm": [
+    1.0,
+    29.43
+   ]
+  },
+  {
+   "mu_trac": 0.35,
+   "m_rv_kg": 500.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 49.05,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": true,
+    "70.0": false
+   },
+   "intersection_n_mm": [
+    1.0,
+    49.05
+   ]
+  },
+  {
+   "mu_trac": 0.35,
+   "m_rv_kg": 800.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 78.48,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": true,
+    "70.0": true
+   },
+   "intersection_n_mm": [
+    1.0,
+    70.0
+   ]
+  },
+  {
+   "mu_trac": 0.5,
+   "m_rv_kg": 300.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 42.042857142857144,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": true,
+    "70.0": false
+   },
+   "intersection_n_mm": [
+    1.0,
+    42.042857142857144
+   ]
+  },
+  {
+   "mu_trac": 0.5,
+   "m_rv_kg": 500.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 70.07142857142857,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": true,
+    "70.0": true
+   },
+   "intersection_n_mm": [
+    1.0,
+    70.0
+   ]
+  },
+  {
+   "mu_trac": 0.5,
+   "m_rv_kg": 800.0,
+   "k_min_n_mm": 1.0,
+   "k_max_n_mm": 112.11428571428571,
+   "mask": {
+    "1.0": true,
+    "3.0": true,
+    "10.0": true,
+    "30.0": true,
+    "70.0": true
+   },
+   "intersection_n_mm": [
+    1.0,
+    70.0
+   ]
+  }
+ ]
+}
