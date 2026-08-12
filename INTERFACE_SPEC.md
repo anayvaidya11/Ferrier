@@ -34,11 +34,11 @@ accumulates on the serviceable side (D-001).
   head (Ø40) meets neck (Ø25). Under tow the load path is head shoulder → latch →
   head structure. The funnel carries zero tow load; tension would pull the stud
   straight out of the mouth. **The latch is the entire primary structure and a single
-  point of failure** (D-003, stated per its consequence).
+  point of failure** (D-003-R, stated per its consequence).
 - Material class: through-hardened quenched-and-tempered alloy steel (4140 QT class),
   zinc-nickel surface treatment for corrosion [ASSUMED — Phase 2 selects].
 - Load rating: **15 kN axial design** (≈10 kN mired-breakout for a 500 kg UGV × 1.5) —
-  an assumption, unverified until Phase 2 (D-003).
+  an assumption, unverified until Phase 2 (D-003-R(a)).
 - Off-axis load sensitivity [derived, shown]: at tow angle θ off the stud axis,
   transverse component 15 kN·sin θ bends the neck about the plate face (moment arm
   90 mm, section modulus πd³/32 = 1.53×10⁻⁶ m³). At θ = 20°: σ ≈ 5.13 kN × 0.09 m /
@@ -354,8 +354,8 @@ Perception enters Phase 1 as the injected model (D-007) parameterized by these a
 
 Stated as a section, not buried:
 
-1. The **15 kN rating is unverified** (D-003); Phase 2 owns it.
-2. The **funnel carries no tow load; the latch is a single point of failure** (D-003).
+1. The **15 kN rating is unverified** (D-003-R(a)); Phase 2 owns it.
+2. The **funnel carries no tow load; the latch is a single point of failure** (D-003-R).
 3. **Bending sizes the stud neck**, not shear — the ±20° off-axis tow limit is assumed
    and materially constrains the resolver stage (§2.1 derivation; Phase 2 verifies).
 4. The **inner ring sits at the most vulnerable point** on the assembly (§3.3).
@@ -371,5 +371,9 @@ Stated as a section, not buried:
 10. **Single-tag orientation is flip-unsafe** (§3.5 caveat, studies/H08) — insertion
     requires multi-tag fusion, so inner-ring occlusion below two visible tags is a
     hard abort condition, tightening §8 row 3.
-11. **The funnel compliance is unratified** (§2.3) — the crux mechanism's topology
-    awaits a human decision; every contact-model number downstream of it is pending.
+11. *(Repaired 2026-08-11, R01 F-021 — the original line "the funnel compliance is
+    unratified" outlived its truth: T1 was ratified 2026-08-02, D-027, and this
+    section never caught up.)* The **ratified T1 topology's constants remain
+    swept/assumed class values** — stiffness k and M_eff are D-026 sweep grids, and
+    the contact model's hard-stop scale is an unrecorded placeholder (R01 F-011);
+    Phase 2 owns the physical sizing.

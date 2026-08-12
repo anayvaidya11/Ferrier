@@ -14,3 +14,10 @@ the P-03 measurement window, and both sets are kept (ROADMAP protocol).
 
 To re-render any of these:
 `sim/.venv/bin/python -m wyzantium_sim.replay render <record> --out <dir>`
+
+*Erratum 2026-08-11 (R01 F-024): the four sidecars' `source_record` fields
+originally pointed at ephemeral session-scratchpad paths (dead on every
+machine). Replaced with the trial_id-based regeneration recipe; the
+artifact→record mapping was always independently closed via the seed
+embedded in each trial_id against the committed plans (verified by the R01
+prosecutor pass).*

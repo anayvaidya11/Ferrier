@@ -10,7 +10,7 @@
 | 1 | **Find** — navigate to last known position, off-road, GPS-denied | Integrated | Off-road DDIL autonomy is commodity; named providers in the ecosystem: Forterra (autonomy prime on American Rheinmetall's team), Overland AI (EABC selectee) — `research/VENDORS.md`, `research/FOLLOW_ON.md`. Building it would be competing with our integration partners (REQ-001, REQ-002). |
 | 2 | **Assess** — classify why it stopped | **Ours** | CV on a damaged, mud-covered, arbitrarily-oriented object is the defensible perception problem (REQ-012; fault classes in `WIRE_FORMAT.md`). |
 | 3 | **Rig** — physically attach | **Ours** | The crux; the entire interface spec exists for this (REQ-003, D-001, D-004). |
-| 4 | **Resolve** — restart, recharge, or extract | Integrated | Winch/traction/power are solved engineering purchased with the chassis; the §2.1-derived tow-angle limit (INTERFACE_SPEC §2.1) is the one constraint we impose on it (D-003). |
+| 4 | **Resolve** — restart, recharge, or extract | Integrated | Winch/traction/power are solved engineering purchased with the chassis; the §2.1-derived tow-angle limit (INTERFACE_SPEC §2.1) is the one constraint we impose on it (D-003-R). |
 
 ## 2. Contract-first data flow (§2.3)
 
