@@ -754,7 +754,9 @@ flowchart TD
 3. **T13 — `sim/REPORT.md`** + first CLAIMS rows + refreshed Tier-3 replay
    artifacts (software; written after the swap by design). *Full pre-swap
    draft landed 2026-08-14 — every §6 output present with committed
-   sources; post-swap numbers are labeled `[MR_V1 PENDING]` slots.*
+   sources; post-swap numbers are labeled `[MR_V1 PENDING]` slots. Tier-3
+   replay artifacts regenerated against v2 the same day
+   (`sim/results/tier3_prior_v2/`, 4 classes).*
 4. **#62 jam-force recalibration** — open as a future revision (D-040 pinned
    the semantics; a wider probe is cheap and local if wanted).
 5. **P-04** — ASSIST registration (Phase 2 dependency, not Phase 1).

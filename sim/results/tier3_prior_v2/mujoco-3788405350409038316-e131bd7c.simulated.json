@@ -1,0 +1,15 @@
+{
+ "label": "simulated",
+ "trial_id": "mujoco-3788405350409038316-e131bd7c",
+ "outcome": "IS8-1",
+ "attempts_used": 1,
+ "t_total": 5.0633333333333335,
+ "source_record": "not retained - regenerate: trial tag 'tier1:outer_occlusion=0.5:r000' of tiers.tier1_plan(20260808) (seed embedded in trial_id) via runner.run_sweep; freeze reference f6325bd (freeze_prior_v2/MANIFEST.json); byte-identity is per-instance-class (R01 F-018)",
+ "code_git_sha": "3d68b384522d6d1db526b917bdcb758c163b6df4-dirty",
+ "source": "A-007; PHASE1_PLAN \u00a72 replay/ row; rendered from logged state only (D-007)",
+ "plan": "tiers.tier1_plan(20260808)",
+ "tag": "tier1:outer_occlusion=0.5:r000",
+ "curve_set": "prior_v1",
+ "regenerated_on": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+ "regeneration_sha_note": "code_git_sha above is a descendant of freeze SHA f6325bd; the only sim-runtime delta since the freeze is the additive run_sweep(curve_sets=...) swap seam, default-inert for prior_v1 (pinned by sim/tests/test_swap_seam.py)"
+}

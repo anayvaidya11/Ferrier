@@ -1,0 +1,15 @@
+{
+ "label": "simulated",
+ "trial_id": "mujoco-2822492525479204279-8a1ceb33",
+ "outcome": "IS8-5",
+ "attempts_used": 3,
+ "t_total": 16.681783318164292,
+ "source_record": "not retained - regenerate: trial tag 'gate:00051' of tiers.gate_plan(20260808, 5000) (seed embedded in trial_id) via runner.run_sweep; freeze reference f6325bd (freeze_prior_v2/MANIFEST.json); byte-identity is per-instance-class (R01 F-018)",
+ "code_git_sha": "3d68b384522d6d1db526b917bdcb758c163b6df4-dirty",
+ "source": "A-007; PHASE1_PLAN \u00a72 replay/ row; rendered from logged state only (D-007)",
+ "plan": "tiers.gate_plan(20260808, 5000)",
+ "tag": "gate:00051",
+ "curve_set": "prior_v1",
+ "regenerated_on": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+ "regeneration_sha_note": "code_git_sha above is a descendant of freeze SHA f6325bd; the only sim-runtime delta since the freeze is the additive run_sweep(curve_sets=...) swap seam, default-inert for prior_v1 (pinned by sim/tests/test_swap_seam.py)"
+}

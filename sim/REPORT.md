@@ -196,15 +196,18 @@ record bulk (`results/freeze_prior_v2/MANIFEST.json`):
   against the P-02 $100 ceiling; regeneration at the committed A-004
   rate ($0.0095/1k) costs about the same.
 
-## 5. Replayable trial artifacts (ARCH §6.5 — A-007) **[ITEM 4 PENDING]**
+## 5. Replayable trial artifacts (ARCH §6.5 — A-007)
 
-Committed set to land: ≥1 successful dock + ≥1 per failure class the DOE
-actually produced (pre-swap: IS8-1, IS8-2, IS8-5 — contact-failure
-classes produced zero trials to replay), each generated from and mapping
-to a committed trial record, rendered from logged state only (D-007
-untouched), labeled *simulated*. The prior set maps to freeze_prior_v1
-records; regeneration against v2 is queued as pre-window item 4. First
-CLAIMS rows land with these artifacts (Appendix A).
+Committed: [`results/tier3_prior_v2/`](results/tier3_prior_v2/) — one
+artifact per class the v2 DOE produced (success, IS8-1, IS8-2, IS8-5;
+contact-failure classes produced zero trials to replay), each rendered
+from logged state only (D-007 untouched), labeled *simulated*, sidecars
+carrying the F-024 trial-id regeneration recipe. The class-set delta vs
+the v1 set is itself R01-fix evidence (IS8-3 artifacts gone with D-042;
+IS8-5 possible only after D-043). Regenerator: `../tools/tier3_v2.py`.
+The v1 set stays committed. **[MR_V1 PENDING]** — the post-swap set,
+same driver, both kept. First CLAIMS rows land with these artifacts
+(Appendix A).
 
 ## 6. The refusal/damage tradeoff (ARCH §6.6 — D-017)
 
