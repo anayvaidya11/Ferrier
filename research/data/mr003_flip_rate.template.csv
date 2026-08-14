@@ -1,0 +1,7 @@
+# MR-003 — detection and pose-flip rate vs. view angle, both layouts (MEASUREMENT_REQUESTS.md)
+# One row per condition. layout in {coplanar,collar}; collar_standoff_mm
+# empty for coplanar rows, else the MEASURED shop-bought spacer height;
+# cam_position in {axial,oblique}; n_flipped judged against rig geometry
+# (recovered-normal sign, detect_frames.py).
+# Loader hard gates: enums as above; 0 <= n_flipped <= n_detected <= n_frames.
+layout,collar_standoff_mm,cam_position,view_angle_deg,n_frames,n_detected,n_flipped,reproj_rms_px,detector_version,notes

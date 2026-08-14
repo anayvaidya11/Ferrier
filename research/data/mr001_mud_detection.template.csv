@@ -1,0 +1,11 @@
+# MR-001 — AprilTag 36h11 detection rate vs. mud occlusion (MEASUREMENT_REQUESTS.md)
+# One row per condition. Units: tag_scale_mm [mm], range_m [m],
+# view_angle_deg [deg], occlusion_frac_est in [0,1], illuminance_lux [lux],
+# reproj_rms_px [px] (mean RMS corner reprojection residual, from
+# detect_frames.py).
+# occlusion_frac_est estimation method (REQUIRED, fill in before data lands):
+#   <describe how occlusion fraction was estimated from the pre-condition
+#    stills, e.g. grid overlay count on the photograph>
+# Loader hard gates (mr_ingest.py): occlusion 0 baseline rows must exist per
+# geometry; 0 <= n_detected <= n_frames; occlusion_frac_est in [0,1].
+tag_scale_mm,range_m,view_angle_deg,occlusion_frac_est,illuminance_lux,n_frames,n_detected,reproj_rms_px,detector_version,notes

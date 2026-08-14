@@ -1,0 +1,6 @@
+# MR-002 — detection rate vs. illuminance below 10 lux (MEASUREMENT_REQUESTS.md)
+# One row per condition. exposure_ms is the FIXED shutter used (ceiling
+# derivation on CHECKLIST_MR002); gain_setting is the locked ISO (string ok).
+# Absolutes are NON-TRANSFERABLE (instrument-specific); only the relative
+# trend is carried forward.
+tag_scale_mm,view_angle_deg,illuminance_lux,exposure_ms,gain_setting,n_frames,n_detected,reproj_rms_px,detector_version,notes

@@ -745,6 +745,8 @@ flowchart TD
 
 1. **P-03 — the measurement window** (human, ~3 days, late August). The only
    honest lever on the gate number. Everything after the CSVs is mechanical.
+   *Execution kit committed 2026-08-14: `research/mr_kit/` — verified print
+   sheets, day checklists, shopping list, and the frame-processing script.*
 2. **Curve swap + re-run + before/after gate report** (software; seam built
    and tested; ~$0.15–0.30 of metered compute; needs explicit go at launch).
 3. **T13 — `sim/REPORT.md`** + first CLAIMS rows + refreshed Tier-3 replay

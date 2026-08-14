@@ -4,3 +4,4 @@ __pycache__/
 *.egg-info/
 sim/.venv/
 .DS_Store
+tools/mr_kit/build/
