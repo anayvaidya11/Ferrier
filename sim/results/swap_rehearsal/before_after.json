@@ -1,0 +1,96 @@
+{
+ "source": "SYNTHETIC REHEARSAL \u2014 not bench data; generated from sim/tests/test_mr_ingest.py ground truth by tools/swap_mr_v1.py --rehearse",
+ "curve_sets": {
+  "before": "prior_v1",
+  "after": "mr_v1"
+ },
+ "seed_pairing": "same SWEEP_ROOT + tags -> same seeds; the curve set is the only changed input",
+ "plans": {
+  "tier1": {
+   "before": {
+    "n": 98,
+    "success": 88,
+    "rate": 0.8979591836734694,
+    "ci95_wilson": [
+     0.8222706682871846,
+     0.9436246043715325
+    ],
+    "census": {
+     "success": 88,
+     "IS8-1": 9,
+     "IS8-2": 1
+    }
+   },
+   "after": {
+    "n": 98,
+    "success": 85,
+    "rate": 0.8673469387755102,
+    "ci95_wilson": [
+     0.7861693677036048,
+     0.9208108839813649
+    ],
+    "census": {
+     "success": 85,
+     "IS8-1": 12,
+     "IS8-2": 1
+    }
+   }
+  },
+  "tier2": {
+   "before": {
+    "n": 30,
+    "success": 2,
+    "rate": 0.06666666666666667,
+    "ci95_wilson": [
+     0.01847663532769335,
+     0.21323817721072091
+    ],
+    "census": {
+     "IS8-1": 12,
+     "success": 2,
+     "IS8-2": 16
+    }
+   },
+   "after": {
+    "n": 30,
+    "success": 1,
+    "rate": 0.03333333333333333,
+    "ci95_wilson": [
+     0.0059084379948573795,
+     0.16670751396958874
+    ],
+    "census": {
+     "IS8-1": 13,
+     "success": 1,
+     "IS8-2": 16
+    }
+   }
+  },
+  "gate": {
+   "before": {
+    "n": 50,
+    "success": 0,
+    "rate": 0.0,
+    "ci95_wilson": [
+     0.0,
+     0.07135003417431873
+    ],
+    "census": {
+     "IS8-1": 50
+    }
+   },
+   "after": {
+    "n": 50,
+    "success": 0,
+    "rate": 0.0,
+    "ci95_wilson": [
+     0.0,
+     0.07135003417431873
+    ],
+    "census": {
+     "IS8-1": 50
+    }
+   }
+  }
+ }
+}

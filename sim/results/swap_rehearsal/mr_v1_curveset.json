@@ -1,0 +1,10 @@
+{
+ "source": "SYNTHETIC REHEARSAL \u2014 not bench data; generated from sim/tests/test_mr_ingest.py ground truth by tools/swap_mr_v1.py --rehearse",
+ "name": "mr_v1",
+ "detection_onset_px": 20.0,
+ "detection_onset_width_px": 10.0,
+ "angle_falloff_exponent": 2.0013256204419023,
+ "lux_knee": 10.0,
+ "lux_floor_p": 0.24961450056087967,
+ "fp_rate_per_image": 1.4e-05
+}

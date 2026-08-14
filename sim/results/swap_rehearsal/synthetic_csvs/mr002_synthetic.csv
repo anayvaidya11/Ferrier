@@ -1,0 +1,22 @@
+# SYNTHETIC REHEARSAL — not bench data; generated from sim/tests/test_mr_ingest.py ground truth by tools/swap_mr_v1.py --rehearse
+tag_scale_mm,view_angle_deg,illuminance_lux,exposure_ms,gain_setting,n_frames,n_detected,detector_version,notes,reproj_rms_px
+150,0,50,8,g8,400,384,apriltag3-ref,,0.35
+150,0,10,8,g8,400,384,apriltag3-ref,,0.35
+150,0,5,8,g8,400,297,apriltag3-ref,,0.35
+150,0,2,8,g8,400,183,apriltag3-ref,,0.35
+150,0,1,8,g8,400,96,apriltag3-ref,,0.35
+150,40,50,8,g8,400,225,apriltag3-ref,,0.35
+150,40,10,8,g8,400,225,apriltag3-ref,,0.35
+150,40,5,8,g8,400,174,apriltag3-ref,,0.35
+150,40,2,8,g8,400,107,apriltag3-ref,,0.35
+150,40,1,8,g8,400,56,apriltag3-ref,,0.35
+10,0,50,8,g8,400,384,apriltag3-ref,,0.35
+10,0,10,8,g8,400,384,apriltag3-ref,,0.35
+10,0,5,8,g8,400,297,apriltag3-ref,,0.35
+10,0,2,8,g8,400,183,apriltag3-ref,,0.35
+10,0,1,8,g8,400,96,apriltag3-ref,,0.35
+10,40,50,8,g8,400,225,apriltag3-ref,,0.35
+10,40,10,8,g8,400,225,apriltag3-ref,,0.35
+10,40,5,8,g8,400,174,apriltag3-ref,,0.35
+10,40,2,8,g8,400,107,apriltag3-ref,,0.35
+10,40,1,8,g8,400,56,apriltag3-ref,,0.35

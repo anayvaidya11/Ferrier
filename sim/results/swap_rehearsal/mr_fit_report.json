@@ -1,0 +1,50 @@
+{
+ "source": "SYNTHETIC REHEARSAL \u2014 not bench data; generated from sim/tests/test_mr_ingest.py ground truth by tools/swap_mr_v1.py --rehearse",
+ "angle_exponent_hat": 2.0013256204419023,
+ "mud_f_c_hat": 0.7,
+ "mud_form_residual_rms": 0.0013564867233746582,
+ "mud_curve": [
+  [
+   0.0,
+   1.0
+  ],
+  [
+   0.1,
+   0.7721270543615677
+  ],
+  [
+   0.2,
+   0.5721073008849559
+  ],
+  [
+   0.3,
+   0.4000395069532238
+  ],
+  [
+   0.4,
+   0.2578387940722011
+  ],
+  [
+   0.5,
+   0.14284599311701085
+  ],
+  [
+   0.6,
+   0.056330945357494035
+  ],
+  [
+   0.7,
+   0.0
+  ]
+ ],
+ "lux_knee_hat": 10.0,
+ "lux_floor_hat": 0.24961450056087967,
+ "sigma_px_hat": 0.42,
+ "flip_kappa_hat": 1.3085284010696856,
+ "flip_c_hat": 7.29732670221679,
+ "collar_flip_rate": 0.0,
+ "warnings": [
+  "decode floor, onset width, fp rate carried from prior_v1 (bench cannot re-measure them)",
+  "mud_f_c / sigma_px / flip_kappa are sweep axes: fitted values ride in this report; collapsing the sweeps is a recorded revision, not a registration side effect"
+ ]
+}

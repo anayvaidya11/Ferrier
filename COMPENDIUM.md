@@ -749,6 +749,8 @@ flowchart TD
    sheets, day checklists, shopping list, and the frame-processing script.*
 2. **Curve swap + re-run + before/after gate report** (software; seam built
    and tested; ~$0.15–0.30 of metered compute; needs explicit go at launch).
+   *Rehearsed end-to-end 2026-08-14 (`studies/SWAP_REHEARSAL.md`): one
+   command (`tools/swap_mr_v1.py`), worker-seam defect found + fixed.*
 3. **T13 — `sim/REPORT.md`** + first CLAIMS rows + refreshed Tier-3 replay
    artifacts (software; written after the swap by design).
 4. **#62 jam-force recalibration** — open as a future revision (D-040 pinned

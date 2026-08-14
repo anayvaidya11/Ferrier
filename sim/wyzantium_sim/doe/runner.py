@@ -34,6 +34,7 @@ from wirefmt import validator
 from wyzantium_sim import scenarios, trial
 from wyzantium_sim.contact.mujoco_engine import MuJoCoEngine
 from wyzantium_sim.doe import tiers
+from wyzantium_sim.perception import curves as perception_curves
 
 
 class SpendCeilingError(RuntimeError):
@@ -106,8 +107,31 @@ class SweepResult:
 _WORKER_ENGINE = None
 
 
-def _init_worker(engine_factory):
+def _ensure_registered(curve_sets):
+    """Idempotently register extra curve sets (the mr_v1 swap seam).
+
+    Worker processes start with a fresh interpreter (spawn/forkserver), so
+    the parent's `perception.curves` registry — which only ever contains
+    the committed prior_v1 at import time — must be re-populated in every
+    worker or an mr_v1 sweep dies at inject's curves.get(). A same-name
+    set with different values is refused: silently running on a stale
+    registration is exactly the swap-discipline failure ROADMAP names.
+    """
+    for cs in curve_sets:
+        try:
+            existing = perception_curves.get(cs.name)
+        except KeyError:
+            perception_curves.register(cs)
+        else:
+            if existing != cs:
+                raise ValueError(
+                    f"curve set {cs.name!r} already registered with "
+                    "different values — sets are never edited in place")
+
+
+def _init_worker(engine_factory, curve_sets=()):
     global _WORKER_ENGINE
+    _ensure_registered(curve_sets)
     _WORKER_ENGINE = engine_factory()
 
 
@@ -118,9 +142,10 @@ def _run_planned(seed, sweep_point, out_dir, solver=None):
 
 
 def run_sweep(plan, out_dir, *, workers=1, engine_factory=MuJoCoEngine,
-              spend=None, solver=None) -> SweepResult:
+              spend=None, solver=None, curve_sets=()) -> SweepResult:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    _ensure_registered(curve_sets)
     engine = engine_factory()
     engine_name = engine.engine_id["name"]
 
@@ -147,7 +172,7 @@ def run_sweep(plan, out_dir, *, workers=1, engine_factory=MuJoCoEngine,
     else:
         with ProcessPoolExecutor(
                 max_workers=workers, initializer=_init_worker,
-                initargs=(engine_factory,)) as pool:
+                initargs=(engine_factory, curve_sets)) as pool:
             futures = {}
             for p in pending:
                 if spend is not None:

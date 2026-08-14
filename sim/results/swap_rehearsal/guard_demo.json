@@ -1,0 +1,5 @@
+{
+ "source": "SYNTHETIC REHEARSAL \u2014 not bench data; generated from sim/tests/test_mr_ingest.py ground truth by tools/swap_mr_v1.py --rehearse",
+ "raised": "MixedCurveSetsError",
+ "message": "dataset spans (curve_set, code_git_sha) pairs [('mr_v1', 'a0c7e3d5bf85612b38dd61a1f0162de754d6b58c-dirty'), ('prior_v1', 'a0c7e3d5bf85612b38dd61a1f0162de754d6b58c-dirty')] \u2014 pooling across the swap seam or across code freezes is refused (ROADMAP protocol; R01 S-05); load each separately"
+}
