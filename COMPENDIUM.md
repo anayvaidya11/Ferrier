@@ -758,7 +758,10 @@ flowchart TD
    replay artifacts regenerated against v2 the same day
    (`sim/results/tier3_prior_v2/`, 4 classes).*
 4. **#62 jam-force recalibration** — open as a future revision (D-040 pinned
-   the semantics; a wider probe is cheap and local if wanted).
+   the semantics). *Wide probe run 2026-08-14
+   (`sim/results/probe62_wide.json`): zero would-fires at all 18 grid
+   cells over 850 successful insertions; max sustained signature 0.255 s
+   vs the 1.0 s window — D-040 confirmed with measured margin.*
 5. **P-04** — ASSIST registration (Phase 2 dependency, not Phase 1).
 6. Phase 2 onward — **blocked by rule, not by capacity**: never work a
    later-phase item while an earlier-phase gate is open (anti-rathole rule 1).

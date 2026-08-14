@@ -151,7 +151,15 @@ guess, and its own header says the measured delta is a finding:
   frozen DOE: pre-swap, trials that reach contact latch, and trials that
   don't reach contact refuse. IS8-17 (jam) never fired — see the #62
   semantics note (D-040): discrimination is carried by the persistence
-  window, and the force cells stand as entry conditions.
+  window, and the force cells stand as entry conditions. The wide probe
+  (`results/probe62_wide.json`, 850 successful insertions across all 17
+  contact-dynamics Tier-1 cells) quantifies that: **zero would-fires at
+  every one of the 18 committed grid cells**; the longest sustained jam
+  signature on any successful insertion was 0.255 s — 25.5% of the
+  default 1.0 s window and half of even the tightest 0.5 s cell — while
+  instantaneous contact transients exceed every force cell by orders of
+  magnitude (p90 max-axial ≈ 35 kN), confirming D-040's reading with
+  measured margin.
 
 **Reading it the way a cofounder would** (the taxonomy's purpose under
 D-014): the mechanical agenda (rows 3, 9, 10, 16) has *not yet been

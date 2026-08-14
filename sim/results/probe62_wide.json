@@ -1,0 +1,124 @@
+{
+ "source": "#62 wide probe (item 5, pre-window work): sustained IS8-17 signature vs the committed grid over every contact-dynamics Tier-1 cell, regenerated locally from the committed plans (records not retained; per-instance-class caveat, R01 F-018). Criterion transcribed from contact/runner.py run_contact; full-series evaluation = pre-latch + hold, conservative. D-040 stands; no thresholds changed.",
+ "code_git_sha": "d78b694f929652dcea9d30c6527918236878f723",
+ "regenerated_on": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+ "cells": [
+  "tier1:head_mass_kg=30.0",
+  "tier1:head_mass_kg=8.0",
+  "tier1:mu_contact=0.1",
+  "tier1:mu_contact=0.2",
+  "tier1:mu_contact=0.6",
+  "tier1:mu_contact=0.8",
+  "tier1:nominal",
+  "tier1:restitution_e=0.1",
+  "tier1:restitution_e=0.3",
+  "tier1:restitution_e=0.4",
+  "tier1:speed_insertion_ms=0.02",
+  "tier1:speed_insertion_ms=0.1",
+  "tier1:speed_insertion_ms=0.15",
+  "tier1:stiffness_k_n_mm=1.0",
+  "tier1:stiffness_k_n_mm=3.0",
+  "tier1:stiffness_k_n_mm=30.0",
+  "tier1:stiffness_k_n_mm=70.0"
+ ],
+ "n_trials": 850,
+ "outcome_census": {
+  "success": 850
+ },
+ "instantaneous_axial_max_N": {
+  "p90": 35371.957342264985,
+  "max": 161072.0540228078
+ },
+ "committed_grid": {
+  "F_ax_N": [
+   50.0,
+   100.0,
+   200.0
+  ],
+  "F_lat_N": [
+   10.0,
+   25.0
+  ],
+  "t_s": [
+   0.5,
+   1.0,
+   2.0
+  ]
+ },
+ "sustained_by_pair": {
+  "F_ax=50,F_lat=10": {
+   "max_sustained_s": {
+    "p50": 0.07060000000014899,
+    "p90": 0.157800000000333,
+    "p99": 0.23520000000049635,
+    "max": 0.2546000000005373
+   },
+   "would_fire_t0.5": 0,
+   "would_fire_t1.0": 0,
+   "would_fire_t2.0": 0
+  },
+  "F_ax=50,F_lat=25": {
+   "max_sustained_s": {
+    "p50": 0.11520000000024311,
+    "p90": 0.20280000000042797,
+    "p99": 0.2504000000005284,
+    "max": 0.2548000000005377
+   },
+   "would_fire_t0.5": 0,
+   "would_fire_t1.0": 0,
+   "would_fire_t2.0": 0
+  },
+  "F_ax=100,F_lat=10": {
+   "max_sustained_s": {
+    "p50": 0.07060000000014899,
+    "p90": 0.14340000000030262,
+    "p99": 0.23520000000049635,
+    "max": 0.2546000000005373
+   },
+   "would_fire_t0.5": 0,
+   "would_fire_t1.0": 0,
+   "would_fire_t2.0": 0
+  },
+  "F_ax=100,F_lat=25": {
+   "max_sustained_s": {
+    "p50": 0.10960000000023129,
+    "p90": 0.20280000000042797,
+    "p99": 0.2504000000005284,
+    "max": 0.2548000000005377
+   },
+   "would_fire_t0.5": 0,
+   "would_fire_t1.0": 0,
+   "would_fire_t2.0": 0
+  },
+  "F_ax=200,F_lat=10": {
+   "max_sustained_s": {
+    "p50": 0.05160000000010889,
+    "p90": 0.13900000000029333,
+    "p99": 0.2012000000004246,
+    "max": 0.20980000000044274
+   },
+   "would_fire_t0.5": 0,
+   "would_fire_t1.0": 0,
+   "would_fire_t2.0": 0
+  },
+  "F_ax=200,F_lat=25": {
+   "max_sustained_s": {
+    "p50": 0.09640000000020343,
+    "p90": 0.18880000000039843,
+    "p99": 0.20620000000043515,
+    "max": 0.2102000000004436
+   },
+   "would_fire_t0.5": 0,
+   "would_fire_t1.0": 0,
+   "would_fire_t2.0": 0
+  }
+ },
+ "default_cell": {
+  "F_ax_N": 100.0,
+  "F_lat_N": 25.0,
+  "t_s": 1.0,
+  "would_fire": 0,
+  "max_sustained_s": 0.2548000000005377
+ },
+ "finding": "zero would-fires at the committed default (F_ax=100 N, F_lat=25 N, t=1 s) across 850 successful insertions; max sustained signature 0.2548 s = 25.5% of the window \u2014 D-040's persistence-window discrimination confirmed with margin"
+}
