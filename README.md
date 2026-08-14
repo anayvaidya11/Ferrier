@@ -25,6 +25,7 @@ $100 (P-02, A-011). Phase 1 — the docking experiment, a kill gate — is OPEN 
 
 | File | What it is |
 |---|---|
+| `COMPENDIUM.md` | Single-file derived reference: the whole project in one document (company, plan, architecture, experiment machine, results, decision digest, diagrams). Sources of truth win over it |
 | `INTERFACE_SPEC.md` | The docking target: stud, fiducials, frames, tolerances, failure modes |
 | `ARCHITECTURE.md` | Four functions, data flow, real-vs-simulated table, sim + compute plan |
 | `WIRE_FORMAT.md` | The one wire contract: target-state stream + deterministic trial records |
