@@ -752,7 +752,9 @@ flowchart TD
    *Rehearsed end-to-end 2026-08-14 (`studies/SWAP_REHEARSAL.md`): one
    command (`tools/swap_mr_v1.py`), worker-seam defect found + fixed.*
 3. **T13 — `sim/REPORT.md`** + first CLAIMS rows + refreshed Tier-3 replay
-   artifacts (software; written after the swap by design).
+   artifacts (software; written after the swap by design). *Full pre-swap
+   draft landed 2026-08-14 — every §6 output present with committed
+   sources; post-swap numbers are labeled `[MR_V1 PENDING]` slots.*
 4. **#62 jam-force recalibration** — open as a future revision (D-040 pinned
    the semantics; a wider probe is cheap and local if wanted).
 5. **P-04** — ASSIST registration (Phase 2 dependency, not Phase 1).

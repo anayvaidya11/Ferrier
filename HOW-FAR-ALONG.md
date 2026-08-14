@@ -4,7 +4,7 @@
      Update it whenever a T-task, phase, or gate changes state.
      Sources of truth: ROADMAP.md (phases), PHASE1_PLAN.md §4 (T0–T13 build order), git log. -->
 
-_Last updated: 2026-08-12 (P-08 ratified; all R01 fixes applied; freeze_prior_v2 landed)_
+_Last updated: 2026-08-14 (pre-window staging: measurement kit, swap rehearsed, T13 draft)_
 
 WyZantium is working toward a February submission in six phases, and right now
 we're in Phase 1: a simulated docking experiment that must hit its kill-gate
@@ -42,7 +42,12 @@ the verdict is unchanged — in clean conditions docking succeeds ~88% of
 the time, and under the moderate mud-and-darkness gate band the robot
 still refuses every single attempt rather than risk the asset. That
 refusal is built on stand-in perception curves, so the one honest lever
-on the gate number is still the measurement window; everything is staged
-so the swap is mechanical when the three CSVs land. After that: the
-before/after gate report and the T13 writeup. Phases 2 through 5 haven't
-started yet.
+on the gate number is still the measurement window — and that window is
+now fully staged: printable tag sheets and day checklists are committed
+(machine-verified before printing), the frame-processing script turns
+captured clips into ready data rows, the swap itself was rehearsed
+end-to-end on synthetic data (finding and fixing a bug that would have
+crashed the real run), and the final report is drafted with the
+post-measurement numbers left as labeled blanks. When the three CSVs
+land, the swap is one command and the report fills in. Phases 2 through
+5 haven't started yet.
